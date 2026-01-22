@@ -9,13 +9,44 @@
   padding: 0;
 }
 
-.main-dashboard-container{
-  background: #1D1E42;
+.main-dashboard-container {
+  background: #1d1e42;
   border-radius: 8px;
 }
 
-.regular-news{
+.regular-news {
   width: 49%;
+}
+
+.mobile-content-list {
+  padding: 10px 20px;
+  gap: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.mobile-popup-title {
+  color: #fff;
+  font-family: Poppins;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 18px;
+  letter-spacing: -0.324px;
+}
+
+.mobile-popup-content-wrapper {
+  border-radius: 8px;
+  background: #211f45;
+}
+
+.mobile-content-text {
+  color: #fff;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  list-style-type: disc;
 }
 
 .view-more-title {
@@ -24,7 +55,7 @@
   font-weight: 500;
   font-size: 12px;
   line-height: 18px;
-  color: #4ED5D2 !important;
+  color: #4ed5d2 !important;
   cursor: pointer;
 }
 
@@ -47,59 +78,57 @@
   opacity: 0.8;
 }
 
-.faq-grid{
+.faq-grid {
   display: grid;
   grid-template-columns: auto;
   gap: 13px;
 }
 
 @media screen and (max-width: 1399px) {
-  .faq-grid{
+  .faq-grid {
     grid-template-columns: auto auto;
   }
 
-  .right-side-wrapper{
+  .right-side-wrapper {
     align-items: flex-end;
   }
 
-  .faq-items-wrapper{
+  .faq-items-wrapper {
     width: 49%;
   }
 
-  .chainlink-wrapper{
+  .chainlink-wrapper {
     width: 24%;
   }
 
-  .launchpad-section-wrapper{
+  .launchpad-section-wrapper {
     width: 24%;
   }
 }
 @media screen and (max-width: 992px) {
-  .regular-news{
+  .regular-news {
     width: 100%;
   }
 }
 
-
 @media screen and (max-width: 786px) {
-  .faq-items-wrapper{
+  .faq-items-wrapper {
     width: 100% !important;
   }
 
-  .chainlink-wrapper{
+  .chainlink-wrapper {
     width: 100% !important;
   }
 
-  .launchpad-section-wrapper{
+  .launchpad-section-wrapper {
     width: 100% !important;
   }
 
-  .faq-grid{
+  .faq-grid {
     grid-template-columns: auto;
   }
- 
-  .toppool-allwrapper{
+
+  .toppool-allwrapper {
     grid-template-columns: auto;
   }
-  
 }

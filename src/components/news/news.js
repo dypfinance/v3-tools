@@ -5,18 +5,14 @@ import PressRealease from "./PressRelease";
 import OtherNews from "./OtherNews";
 import NewsModal from "./NewsModal";
 import axios from "axios";
-import ToolTip from "./ToolTip";
-import OutsideClickHandler from "react-outside-click-handler";
 import * as _ from "lodash";
 import { useWeb3React } from "@web3-react/core";
-import Carousel from "better-react-carousel";
 import { useParams } from "react-router-dom";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Slider from "react-slick";
-import pressReleaseNext from "./assets/pressReleaseNext.svg";
 import Web3 from "web3";
 
-const News = ({ theme, isPremium, coinbase }) => {
+const News = ({  isPremium, coinbase }) => {
   const settings = {
     dots: false,
     infinite: true,
@@ -94,9 +90,13 @@ const News = ({ theme, isPremium, coinbase }) => {
   const [next, setNext] = useState(newsPerRow);
   const [userAlreadyVoted, setUserAlreadyVoted] = useState(true);
   const [canVote, setCanVote] = useState(false);
-  const [bal1, setbal1] = useState(0);
-  const [bal2, setbal2] = useState(0);
-  const [bal3, setbal3] = useState(0);
+  const [bal1, setbal1] = useState('0');
+  const [bal2, setbal2] = useState('0');
+  const [bal3, setbal3] = useState('0');
+
+  const [bal4, setbal4] = useState('0');
+  const [bal5, setbal5] = useState('0');
+  const [bal6, setbal6] = useState('0');
 
   const checkFunds = async (account) => {
     const web3eth = new Web3(
@@ -104,13 +104,22 @@ const News = ({ theme, isPremium, coinbase }) => {
     );
     const web3avax = new Web3("https://api.avax.network/ext/bc/C/rpc");
     const web3bsc = new Web3("https://bsc-dataseed.binance.org/");
-    const tokenAddress = "0x961C8c0B1aaD0c0b10a51FeF6a867E3091BCef17";
+    const tokenAddress = window.config.token_dypius_new_address;
+    const tokenAddress_bsc = window.config.token_dypius_new_bsc_address;
+
+    const tokenAddress_old = window.config.token_old_address;
+
+
     const walletAddress = account;
     const TokenABI = window.ERC20_ABI;
     if (account != undefined) {
       const contract1 = new web3eth.eth.Contract(TokenABI, tokenAddress);
-      const contract2 = new web3avax.eth.Contract(TokenABI, tokenAddress);
-      const contract3 = new web3bsc.eth.Contract(TokenABI, tokenAddress);
+      const contract2 = new web3avax.eth.Contract(TokenABI, tokenAddress_bsc);
+      const contract3 = new web3bsc.eth.Contract(TokenABI, tokenAddress_bsc);
+
+      const contract4 = new web3eth.eth.Contract(TokenABI, tokenAddress_old);
+      const contract5 = new web3avax.eth.Contract(TokenABI, tokenAddress_old);
+      const contract6 = new web3bsc.eth.Contract(TokenABI, tokenAddress_old);
 
       const baleth = await contract1.methods
         .balanceOf(walletAddress)
@@ -118,14 +127,31 @@ const News = ({ theme, isPremium, coinbase }) => {
         .then((data) => {
           return web3eth.utils.fromWei(data, "ether");
         });
+        const baleth_old = await contract4.methods
+        .balanceOf(walletAddress)
+        .call()
+        .then((data) => {
+          return web3eth.utils.fromWei(data, "ether");
+        });
+
       setbal1(baleth);
+      setbal4(baleth_old);
+
       const balavax = await contract2.methods
         .balanceOf(walletAddress)
         .call()
         .then((data) => {
           return web3avax.utils.fromWei(data, "ether");
         });
+        const balavax_old = await contract5.methods
+        .balanceOf(walletAddress)
+        .call()
+        .then((data) => {
+          return web3avax.utils.fromWei(data, "ether");
+        });
+
       setbal2(balavax);
+      setbal5(balavax_old);
 
       const balbnb = await contract3.methods
         .balanceOf(walletAddress)
@@ -133,7 +159,16 @@ const News = ({ theme, isPremium, coinbase }) => {
         .then((data) => {
           return web3bsc.utils.fromWei(data, "ether");
         });
+
+        const balbnb_old = await contract6.methods
+        .balanceOf(walletAddress)
+        .call()
+        .then((data) => {
+          return web3bsc.utils.fromWei(data, "ether");
+        });
+      setbal6(balbnb_old);
       setbal3(balbnb);
+
     }
   };
 
@@ -143,11 +178,6 @@ const News = ({ theme, isPremium, coinbase }) => {
 
   const loadMore = () => {
     setNext(next + newsPerRow);
-  };
-
-  const handleSingleNewsUpdate = (id) => {
-    setActiveNews(newsData[id]);
-    setShowModal(true);
   };
 
   const fetchVotingdata = async () => {
@@ -446,7 +476,7 @@ const News = ({ theme, isPremium, coinbase }) => {
     fetchPressData().then();
     fetchPopularNewsData().then();
     fetchOtherNewsData().then();
-  }, [newsData.length, popularNewsData.length]);
+  }, []);
 
   useEffect(() => {
     fetchVotingdata().then();
@@ -455,26 +485,35 @@ const News = ({ theme, isPremium, coinbase }) => {
   const logout = localStorage.getItem("logout");
 
   useEffect(() => {
-    if (bal1 === '0' && bal2 === '0'&& bal3 === '0' && isPremium === true) {
+    if (bal1 === '0' && bal2 === '0'&& bal3 === '0' && bal4 === '0' && bal5 === '0' && bal6 === '0' && isPremium === true) {
       setCanVote(true);
-    } else if (bal1 !== '0' && bal2 !== '0' && bal3 !== '0' && isPremium === true) {
+    } else if (bal1 !== '0' && bal2 !== '0' && bal3 !== '0' && bal4 !== '0' && bal5 !== '0' && bal6 !== '0' && isPremium === true) {
       setCanVote(true);
-    } else if ((bal1 !== '0' || bal2 !== '0'  || bal3 !== '0') && isPremium === false) {
+    } else if ((bal1 !== '0' || bal2 !== '0'  || bal3 !== '0' || bal4 !== '0' || bal5 !== '0' || bal6 !== '0') && isPremium === false) {
+      setCanVote(true);
+    }else if (
+      (bal1 !== "0" ||
+        bal2 !== "0" ||
+        bal3 !== "0" ||
+        bal4 !== "0" ||
+        bal5 !== "0" ||
+        bal6 !== "0") &&
+      isPremium === true
+    ) {
       setCanVote(true);
     } else if (bal1 === '0' && bal2 === '0'  && bal3 !== '0' && isPremium === false) {
       setCanVote(false);
     } else if (logout === "true") {
       setCanVote(false);
     }
-  }, [userAlreadyVoted, bal1, bal2, isPremium, logout, coinbase]);
+  }, [userAlreadyVoted, bal1, bal2, bal3, bal4, bal5, bal6, isPremium, logout, coinbase]);
 
-  // console.log(isPremium)
-
+ 
   const handleUpVoting = async (itemId) => {
     const coinbase = await window.getCoinbase();
     // console.log(itemId)
     if (
-      (bal1 === '0' && bal2 === '0'  && bal3 === '0' && isPremium === false) ||
+      (bal1 === '0' && bal2 === '0'  && bal3 === '0' && bal4 === '0' && bal5 === '0' && bal6 === '0' && isPremium === false) ||
       logout === "true"
     ) {
       setShowTooltip(true);
@@ -504,7 +543,7 @@ const News = ({ theme, isPremium, coinbase }) => {
     const coinbase = await window.getCoinbase();
 
     if (
-      (bal1 === '0' && bal2 === '0'  && bal3 === '0'&& isPremium === false) ||
+      (bal1 === '0' && bal2 === '0'  && bal3 === '0' && bal4 === '0' && bal5 === '0' && bal6 === '0' && isPremium === false)  ||
       logout === "true"
     ) {
       setShowTooltip(true);
@@ -607,6 +646,9 @@ const News = ({ theme, isPremium, coinbase }) => {
             bal1={bal1}
             bal2={bal2}
             bal3={bal3}
+            bal4={bal4}
+            bal5={bal5}
+            bal6={bal6}
             style={{ width: "fit-content" }}
             onSelectOtherNews={(key) => {
               window.scrollTo(0, 0);
@@ -618,7 +660,6 @@ const News = ({ theme, isPremium, coinbase }) => {
             link={activeNews.link}
             image={activeNews.image}
             content={newsContent}
-            theme={theme}
             coinbase={coinbase}
             upvotes={activeNews.vote.up}
             downvotes={activeNews.vote.down}
@@ -662,11 +703,13 @@ const News = ({ theme, isPremium, coinbase }) => {
                             bal1={bal1}
                             bal2={bal2}
                             bal3={bal3}
+                            bal4={bal4}
+                            bal5={bal5}
+                            bal6={bal6}
                             image={item.image}
                             title={item.title}
                             link={item.link}
                             day={item.date}
-                            theme={theme}
                             coinbase={coinbase}
                             upvotes={
                               votes.length !== 0
@@ -699,7 +742,7 @@ const News = ({ theme, isPremium, coinbase }) => {
                 </Slider>
                 <div className="d-flex align-items-center gap-2 featured-slider-arrows">
                   <img
-                    src={pressReleaseNext}
+                    src={'https://cdn.worldofdypians.com/tools/pressReleaseNext.svg'}
                     height={40}
                     width={40}
                     className="cursor-pointer d-none d-lg-flex"
@@ -708,7 +751,7 @@ const News = ({ theme, isPremium, coinbase }) => {
                     onClick={prevMain}
                   />
                   <img
-                    src={pressReleaseNext}
+                    src={'https://cdn.worldofdypians.com/tools/pressReleaseNext.svg'}
                     height={40}
                     width={40}
                     className="cursor-pointer d-none d-lg-flex"
@@ -760,9 +803,12 @@ const News = ({ theme, isPremium, coinbase }) => {
                         key={key}
                       >
                         <SingleNews
-                          bal1={bal1}
-                          bal2={bal2}
-                          bal3={bal3}
+                         bal1={bal1}
+                         bal2={bal2}
+                         bal3={bal3}
+                         bal4={bal4}
+                         bal5={bal5}
+                         bal6={bal6}
                           image={item.image}
                           title={item.title}
                           link={item.link}
@@ -770,7 +816,6 @@ const News = ({ theme, isPremium, coinbase }) => {
                           month={item.month}
                           day={item.date.slice(0, 10)}
                           fullDate={item.date}
-                          theme={theme}
                           newsId={item.id}
                           upvotes={item.vote.up}
                           downvotes={item.vote.down}
@@ -801,6 +846,9 @@ const News = ({ theme, isPremium, coinbase }) => {
                             bal1={bal1}
                             bal2={bal2}
                             bal3={bal3}
+                            bal4={bal4}
+                            bal5={bal5}
+                            bal6={bal6}
                             image={item.image}
                             title={item.title}
                             link={item.link}
@@ -808,7 +856,6 @@ const News = ({ theme, isPremium, coinbase }) => {
                             month={item.month}
                             day={item.date.slice(0, 10)}
                             fullDate={item.date}
-                            theme={theme}
                             onVotesFetch={fetchVotingdata}
                             coinbase={coinbase}
                             upvotes={item.vote.up}
@@ -868,7 +915,7 @@ const News = ({ theme, isPremium, coinbase }) => {
           // style={{ width: "96%", margin: "auto", background: "none" }}
         >
           <img
-            src={pressReleaseNext}
+            src={'https://cdn.worldofdypians.com/tools/pressReleaseNext.svg'}
             className="press-prev-btn"
             alt="prev-button"
             style={{ transform: "rotate(180deg)" }}
@@ -891,6 +938,9 @@ const News = ({ theme, isPremium, coinbase }) => {
                         bal1={bal1}
                         bal2={bal2}
                         bal3={bal3}
+                        bal4={bal4}
+                        bal5={bal5}
+                        bal6={bal6}
                         image={item.image}
                         title={item.title}
                         link={item.link}
@@ -914,7 +964,7 @@ const News = ({ theme, isPremium, coinbase }) => {
             </Slider>
           </div>
           <img
-            src={pressReleaseNext}
+            src={'https://cdn.worldofdypians.com/tools/pressReleaseNext.svg'}
             alt="next-button"
             className="press-next-btn"
             onClick={nextSlide}
@@ -938,6 +988,9 @@ const News = ({ theme, isPremium, coinbase }) => {
                     bal1={bal1}
                     bal2={bal2}
                     bal3={bal3}
+                    bal4={bal4}
+                    bal5={bal5}
+                    bal6={bal6}
                     image={item.image}
                     title={item.title}
                     link={item.link}
@@ -945,7 +998,6 @@ const News = ({ theme, isPremium, coinbase }) => {
                     fulldate={item.date}
                     month={item.month}
                     year={item.year}
-                    theme={theme}
                     onVotesFetch={fetchVotingdata}
                     newsId={item.id}
                     upvotes={item.vote.up}

@@ -6,28 +6,12 @@ import Address from "./address";
 import WalletModal from "../WalletModal";
 import "./top-pools.css";
 import Countdown from "react-countdown";
-import ellipse from "./assets/ellipse.svg";
-import empty from "./assets/empty.svg";
-import check from "./assets/check.svg";
-import failMark from "../../assets/failMark.svg";
-import arrowup from "./assets/arrow-up.svg";
-import whiteArrowUp from "./assets/whiteArrowUp.svg";
-import moreinfo from "./assets/more-info.svg";
-import stats from "./assets/stats.svg";
-import purplestats from "./assets/purpleStat.svg";
-import wallet from "./assets/wallet.svg";
 import Tooltip from "@material-ui/core/Tooltip";
-import dropdownVector from "./assets/dropdownVector.svg";
-import { DropdownButton } from "react-bootstrap";
 import axios from "axios";
-import statsLinkIcon from "./assets/statsLinkIcon.svg";
 import { shortAddress } from "../../functions/shortAddress";
-import poolStatsIcon from "./assets/poolStatsIcon.svg";
-import poolsCalculatorIcon from "./assets/poolsCalculatorIcon.svg";
-import calculatorIcon from "../calculator/assets/calculator.svg";
-import xMark from "../calculator/assets/xMark.svg";
 import { ClickAwayListener } from "@material-ui/core";
 import { handleSwitchNetworkhook } from "../../functions/hooks";
+import { ethers } from "ethers";
 
 const renderer = ({ days, hours, minutes, seconds }) => {
   return (
@@ -75,7 +59,9 @@ const BscFarmingFunc = ({
   isConnected,
   latestApr,
   wbnbPrice,
-  latestTvl
+  latestTvl,
+  binanceW3WProvider,
+  handleSwitchChainBinanceWallet,
 }) => {
   let { reward_token, BigNumber, alertify, reward_token_idyp, token_dypsbsc } =
     window;
@@ -205,7 +191,6 @@ const BscFarmingFunc = ({
   const [showWithdrawModal, setShowWithdrawModal] = useState(false);
   const [showCalculator, setShowCalculator] = useState(false);
   const [popup, setPopup] = useState(false);
-  const [is_wallet_connected, setIs_wallet_connected] = useState(false);
   const [selectedTokenLogo, setSelectedTokenLogo] = useState("wbnb");
   const [selectedRewardTokenLogo1, setSelectedRewardTokenLogo1] =
     useState("wbnb");
@@ -226,23 +211,30 @@ const BscFarmingFunc = ({
 
   const [totalLPdeposited, setTotalLpDeposited] = useState("");
   const [priceUSD, setPriceUSD] = useState("");
-  const [rewardsPendingClaim , setrewardsPendingClaim ] = useState("");
-  const [calculatedUsd, setCalculatedUsd] = useState(0)
-  const [calculatedWbnb, setCalculatedWbnb] = useState(0)
-  const [dypPrice, setDypPrice] = useState(0)
-  const [idypPrice, setIdypPrice] = useState(0)
-
+  const [rewardsPendingClaim, setrewardsPendingClaim] = useState("");
+  const [calculatedUsd, setCalculatedUsd] = useState(0);
+  const [calculatedWbnb, setCalculatedWbnb] = useState(0);
+  const [dypPrice, setDypPrice] = useState(0);
+  const [idypPrice, setIdypPrice] = useState(0);
 
   const fetchDypPrice = async () => {
-    axios.get('https://api.geckoterminal.com/api/v2/networks/bsc/pools/0x3fbca1072fb101e9440bb97be9ef763aac312516').then((res) => {
-      setDypPrice(res.data.data.attributes.base_token_price_usd)
-    })
-  }
+    axios
+      .get(
+        "https://api.geckoterminal.com/api/v2/networks/bsc/pools/0x3fbca1072fb101e9440bb97be9ef763aac312516"
+      )
+      .then((res) => {
+        setDypPrice(res.data.data.attributes.base_token_price_usd);
+      });
+  };
   const fetchiDypPrice = async () => {
-    axios.get('https://api.geckoterminal.com/api/v2/networks/bsc/pools/0x1bC61d08A300892e784eD37b2d0E63C85D1d57fb').then((res) => {
-      setIdypPrice(res.data.data.attributes.base_token_price_usd)
-    })
-  }
+    axios
+      .get(
+        "https://api.geckoterminal.com/api/v2/networks/bsc/pools/0x1bC61d08A300892e784eD37b2d0E63C85D1d57fb"
+      )
+      .then((res) => {
+        setIdypPrice(res.data.data.attributes.base_token_price_usd);
+      });
+  };
 
   const showModal = () => {
     setShow(true);
@@ -277,7 +269,12 @@ const BscFarmingFunc = ({
 
   const getLPTokens = async () => {
     let router = await window.getPancakeswapRouterContract();
-    let WETH = await router.methods.WETH().call();
+    let WETH = await router.methods
+      .WETH()
+      .call()
+      .catch((e) => {
+        console.error(e);
+      });
     let rewardTokenAddress = "0xBD100d061E120b2c67A24453CF6368E63f1Be056"; // idyp address
 
     let amount = await constant.depositedTokens(coinbase);
@@ -286,9 +283,27 @@ const BscFarmingFunc = ({
     let web3 = window.bscWeb3;
 
     let pair = new web3.eth.Contract(PAIR_ABI, pair_token_address);
-    let totalSupply = await pair.methods.totalSupply().call();
-    let reserves = await pair.methods.getReserves().call();
-    let amountlpContract = await pair.methods.balanceOf(constant._address).call()
+    let totalSupply = await pair.methods
+      .totalSupply()
+      .call()
+      .catch((e) => {
+        console.error(e);
+        return 0;
+      });
+    let reserves = await pair.methods
+      .getReserves()
+      .call()
+      .catch((e) => {
+        console.error(e);
+        return 0;
+      });
+    let amountlpContract = await pair.methods
+      .balanceOf(constant._address)
+      .call()
+      .catch((e) => {
+        console.error(e);
+        return 0;
+      });
 
     let maxETH = reserves[0];
     let maxToken = reserves[1];
@@ -316,27 +331,35 @@ const BscFarmingFunc = ({
     ];
 
     let totalContractUSD = await router.methods
-    .getAmountsOut(maxContractToken, path1)
-    .call();
-  totalContractUSD = totalContractUSD[totalContractUSD.length - 1];
+      .getAmountsOut(maxContractToken, path1)
+      .call()
+      .catch((e) => {
+        console.error(e);
+      });
+    totalContractUSD = totalContractUSD[totalContractUSD.length - 1];
 
-  totalContractUSD = BigNumber(totalContractUSD)
+    totalContractUSD = BigNumber(totalContractUSD)
       .plus(maxContractEth)
       .div(1e18)
       .toFixed(18);
 
-      setlpTokensContract(totalContractUSD)
+    setlpTokensContract(totalContractUSD);
 
     let _userWithdrawAmount = await router.methods
       .getAmountsOut(maxUserToken, path1)
-      .call();
-    _userWithdrawAmount = _userWithdrawAmount[_userWithdrawAmount.length - 1];
+      .call()
+      .catch((e) => {
+        console.error(e);
+      });
+    if (_userWithdrawAmount) {
+      _userWithdrawAmount = _userWithdrawAmount[_userWithdrawAmount.length - 1];
 
-    _userWithdrawAmount = BigNumber(_userWithdrawAmount)
-      .plus(maxUserEth)
-      .div(1e18)
-      .toFixed(18);
-    setlpTokens(_userWithdrawAmount);
+      _userWithdrawAmount = BigNumber(_userWithdrawAmount)
+        .plus(maxUserEth)
+        .div(1e18)
+        .toFixed(18);
+      setlpTokens(_userWithdrawAmount);
+    }
   };
 
   const handleListDownload = async (e) => {
@@ -403,7 +426,7 @@ const BscFarmingFunc = ({
         }, 2000);
       });
   };
-  
+
   const handleStake = async (e) => {
     let selectedBuybackToken = "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c"; // wbnb/wavax
     let amount = depositAmount;
@@ -606,37 +629,81 @@ const BscFarmingFunc = ({
   };
 
   const handleWithdrawDyp = async () => {
-    let amountConstant = await staking.depositedTokens(coinbase);
+    let amountConstant = await staking.depositedTokens(coinbase).catch((e) => {
+      console.error(e);
+      return 0;
+    });
     amountConstant = new BigNumber(amountConstant).toFixed(0);
     setWithdrawLoading(true);
 
     let deadline = Math.floor(
       Date.now() / 1e3 + window.config.tx_max_wait_seconds
     );
+    if (window.WALLET_TYPE !== "binance") {
+      try {
+        staking
+          .unstake(amountConstant, 0, deadline)
+          .then(() => {
+            setWithdrawStatus("success");
+            setWithdrawLoading(false);
+            refreshBalance();
+            setTimeout(() => {
+              setWithdrawStatus("initial");
+              setSelectedPool("");
+            }, 10000);
+          })
+          .catch((e) => {
+            setWithdrawStatus("failed");
+            setWithdrawLoading(false);
+            setErrorMsg(e?.message);
+            setTimeout(() => {
+              setWithdrawStatus("initial");
+              setSelectedPool("");
+              setErrorMsg("");
+            }, 10000);
+          });
+      } catch (e) {
+        setErrorMsg(e?.message);
 
-    try {
-      staking
-        .unstake(amountConstant, 0, deadline)
-        .then(() => {
+        console.error(e);
+        return;
+      }
+    } else if (window.WALLET_TYPE === "binance") {
+      try {
+        let staking_Sc = new ethers.Contract(
+          staking._address,
+          window.CONSTANT_STAKINGNEW_ABI,
+          binanceW3WProvider.getSigner()
+        );
+        const txResponse = staking_Sc
+          .unstake(amountConstant, 0, deadline)
+          .catch((e) => {
+            setWithdrawStatus("failed");
+            setWithdrawLoading(false);
+            setErrorMsg(e?.message);
+            setTimeout(() => {
+              setWithdrawStatus("initial");
+              setSelectedPool("");
+              setErrorMsg("");
+            }, 10000);
+          });
+
+        const txReceipt = await txResponse.wait();
+        if (txReceipt) {
           setWithdrawStatus("success");
           setWithdrawLoading(false);
           refreshBalance();
-        })
-        .catch((e) => {
-          setWithdrawStatus("failed");
-          setWithdrawLoading(false);
-          setErrorMsg(e?.message);
           setTimeout(() => {
             setWithdrawStatus("initial");
             setSelectedPool("");
-            setErrorMsg("");
-          }, 10000);
-        });
-    } catch (e) {
-      setErrorMsg(e?.message);
+          }, 8000);
+        }
+      } catch (e) {
+        setErrorMsg(e?.message);
 
-      console.error(e);
-      return;
+        console.error(e);
+        return;
+      }
     }
   };
 
@@ -752,19 +819,58 @@ const BscFarmingFunc = ({
     ];
 
     console.log(minAmounts);
-    constant
-      .withdraw(selectedBuybackToken, amount, minAmounts, deadline)
-      .then(() => {
+    if (window.WALLET_TYPE !== "binance") {
+      constant
+        .withdraw(selectedBuybackToken, amount, minAmounts, deadline)
+        .then(() => {
+          setWithdrawLoading(false);
+          setWithdrawStatus("success");
+          refreshBalance();
+          setTimeout(() => {
+            setWithdrawStatus("initial");
+            setSelectedPool("");
+          }, 5000);
+        })
+        .catch((e) => {
+          setWithdrawLoading(false);
+          setWithdrawStatus("fail");
+          setErrorMsg3(e?.message);
+          setTimeout(() => {
+            setWithdrawStatus("initial");
+            setErrorMsg3("");
+            setSelectedPool("");
+          }, 5000);
+        });
+    } else if (window.WALLET_TYPE === "binance") {
+      let constant_Sc = new ethers.Contract(
+        staking._address,
+        window.FARMING_ACTIVEBSC_ABI,
+        binanceW3WProvider.getSigner()
+      );
+
+      const txResponse = constant_Sc
+        .withdraw(selectedBuybackToken, amount, minAmounts, deadline)
+        .catch((e) => {
+          setWithdrawLoading(false);
+          setWithdrawStatus("fail");
+          setErrorMsg3(e?.message);
+          setTimeout(() => {
+            setWithdrawStatus("initial");
+            setErrorMsg3("");
+            setSelectedPool("");
+          }, 5000);
+        });
+      const txReceipt = await txResponse.wait();
+      if (txReceipt) {
         setWithdrawLoading(false);
         setWithdrawStatus("success");
         refreshBalance();
-        // getBalance();
-      })
-      .catch((e) => {
-        setWithdrawLoading(false);
-        setWithdrawStatus("fail");
-        setErrorMsg3(e?.message);
-      });
+        setTimeout(() => {
+          setWithdrawStatus("initial");
+          setSelectedPool("");
+        }, 5000);
+      }
+    }
   };
 
   const handleClaimDivs = async () => {
@@ -862,35 +968,79 @@ const BscFarmingFunc = ({
       _amountOutMinSwap_real,
       deadline,
     });
+    if (window.WALLET_TYPE !== "binance") {
+      try {
+        constant
+          .claimAs(
+            window.config.bscweth_address,
+            _amountOutMinConstantETH,
+            _amountOutMinConstant,
+            _amountOutMinSwap_real,
+            deadline
+          )
+          .then(() => {
+            setClaimStatus("success");
+            setClaimLoading(false);
+            setPendingDivs(getFormattedNumber(0, 6));
+            refreshBalance();
+            setTimeout(() => {
+              setClaimStatus("initial");
+            }, 5000);
+          })
+          .catch((e) => {
+            setClaimStatus("fail");
+            setClaimLoading(false);
+            setErrorMsg2(e?.message);
+            console.log(e);
+            setTimeout(() => {
+              setClaimStatus("initial");
+              setErrorMsg2("");
+            }, 10000);
+          });
+      } catch (e) {
+        console.error(e);
+        return;
+      }
+    } else if (window.WALLET_TYPE === "binance") {
+      try {
+        let constant_Sc = new ethers.Contract(
+          staking._address,
+          window.FARMING_ACTIVEBSC_ABI,
+          binanceW3WProvider.getSigner()
+        );
 
-    try {
-      constant
-        .claimAs(
-          window.config.bscweth_address,
-          _amountOutMinConstantETH,
-          _amountOutMinConstant,
-          _amountOutMinSwap_real,
-          deadline
-        )
-        .then(() => {
+        const txResponse = constant_Sc
+          .claimAs(
+            window.config.bscweth_address,
+            _amountOutMinConstantETH,
+            _amountOutMinConstant,
+            _amountOutMinSwap_real,
+            deadline
+          )
+          .catch((e) => {
+            setClaimStatus("fail");
+            setClaimLoading(false);
+            setErrorMsg2(e?.message);
+            console.log(e);
+            setTimeout(() => {
+              setClaimStatus("initial");
+              setErrorMsg2("");
+            }, 10000);
+          });
+        const txReceipt = await txResponse.wait();
+        if (txReceipt) {
           setClaimStatus("success");
           setClaimLoading(false);
           setPendingDivs(getFormattedNumber(0, 6));
           refreshBalance();
-        })
-        .catch((e) => {
-          setClaimStatus("fail");
-          setClaimLoading(false);
-          setErrorMsg2(e?.message);
-          console.log(e);
           setTimeout(() => {
             setClaimStatus("initial");
-            setErrorMsg2("");
-          }, 10000);
-        });
-    } catch (e) {
-      console.error(e);
-      return;
+          }, 5000);
+        }
+      } catch (e) {
+        console.error(e);
+        return;
+      }
     }
   };
   const handleClaimAsDivs = async (token) => {
@@ -915,146 +1065,184 @@ const BscFarmingFunc = ({
 
     let address = coinbase;
 
-    let amount = await staking.getPendingDivs(address);
+    let amount = await staking.getPendingDivs(address).catch((e) => {
+      console.error(e);
+      return 0;
+    });
 
     let claimdivs2 = new BigNumber(amount)
-    .times(100 - window.config.slippage_tolerance_percent_liquidity)
-    .div(100)
-    .toFixed(0);
-    
-    try{
-      staking.claim(0, 0, deadline).then(() => {
-        setClaimStatus("success");
-        setClaimLoading(false);
-        setPendingDivs(getFormattedNumber(0, 6));
-        refreshBalance();
-      })
-      .catch((e) => {
-        setClaimStatus("fail");
-        setClaimLoading(false);
-        setErrorMsg2(e?.message);
-        console.log(e);
-        setTimeout(() => {
-          setClaimStatus("initial");
-          setErrorMsg2("");
-        }, 10000);
-      });
-    }catch (e) {
-      console.error(e);
-      return;
+      .times(100 - window.config.slippage_tolerance_percent_liquidity)
+      .div(100)
+      .toFixed(0);
+    if (window.WALLET_TYPE !== "binance") {
+      try {
+        staking
+          .claim(0, 0, deadline)
+          .then(() => {
+            setClaimStatus("success");
+            setClaimLoading(false);
+            setPendingDivs(getFormattedNumber(0, 6));
+            refreshBalance();
+            setTimeout(() => {
+              setClaimStatus("initial");
+            }, 5000);
+          })
+          .catch((e) => {
+            setClaimStatus("fail");
+            setClaimLoading(false);
+            setErrorMsg2(e?.message);
+            console.log(e);
+            setTimeout(() => {
+              setClaimStatus("initial");
+              setErrorMsg2("");
+            }, 10000);
+          });
+      } catch (e) {
+        console.error(e);
+        return;
+      }
+    } else if (window.WALLET_TYPE === "binance") {
+      try {
+        let staking_Sc = new ethers.Contract(
+          staking._address,
+          window.CONSTANT_STAKINGNEW_ABI,
+          binanceW3WProvider.getSigner()
+        );
+        const txResponse = staking_Sc.claim(0, 0, deadline).catch((e) => {
+          setClaimStatus("fail");
+          setClaimLoading(false);
+          setErrorMsg2(e?.message);
+          console.log(e);
+          setTimeout(() => {
+            setClaimStatus("initial");
+            setErrorMsg2("");
+          }, 10000);
+        });
+        const txReceipt = await txResponse.wait();
+        if (txReceipt) {
+          setClaimStatus("success");
+          setClaimLoading(false);
+          setPendingDivs(getFormattedNumber(0, 6));
+          refreshBalance();
+          setTimeout(() => {
+            setClaimStatus("initial");
+          }, 5000);
+        }
+      } catch (e) {
+        console.error(e);
+        return;
+      }
     }
-//     let router = await window.getPancakeswapRouterContract();
-//     let WETH = await router.methods.WETH().call();
-//     let platformTokenAddress = window.config.reward_token_address;
-//     let rewardTokenAddress = window.config.reward_tokenbsc_address2;
-//     let path = [
-//       ...new Set(
-//         [rewardTokenAddress, WETH, platformTokenAddress].map((a) =>
-//           a.toLowerCase()
-//         )
-//       ),
-//     ];
 
-//     let path1 = [
-//       ...new Set([rewardTokenAddress, WETH].map((a) => a.toLowerCase())),
-//     ];
+    //     let router = await window.getPancakeswapRouterContract();
+    //     let WETH = await router.methods.WETH().call();
+    //     let platformTokenAddress = window.config.reward_token_address;
+    //     let rewardTokenAddress = window.config.reward_tokenbsc_address2;
+    //     let path = [
+    //       ...new Set(
+    //         [rewardTokenAddress, WETH, platformTokenAddress].map((a) =>
+    //           a.toLowerCase()
+    //         )
+    //       ),
+    //     ];
 
+    //     let path1 = [
+    //       ...new Set([rewardTokenAddress, WETH].map((a) => a.toLowerCase())),
+    //     ];
 
-//     let PAIR_ABI = window.PAIR_ABI;
-//     let pair_token_address = "0x1bC61d08A300892e784eD37b2d0E63C85D1d57fb";
-//     let web3 = window.bscWeb3;
-//     let pair = new web3.eth.Contract(PAIR_ABI, pair_token_address);
+    //     let PAIR_ABI = window.PAIR_ABI;
+    //     let pair_token_address = "0x1bC61d08A300892e784eD37b2d0E63C85D1d57fb";
+    //     let web3 = window.bscWeb3;
+    //     let pair = new web3.eth.Contract(PAIR_ABI, pair_token_address);
 
-//     let totalSupply = await pair.methods.totalSupply().call();
-//     let reserves = await pair.methods.getReserves().call();
+    //     let totalSupply = await pair.methods.totalSupply().call();
+    //     let reserves = await pair.methods.getReserves().call();
 
-//     let amountlpContract = await pair.methods.balanceOf(constant._address).call()
+    //     let amountlpContract = await pair.methods.balanceOf(constant._address).call()
 
+    //     let maxETH = reserves[0];
+    //     let maxToken = reserves[1];
 
-//     let maxETH = reserves[0];
-//     let maxToken = reserves[1];
+    //     let maxContractEth = (amountlpContract * maxETH) / totalSupply;
+    //     maxContractEth = new BigNumber(maxContractEth).toFixed(0);
+    //     let maxContractToken = (amountlpContract * maxToken) / totalSupply;
+    //     maxContractToken = new BigNumber(maxContractToken).toFixed(0);
 
-//     let maxContractEth = (amountlpContract * maxETH) / totalSupply;
-//     maxContractEth = new BigNumber(maxContractEth).toFixed(0);
-//     let maxContractToken = (amountlpContract * maxToken) / totalSupply;
-//     maxContractToken = new BigNumber(maxContractToken).toFixed(0);
+    //     let totalContractUSD = await router.methods
+    //     .getAmountsOut(maxContractToken, path1)
+    //     .call().catch((e) => {
+    //       setClaimStatus("failed");
+    //       console.log(e)
+    //       setClaimLoading(false);
+    //       setErrorMsg2(e?.message);
+    //       setTimeout(() => {
+    //         setClaimStatus("initial");
+    //         setSelectedPool("");
+    //         setErrorMsg2("");
+    //       }, 10000);
+    //     });
 
-    
+    //       let amountsPendingClaim = await router.methods
+    //       .getAmountsOut(amount, path)
+    //       .call().catch((e) => {
+    //         setClaimStatus("failed");
+    //         console.log(e)
+    //         setClaimLoading(false);
+    //         setErrorMsg2(e?.message);
+    //         setTimeout(() => {
+    //           setClaimStatus("initial");
+    //           setSelectedPool("");
+    //           setErrorMsg2("");
+    //         }, 10000);
+    //       });
 
-//     let totalContractUSD = await router.methods
-//     .getAmountsOut(maxContractToken, path1)
-//     .call().catch((e) => {
-//       setClaimStatus("failed");
-//       console.log(e)
-//       setClaimLoading(false);
-//       setErrorMsg2(e?.message);
-//       setTimeout(() => {
-//         setClaimStatus("initial");
-//         setSelectedPool("");
-//         setErrorMsg2("");
-//       }, 10000);
-//     });
+    //     amountsPendingClaim = amountsPendingClaim[totalContractUSD.length - 1];
 
-//       let amountsPendingClaim = await router.methods
-//       .getAmountsOut(amount, path)
-//       .call().catch((e) => {
-//         setClaimStatus("failed");
-//         console.log(e)
-//         setClaimLoading(false);
-//         setErrorMsg2(e?.message);
-//         setTimeout(() => {
-//           setClaimStatus("initial");
-//           setSelectedPool("");
-//           setErrorMsg2("");
-//         }, 10000);
-//       });
+    //    amountsPendingClaim = BigNumber(amountsPendingClaim)
+    //       .div(1e18)
+    //       .toFixed(18);
 
-//     amountsPendingClaim = amountsPendingClaim[totalContractUSD.length - 1];
-    
-//    amountsPendingClaim = BigNumber(amountsPendingClaim)
-//       .div(1e18)
-//       .toFixed(18);
+    //     amountsPendingClaim = new BigNumber(amountsPendingClaim)
+    //     .times(100 - window.config.slippage_tolerance_percent)
+    //     .div(100)
+    //     .toFixed(0);
 
-//     amountsPendingClaim = new BigNumber(amountsPendingClaim)
-//     .times(100 - window.config.slippage_tolerance_percent)
-//     .div(100)
-//     .toFixed(0);
- 
-// console.log(0, amountsPendingClaim, deadline)
-//     try {
-//       staking
-//         .claim(0, amountsPendingClaim, deadline)
-//         .then(() => {
-//           setClaimStatus("success");
-//           setClaimLoading(false);
-//         })
-//         .catch((e) => {
-//           setClaimStatus("failed");
-//           setClaimLoading(false);
-//           setErrorMsg2(e?.message);
-//           setTimeout(() => {
-//             setClaimStatus("initial");
-//             setSelectedPool("");
-//             setErrorMsg2("");
-//           }, 10000);
-//         });
-//     } catch (e) {
-//       setErrorMsg2(e?.message);
+    // console.log(0, amountsPendingClaim, deadline)
+    //     try {
+    //       staking
+    //         .claim(0, amountsPendingClaim, deadline)
+    //         .then(() => {
+    //           setClaimStatus("success");
+    //           setClaimLoading(false);
+    //         })
+    //         .catch((e) => {
+    //           setClaimStatus("failed");
+    //           setClaimLoading(false);
+    //           setErrorMsg2(e?.message);
+    //           setTimeout(() => {
+    //             setClaimStatus("initial");
+    //             setSelectedPool("");
+    //             setErrorMsg2("");
+    //           }, 10000);
+    //         });
+    //     } catch (e) {
+    //       setErrorMsg2(e?.message);
 
-//       console.error(e);
-//       return;
-//     }
+    //       console.error(e);
+    //       return;
+    //     }
   };
 
   const handleSetMaxDeposit = (e) => {
     e.preventDefault();
 
-    if( new BigNumber(selectedTokenBalance)
-    .div(10 ** selectedTokenDecimals)
-    .toFixed(selectedTokenDecimals) > 10){
-      setDepositAmount(10)
-    }else{
-
+    if (
+      new BigNumber(selectedTokenBalance)
+        .div(10 ** selectedTokenDecimals)
+        .toFixed(selectedTokenDecimals) > 10
+    ) {
+      setDepositAmount(10);
+    } else {
       setDepositAmount(
         new BigNumber(selectedTokenBalance)
           .div(10 ** selectedTokenDecimals)
@@ -1093,12 +1281,7 @@ const BscFarmingFunc = ({
   };
 
   const refreshBalance = async () => {
-    let coinbase = coinbase;
-
-    if (window.coinbase_address) {
-      coinbase = window.coinbase_address;
-      setCoinbase2(coinbase);
-    }
+    let coinbase = coinbase2 === null ? window.coinbase_address : coinbase2;
 
     let lp_data = the_graph_result.lp_data;
 
@@ -1120,55 +1303,102 @@ const BscFarmingFunc = ({
       ];
       let _amountOutMin = await router.methods
         .getAmountsOut(amount, path)
-        .call();
+        .call()
+        .catch((e) => {
+          console.error(e);
+          return 0;
+        });
       _amountOutMin = _amountOutMin[_amountOutMin.length - 1];
       _amountOutMin = new BigNumber(_amountOutMin).div(1e18).toFixed(18);
 
-      let _bal = token.balanceOf(coinbase);
-      let _rBal = reward_token.balanceOf(coinbase);
+      let _bal = token.balanceOf(coinbase).catch((e) => {
+        console.error(e);
+        return 0;
+      });
+      let _rBal = reward_token.balanceOf(coinbase).catch((e) => {
+        console.error(e);
+        return 0;
+      });
+      let _pDivs = constant.getPendingDivs(coinbase).catch((e) => {
+        console.error(e);
+        return 0;
+      });
 
-      let _pDivs = constant.getPendingDivs(coinbase);
+      let _pDivsEth = constant.getPendingDivsEth(coinbase).catch((e) => {
+        console.error(e);
+        return 0;
+      });
 
-      let _pDivsEth = constant.getPendingDivsEth(coinbase);
+      let _tEarned = constant.totalEarnedTokens(coinbase).catch((e) => {
+        console.error(e);
+        return 0;
+      });
 
-      let _tEarned = constant.totalEarnedTokens(coinbase);
+      let _tEarnedEth = constant.totalEarnedEth(coinbase).catch((e) => {
+        console.error(e);
+        return 0;
+      });
 
-      let _tEarnedEth = constant.totalEarnedEth(coinbase);
+      let _stakingTime = constant.depositTime(coinbase).catch((e) => {
+        console.error(e);
+        return 0;
+      });
 
-      let _stakingTime = constant.depositTime(coinbase);
+      let _dTokens = constant.depositedTokens(coinbase).catch((e) => {
+        console.error(e);
+        return 0;
+      });
 
-      let _dTokens = constant.depositedTokens(coinbase);
-
-      let _lClaimTime = constant.lastClaimedTime(coinbase);
+      let _lClaimTime = constant.lastClaimedTime(coinbase).catch((e) => {
+        console.error(e);
+        return 0;
+      });
 
       let _tvl = token.balanceOf(constant._address);
 
       //Take iDYP Balance on Staking & Farming
 
-      let _tvlConstantiDYP = reward_token_idyp.balanceOf(
-        constant._address
-      ); /* TVL of iDYP on Staking */
+      let _tvlConstantiDYP = reward_token_idyp
+        .balanceOf(constant._address)
+        .catch((e) => {
+          console.error(e);
+          return 0;
+        }); /* TVL of iDYP on Staking */
 
-      let _tvlConstantDYP = reward_token.balanceOf(
-        constant._address
-      ); /* TVL of iDYP on Staking */
+      let _tvlConstantDYP = reward_token
+        .balanceOf(constant._address)
+        .catch((e) => {
+          console.error(e);
+          return 0;
+        }); /* TVL of iDYP on Staking */
 
-      let _tvliDYP = reward_token_idyp.balanceOf(
-        constant._address
-      ); /* TVL of iDYP on Farming */
+      let _tvliDYP = reward_token_idyp
+        .balanceOf(constant._address)
+        .catch((e) => {
+          console.error(e);
+          return 0;
+        }); /* TVL of iDYP on Farming */
 
-      let _dTokensDYP = staking.depositedTokens(coinbase);
-      let _rewardsPendingClaim = staking.getPendingDivs(coinbase)
+      let _dTokensDYP = staking.depositedTokens(coinbase).catch((e) => {
+        console.error(e);
+        return 0;
+      });
+      let _rewardsPendingClaim = staking.getPendingDivs(coinbase).catch((e) => {
+        console.error(e);
+        return 0;
+      });
 
       // let _pendingDivsStaking = constant.getTotalPendingDivs(coinbase);
 
       //Take DYPS Balance
-      let _tvlDYPS = token_dypsbsc.balanceOf(
-        constant._address
-      ); /* TVL of DYPS */
+      let _tvlDYPS = token_dypsbsc.balanceOf(constant._address).catch((e) => {
+        console.error(e);
+        return 0;
+      }); /* TVL of DYPS */
 
       let [
         token_balance2,
+        pendingDivsEth2,
         reward_token_balance2,
         pendingDivs2,
         totalEarnedTokens2,
@@ -1177,7 +1407,7 @@ const BscFarmingFunc = ({
         lastClaimedTime2,
         tvl2,
         totalEarnedEth2,
-        pendingDivsEth2,
+
         tvlConstantiDYP2,
         tvlConstantDYP2,
         tvliDYP2,
@@ -1186,6 +1416,7 @@ const BscFarmingFunc = ({
         tvlDYPS2,
       ] = await Promise.all([
         _bal,
+        _pDivsEth,
         _rBal,
         _pDivs,
         _tEarned,
@@ -1194,7 +1425,7 @@ const BscFarmingFunc = ({
         _lClaimTime,
         _tvl,
         _tEarnedEth,
-        _pDivsEth,
+
         _tvlConstantiDYP,
         _tvlConstantDYP,
         _tvliDYP,
@@ -1278,7 +1509,9 @@ const BscFarmingFunc = ({
         .toString(10);
       setPendingDivs(pendingDivs_formatted);
 
-      let rewardsPendingClaim_formatted = new BigNumber(rewardsPendingClaim2).div(1e18).toString(10);
+      let rewardsPendingClaim_formatted = new BigNumber(rewardsPendingClaim2)
+        .div(1e18)
+        .toString(10);
       setrewardsPendingClaim(rewardsPendingClaim_formatted);
 
       let totalEarnedTokens_formatted = new BigNumber(totalEarnedTokens2)
@@ -1384,38 +1617,44 @@ const BscFarmingFunc = ({
 
     //console.log(disburseDuration)
     //console.log(contractDeployTime)
-
-
   };
 
-  const getBalance = async()=>{
+  const getBalance = async () => {
     try {
-    let TOKEN_ABI = window.ERC20_ABI;
+      let TOKEN_ABI = window.ERC20_ABI;
 
-    let selectedBuybackToken2 = "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c"; // wbnb/wavax
-    let web3 = window.bscWeb3;
-    let tokenContract = new web3.eth.Contract(TOKEN_ABI, selectedBuybackToken2);
-    const result = await tokenContract.methods.balanceOf(coinbase).call().catch((e)=>{console.log(e)})
-  
-     setSelectedTokenBalance(result);
+      let selectedBuybackToken2 = "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c"; // wbnb/wavax
+      let web3 = window.bscWeb3;
+      let tokenContract = new web3.eth.Contract(
+        TOKEN_ABI,
+        selectedBuybackToken2
+      );
+      const result = await tokenContract.methods
+        .balanceOf(coinbase)
+        .call()
+        .catch((e) => {
+          console.log(e);
+        });
+
+      setSelectedTokenBalance(result);
     } catch (e) {
       console.warn(e);
     }
-  }
+  };
 
   const getUsdPerETH = () => {
     return the_graph_result.usd_per_eth || 0;
   };
 
-  const getTvlUsdInfo = async()=>{
+  const getTvlUsdInfo = async () => {
     const tokenPrice = await axios
-    .get(`https://api.dyp.finance/api/the_graph_bsc_v2`)
-    .then((res) => {
-      return res.data.the_graph_bsc_v2.usd_per_eth;
-    })
-    .catch((err) => console.error(err));
-    setPriceUSD(tokenPrice)
-  }
+      .get(`https://api.dyp.finance/api/the_graph_bsc_v2`)
+      .then((res) => {
+        return res.data.the_graph_bsc_v2.usd_per_eth;
+      })
+      .catch((err) => console.error(err));
+    setPriceUSD(tokenPrice);
+  };
 
   const getmyShare = async () => {
     // myshare = (my lp deposit / total lp deposited) * 100
@@ -1423,7 +1662,9 @@ const BscFarmingFunc = ({
       setmyShare(0);
     }
     if (totalLPdeposited != "0" && totalLPdeposited != "") {
-      let myShare2 = ((myDepositedLpTokens / totalLPdeposited) * 100).toFixed(2);
+      let myShare2 = ((myDepositedLpTokens / totalLPdeposited) * 100).toFixed(
+        2
+      );
       setmyShare(myShare2);
     }
   };
@@ -1435,7 +1676,9 @@ const BscFarmingFunc = ({
     // let approxDeposit = approxDeposit;
     //let lp_data = the_graph_result.lp_data
     //let usd_per_lp = lp_data ? lp_data[lp_id].usd_per_lp : 0
-    setCalculatedUsd(approxDeposit * (1 + latestApr/ 100) ** (approxDays / 365))
+    setCalculatedUsd(
+      approxDeposit * (1 + latestApr / 100) ** (approxDays / 365)
+    );
     // return ((approxDeposit * APY) / 100 / 365) * approxDays;
   };
 
@@ -1448,12 +1691,11 @@ const BscFarmingFunc = ({
     return result;
   };
 
-const checkDepositAmount = (amount) => {
-  
-  if(Number(amount) > 10){
-    setDepositAmount(10)
-  }
-}
+  const checkDepositAmount = (amount) => {
+    if (Number(amount) > 10) {
+      setDepositAmount(10);
+    }
+  };
 
   const checkApproval = async (amount) => {
     let selectedBuybackToken = "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c"; // wbnb/wavax
@@ -1470,7 +1712,6 @@ const checkDepositAmount = (amount) => {
 
     let result_formatted = new BigNumber(result).div(1e18).toFixed(6);
 
-
     if (
       Number(result_formatted) >= Number(amount) &&
       Number(result_formatted) !== 0
@@ -1482,28 +1723,41 @@ const checkDepositAmount = (amount) => {
   };
 
   const handleBnbPool = async () => {
-    await handleSwitchNetworkhook("0x38")
-      .then(() => {
-        handleSwitchNetwork("56");
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+    if (window.ethereum) {
+      if (window.WALLET_TYPE !== "binance") {
+        await handleSwitchNetworkhook("0x38")
+          .then(() => {
+            handleSwitchNetwork(56);
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      } else if (window.WALLET_TYPE === "binance") {
+        handleSwitchChainBinanceWallet(56);
+      }
+    } else if (window.WALLET_TYPE === "binance") {
+      handleSwitchChainBinanceWallet(56);
+    } else {
+      window.alertify.error("No web3 detected. Please install Metamask!");
+    }
   };
 
   useEffect(() => {
-    if (coinbase !== coinbase2) {
+    if (coinbase !== coinbase2 && chainId === "56") {
       setCoinbase2(coinbase);
       getTotalLP();
-      getLPTokens();
       console.log(wbnbPrice, "wbnbprice");
     }
     fetchDypPrice();
     fetchiDypPrice();
     getPriceDYP();
   }, []);
-
-  let is_connected = is_wallet_connected;
+  useEffect(() => {
+    if (coinbase && isConnected) {
+      setCoinbase2(coinbase);
+      getLPTokens();
+    }
+  }, [coinbase, isConnected]);
 
   let usd_per_token = the_graph_result.token_data
     ? the_graph_result.token_data["0x961c8c0b1aad0c0b10a51fef6a867e3091bcef17"]
@@ -1554,13 +1808,13 @@ const checkDepositAmount = (amount) => {
   }
 
   let lp_data = the_graph_result.lp_data;
-  let apy = lp_data ? lp_data[lp_id].apy : 0;
+  let apy = lp_data ? lp_data[lp_id]?.apy : 0;
 
-  let total_stakers = lp_data ? lp_data[lp_id].stakers_num : 0;
+  let total_stakers = lp_data ? lp_data[lp_id]?.stakers_num : 0;
   // let tvl_usd = lp_data ? lp_data[lp_id].tvl_usd : 0
 
-  apy = getFormattedNumber(apy, 2);
-  total_stakers = getFormattedNumber(total_stakers, 0);
+  apy = getFormattedNumber(apy ?? 0, 2);
+  total_stakers = getFormattedNumber(total_stakers ?? 0, 0);
 
   //console.log(total_stakers)
 
@@ -1627,27 +1881,26 @@ const checkDepositAmount = (amount) => {
   };
 
   useEffect(() => {
+    if (chainId === "56") {
       refreshBalance();
-       if (depositAmount !== "") {
-      checkApproval(depositAmount);
-
+      if (depositAmount !== "") {
+        checkApproval(depositAmount);
+      }
     }
   }, [coinbase, coinbase2, chainId, staking, constant]);
 
+  useEffect(() => {
+    setDepositAmount("");
+    setDepositStatus("initial");
+  }, [staking]);
 
   useEffect(() => {
-      setDepositAmount('');
-      setDepositStatus('initial')
-
-  }, [ staking]);
-
-  useEffect(() => {
-      getBalance();
+    getBalance();
   }, [coinbase, chainId]);
 
   useEffect(() => {
     getmyShare();
-    getTvlUsdInfo()
+    getTvlUsdInfo();
   }, [totalLPdeposited, myDepositedLpTokens]);
 
   return (
@@ -1662,15 +1915,7 @@ const checkDepositAmount = (amount) => {
         <div className="leftside2 w-100">
           <div className="activewrapper activewrapper-vault">
             <div className="d-flex flex-column flex-lg-row w-100 align-items-start align-items-lg-center justify-content-between">
-              <h6 className="activetxt position-relative activetxt-vault">
-                <img
-                  src={ellipse}
-                  alt=""
-                  className="position-relative"
-                  style={{ top: "-1px" }}
-                />
-                Active status
-              </h6>
+              <h6 className="expiredtxt caws-active-txt">Expired Pool</h6>
               {/* <div className="d-flex align-items-center justify-content-between gap-2">
             <h6 className="earnrewards-text">Earn rewards in:</h6>
             <h6 className="earnrewards-token d-flex align-items-center gap-1">
@@ -1699,7 +1944,9 @@ const checkDepositAmount = (amount) => {
                           }
                         >
                           <img
-                            src={moreinfo}
+                            src={
+                              "https://cdn.worldofdypians.com/tools/more-info.svg"
+                            }
                             alt=""
                             onClick={performanceOpen}
                           />
@@ -1727,7 +1974,13 @@ const checkDepositAmount = (amount) => {
                             </div>
                           }
                         >
-                          <img src={moreinfo} alt="" onClick={aprOpen} />
+                          <img
+                            src={
+                              "https://cdn.worldofdypians.com/tools/more-info.svg"
+                            }
+                            alt=""
+                            onClick={aprOpen}
+                          />
                         </Tooltip>
                       </ClickAwayListener>
                     </h6>
@@ -1751,7 +2004,13 @@ const checkDepositAmount = (amount) => {
                             </div>
                           }
                         >
-                          <img src={moreinfo} alt="" onClick={lockOpen} />
+                          <img
+                            src={
+                              "https://cdn.worldofdypians.com/tools/more-info.svg"
+                            }
+                            alt=""
+                            onClick={lockOpen}
+                          />
                         </Tooltip>
                       </ClickAwayListener>
                     </h6>
@@ -1774,9 +2033,17 @@ const checkDepositAmount = (amount) => {
           </a> */}
                   <h6
                     className="bottomitems"
-                    onClick={() => {setShowCalculator(true); getApproxReturnUSD();}}
+                    onClick={() => {
+                      setShowCalculator(true);
+                      getApproxReturnUSD();
+                    }}
                   >
-                    <img src={poolsCalculatorIcon} alt="" />
+                    <img
+                      src={
+                        "https://cdn.worldofdypians.com/tools/poolsCalculatorIcon.svg"
+                      }
+                      alt=""
+                    />
                     Calculator
                   </h6>
                   <div
@@ -1785,7 +2052,12 @@ const checkDepositAmount = (amount) => {
                     }}
                   >
                     <h6 className="bottomitems">
-                      <img src={purplestats} alt="" />
+                      <img
+                        src={
+                          "https://cdn.worldofdypians.com/tools/purpleStat.svg"
+                        }
+                        alt=""
+                      />
                       Stats
                     </h6>
                   </div>
@@ -1811,7 +2083,13 @@ const checkDepositAmount = (amount) => {
                 coinbase === undefined ||
                 isConnected === false ? (
                   <button className="connectbtn btn" onClick={showModal}>
-                    <img src={wallet} alt="" /> Connect wallet
+                    <img
+                      src={
+                        "https://cdn.worldofdypians.com/tools/walletIcon.svg"
+                      }
+                      alt=""
+                    />{" "}
+                    Connect wallet
                   </button>
                 ) : chainId === "56" ? (
                   <div className="addressbtn btn">
@@ -1853,16 +2131,15 @@ const checkDepositAmount = (amount) => {
                           style={{ position: "relative", bottom: "4px" }}
                         >
                           <img
-                            src={
-                              require(`./assets/bsc/${selectedTokenLogo.toLowerCase()}.svg`)
-                                .default
-                            }
+                            src={`https://cdn.worldofdypians.com/tools/${selectedTokenLogo.toLowerCase()}.svg`}
                             alt=""
                             style={{ width: 14, height: 14 }}
                           />
                           {selectedTokenLogo.toUpperCase()}
                           <img
-                            src={dropdownVector}
+                            src={
+                              "https://cdn.worldofdypians.com/tools/dropdownVector.svg"
+                            }
                             alt=""
                             style={{ width: 10, height: 10 }}
                           />
@@ -1874,11 +2151,9 @@ const checkDepositAmount = (amount) => {
                               onClick={() => handleSelectedTokenChange(t)}
                             >
                               <img
-                                src={
-                                  require(`./assets/bsc/${buyback_activetokensbsc[
-                                    t
-                                  ].symbol.toLowerCase()}.svg`).default
-                                }
+                                src={`https://cdn.worldofdypians.com/tools/${buyback_activetokensbsc[
+                                  t
+                                ].symbol.toLowerCase()}.svg`}
                                 alt=""
                                 style={{ width: 14, height: 14 }}
                               />
@@ -1915,14 +2190,26 @@ const checkDepositAmount = (amount) => {
                       </div>
                     }
                   >
-                    <img src={moreinfo} alt="" onClick={depositOpen} />
+                    <img
+                      src={"https://cdn.worldofdypians.com/tools/more-info.svg"}
+                      alt=""
+                      onClick={depositOpen}
+                    />
                   </Tooltip>
                 </ClickAwayListener>
               </div>
               <div className="d-flex flex-column gap-2 justify-content-between">
                 <div className="d-flex flex-column flex-lg-row align-items-center justify-content-between gap-2 position-relative">
-                  <div className="position-absolute" style={{bottom: '-15px', left: '0px'}}>
-                    <span className="mb-0" style={{color: '#ff6232', fontSize: '10px'}}>The maximum deposit limit is 10 WBNB per transaction*</span>
+                  <div
+                    className="position-absolute"
+                    style={{ bottom: "-15px", left: "0px" }}
+                  >
+                    <span
+                      className="mb-0"
+                      style={{ color: "#ff6232", fontSize: "10px" }}
+                    >
+                      The maximum deposit limit is 10 WBNB per transaction*
+                    </span>
                   </div>
                   <div className="d-flex align-items-center justify-content-between justify-content-lg-start gap-2 w-100">
                     <div className="input-container px-0">
@@ -1937,7 +2224,7 @@ const checkDepositAmount = (amount) => {
                         onChange={(e) => {
                           setDepositAmount(e.target.value);
                           checkApproval(e.target.value);
-                          checkDepositAmount(e.target.value)
+                          checkDepositAmount(e.target.value);
                         }}
                         placeholder=" "
                         className="text-input"
@@ -2005,7 +2292,12 @@ const checkDepositAmount = (amount) => {
                       <>Success</>
                     ) : (
                       <>
-                        <img src={failMark} alt="" />
+                        <img
+                          src={
+                            "https://cdn.worldofdypians.com/wod/failMark.svg"
+                          }
+                          alt=""
+                        />
                         Failed
                       </>
                     )}
@@ -2038,7 +2330,13 @@ const checkDepositAmount = (amount) => {
                         </div>
                       }
                     >
-                      <img src={moreinfo} alt="" onClick={rewardsOpen} />
+                      <img
+                        src={
+                          "https://cdn.worldofdypians.com/tools/more-info.svg"
+                        }
+                        alt=""
+                        onClick={rewardsOpen}
+                      />
                     </Tooltip>
                   </ClickAwayListener>
                 </h6>
@@ -2046,7 +2344,10 @@ const checkDepositAmount = (amount) => {
               <div className="d-flex flex-column gap-2 justify-content-between">
                 <div className="d-flex align-items-center justify-content-between gap-2"></div>
                 <div className="form-row d-flex flex-column flex-lg-row gap-2 align-items-center align-items-lg-end justify-content-between">
-                  <div className="d-flex align-items-center justify-content-between justify-content-lg-center gap-3" style={{maxWidth: '65%'}}>
+                  <div
+                    className="d-flex align-items-center justify-content-between justify-content-lg-center gap-3"
+                    style={{ maxWidth: "65%" }}
+                  >
                     <div
                       className="gap-1 claimreward-wrapper"
                       onClick={() => {
@@ -2054,7 +2355,7 @@ const checkDepositAmount = (amount) => {
                       }}
                       style={{
                         // padding: "3px",
-                        maxWidth: '45%',
+                        maxWidth: "45%",
                         background:
                           selectedPool === "wbnb" ? "#141333" : "#26264F",
                         border:
@@ -2064,7 +2365,11 @@ const checkDepositAmount = (amount) => {
                       }}
                     >
                       <img
-                        src={selectedPool === "wbnb" ? check : empty}
+                        src={
+                          selectedPool === "wbnb"
+                            ? "https://cdn.worldofdypians.com/wod/check.svg"
+                            : "https://cdn.worldofdypians.com/wod/empty.svg"
+                        }
                         alt=""
                         className="activestate"
                       />
@@ -2073,7 +2378,7 @@ const checkDepositAmount = (amount) => {
                           disabled
                           value={
                             Number(pendingDivsEth) > 0
-                              ? `${getFormattedNumber(pendingDivsEth, 2)} WBNB`
+                              ? `${getFormattedNumber(pendingDivsEth, 4)} WBNB`
                               : `${getFormattedNumber(0, 2)} WBNB`
                           }
                           onChange={(e) =>
@@ -2088,7 +2393,7 @@ const checkDepositAmount = (amount) => {
                           type="text"
                           style={{
                             width: "100px",
-                            padding: "0px 15px 0px 15px",
+                            textAlign: "center",
                             height: 35,
                           }}
                         />
@@ -2102,16 +2407,15 @@ const checkDepositAmount = (amount) => {
                             aria-expanded="false"
                           >
                             <img
-                              src={
-                                require(`./assets/bsc/${selectedRewardTokenLogo1.toLowerCase()}.svg`)
-                                  .default
-                              }
+                              src={`https://cdn.worldofdypians.com/tools/${selectedRewardTokenLogo1.toLowerCase()}.svg`}
                               alt=""
-                              style={{ width: 14, height: 14 }}
+                              style={{ width: 13, height: 13 }}
                             />
                             {selectedRewardTokenLogo1.toUpperCase()}
                             <img
-                              src={dropdownVector}
+                              src={
+                                "https://cdn.worldofdypians.com/tools/dropdownVector.svg"
+                              }
                               alt=""
                               style={{ width: 10, height: 10 }}
                             />
@@ -2129,7 +2433,9 @@ const checkDepositAmount = (amount) => {
                               }}
                             >
                               <img
-                                src={require(`./assets/bsc/wbnb.svg`).default}
+                                src={
+                                  "https://cdn.worldofdypians.com/tools/wbnbIcon.svg"
+                                }
                                 alt=""
                                 style={{ width: 14, height: 14 }}
                               />
@@ -2142,7 +2448,7 @@ const checkDepositAmount = (amount) => {
                     <div
                       className="gap-1 claimreward-wrapper"
                       style={{
-                        maxWidth: '45%',
+                        maxWidth: "45%",
                         background:
                           selectedPool === "dyp" ? "#141333" : "#26264F",
                         border:
@@ -2155,7 +2461,11 @@ const checkDepositAmount = (amount) => {
                       }}
                     >
                       <img
-                        src={selectedPool === "dyp" ? check : empty}
+                        src={
+                          selectedPool === "dyp"
+                            ? "https://cdn.worldofdypians.com/wod/check.svg"
+                            : "https://cdn.worldofdypians.com/wod/empty.svg"
+                        }
                         alt=""
                         className="activestate"
                       />
@@ -2165,7 +2475,10 @@ const checkDepositAmount = (amount) => {
                           disabled
                           value={
                             Number(rewardsPendingClaim) > 0
-                              ? `${getFormattedNumber(idypPrice * rewardsPendingClaim / dypPrice,6)} DYP`
+                              ? `${getFormattedNumber(
+                                  (idypPrice * rewardsPendingClaim) / dypPrice,
+                                  6
+                                )} DYP`
                               : `${getFormattedNumber(0, 2)} DYP`
                           }
                           onChange={(e) =>
@@ -2188,7 +2501,9 @@ const checkDepositAmount = (amount) => {
 
                       <div className="d-flex align-items-center justify-content-center w-100 claimreward-header ">
                         <img
-                          src={require(`./assets/dyp.svg`).default}
+                          src={
+                            "https://cdn.worldofdypians.com/tools/dyplogo.svg"
+                          }
                           alt=""
                           style={{ width: 14, height: 14 }}
                         />
@@ -2198,7 +2513,7 @@ const checkDepositAmount = (amount) => {
                           className="form-control inputfarming"
                           style={{ border: "none", padding: "0 0 0 3px" }}
                         >
-                          <option value="DYP"> DYP </option>
+                          <option value="DYP"> DYP (old) </option>
                         </select>
                       </div>
                     </div>
@@ -2239,7 +2554,12 @@ const checkDepositAmount = (amount) => {
                       </div>
                     ) : claimStatus === "failed" ? (
                       <>
-                        <img src={failMark} alt="" />
+                        <img
+                          src={
+                            "https://cdn.worldofdypians.com/wod/failMark.svg"
+                          }
+                          alt=""
+                        />
                         Failed
                       </>
                     ) : claimStatus === "success" ? (
@@ -2296,7 +2616,11 @@ const checkDepositAmount = (amount) => {
                       </div>
                     }
                   >
-                    <img src={moreinfo} alt="" onClick={withdrawOpen} />
+                    <img
+                      src={"https://cdn.worldofdypians.com/tools/more-info.svg"}
+                      alt=""
+                      onClick={withdrawOpen}
+                    />
                   </Tooltip>
                 </ClickAwayListener>
               </h6>
@@ -2399,7 +2723,13 @@ const checkDepositAmount = (amount) => {
                   href={`${window.config.bscscan_baseURL}/address/${coinbase}`}
                   className="stats-link"
                 >
-                  {shortAddress(coinbase)} <img src={statsLinkIcon} alt="" />
+                  {shortAddress(coinbase)}{" "}
+                  <img
+                    src={
+                      "https://cdn.worldofdypians.com/tools/statsLinkIcon.svg"
+                    }
+                    alt=""
+                  />
                 </a>
               </div>
               <hr />
@@ -2415,7 +2745,12 @@ const checkDepositAmount = (amount) => {
                         color: "#f7f7fc",
                       }}
                     >
-                      <img src={poolStatsIcon} alt="" />
+                      <img
+                        src={
+                          "https://cdn.worldofdypians.com/tools/poolStatsIcon.svg"
+                        }
+                        alt=""
+                      />
                       Pool stats
                     </h6>
                     {/* <h6 className="d-flex gap-2 align-items-center myaddrtext">
@@ -2474,7 +2809,13 @@ const checkDepositAmount = (amount) => {
                       href={`https://github.com/dypfinance/staking-governance-security-audits`}
                       className="stats-link"
                     >
-                      Audit <img src={statsLinkIcon} alt="" />
+                      Audit{" "}
+                      <img
+                        src={
+                          "https://cdn.worldofdypians.com/tools/statsLinkIcon.svg"
+                        }
+                        alt=""
+                      />
                     </a>
                     <a
                       target="_blank"
@@ -2482,7 +2823,13 @@ const checkDepositAmount = (amount) => {
                       href={`${window.config.bscscan_baseURL}/token/${token._address}?a=${coinbase}`}
                       className="stats-link"
                     >
-                      View transaction <img src={statsLinkIcon} alt="" />
+                      View transaction{" "}
+                      <img
+                        src={
+                          "https://cdn.worldofdypians.com/tools/statsLinkIcon.svg"
+                        }
+                        alt=""
+                      />
                     </a>
                   </div>
                 </div>
@@ -2555,7 +2902,11 @@ const checkDepositAmount = (amount) => {
                           }}
                         >
                           <img
-                            src={selectedPool === "wbnb2" ? check : empty}
+                            src={
+                              selectedPool === "wbnb2"
+                                ? "https://cdn.worldofdypians.com/wod/check.svg"
+                                : "https://cdn.worldofdypians.com/wod/empty.svg"
+                            }
                             alt=""
                             className="activestate"
                             style={{ top: "45px" }}
@@ -2609,16 +2960,15 @@ const checkDepositAmount = (amount) => {
                                 aria-expanded="false"
                               >
                                 <img
-                                  src={
-                                    require(`./assets/bsc/${selectedRewardTokenLogo1.toLowerCase()}.svg`)
-                                      .default
-                                  }
+                                  src={`https://cdn.worldofdypians.com/tools/${selectedRewardTokenLogo1.toLowerCase()}.svg`}
                                   alt=""
-                                  style={{ width: 14, height: 14 }}
+                                  style={{ width: 15, height: 15 }}
                                 />
                                 {selectedRewardTokenLogo1.toUpperCase()}
                                 <img
-                                  src={dropdownVector}
+                                  src={
+                                    "https://cdn.worldofdypians.com/tools/dropdownVector.svg"
+                                  }
                                   alt=""
                                   style={{ width: 10, height: 10 }}
                                 />
@@ -2636,7 +2986,7 @@ const checkDepositAmount = (amount) => {
                                 >
                                   <img
                                     src={
-                                      require(`./assets/bsc/wbnb.svg`).default
+                                      "https://cdn.worldofdypians.com/tools/wbnbIcon.svg"
                                     }
                                     alt=""
                                     style={{ width: 14, height: 14 }}
@@ -2667,7 +3017,11 @@ const checkDepositAmount = (amount) => {
                           }}
                         >
                           <img
-                            src={selectedPool === "dyp2" ? check : empty}
+                            src={
+                              selectedPool === "dyp2"
+                                ? "https://cdn.worldofdypians.com/wod/check.svg"
+                                : "https://cdn.worldofdypians.com/wod/empty.svg"
+                            }
                             alt=""
                             className="activestate"
                             style={{ top: "45px" }}
@@ -2709,7 +3063,9 @@ const checkDepositAmount = (amount) => {
                           </div>
                           <div className="d-flex align-items-center justify-content-center w-100 claimreward-header">
                             <img
-                              src={require(`./assets/dyp.svg`).default}
+                              src={
+                                "https://cdn.worldofdypians.com/tools/dyplogo.svg"
+                              }
                               alt=""
                               style={{ width: 14, height: 14 }}
                             />
@@ -2784,7 +3140,12 @@ const checkDepositAmount = (amount) => {
                         </div>
                       ) : withdrawStatus === "failed" ? (
                         <>
-                          <img src={failMark} alt="" />
+                          <img
+                            src={
+                              "https://cdn.worldofdypians.com/wod/failMark.svg"
+                            }
+                            alt=""
+                          />
                           Failed
                         </>
                       ) : withdrawStatus === "success" ? (
@@ -2904,7 +3265,10 @@ const checkDepositAmount = (amount) => {
                   name="days"
                   placeholder="Days*"
                   value={approxDays}
-                  onChange={(e) => {setApproxDays(e.target.value); getApproxReturnUSD();}}
+                  onChange={(e) => {
+                    setApproxDays(e.target.value);
+                    getApproxReturnUSD();
+                  }}
                 />
               </div>
               <div className="d-flex flex-column gap-3 w-50 me-5">
@@ -2923,22 +3287,20 @@ const checkDepositAmount = (amount) => {
                       ? approxDeposit * LP_AMPLIFY_FACTOR
                       : approxDeposit
                   }
-                  onChange={(e) =>
-                   { setApproxDeposit(
+                  onChange={(e) => {
+                    setApproxDeposit(
                       Number(e.target.value) > 0
                         ? e.target.value / LP_AMPLIFY_FACTOR
                         : e.target.value
                     );
                     getApproxReturnUSD();
-                  }
-                  }
+                  }}
                 />
               </div>
             </div>
             <div className="d-flex flex-column gap-2 mt-4">
               <h3 style={{ fontWeight: "500", fontSize: "39px" }}>
-                
-                ${getFormattedNumber(calculatedUsd , 2, 6)} USD
+                ${getFormattedNumber(calculatedUsd, 2, 6)} USD
               </h3>
               <h6
                 style={{
@@ -2947,8 +3309,7 @@ const checkDepositAmount = (amount) => {
                   color: "#f7f7fc",
                 }}
               >
-                Approx{" "}
-                {getFormattedNumber(calculatedUsd / wbnbPrice)} WBNB
+                Approx {getFormattedNumber(calculatedUsd / wbnbPrice)} WBNB
               </h6>
             </div>
             <div className="mt-4">

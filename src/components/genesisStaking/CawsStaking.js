@@ -585,12 +585,12 @@ const CawsStaking = ({
       </div>
       <div className="row d-flex d-lg-none align-items-center justify-content-center w-100">
         <NavLink
-          to="/earn"
+          to="/earn/dypius"
           className="d-flex align-items-center gap-2"
           style={{ width: "fit-content" }}
         >
           <img src={toolsIcon} alt="" />
-          <span className="earn-link mb-0">app.dypius.com/earn</span>
+          <span className="earn-link mb-0">app.dypius.com/earn/dypius</span>
         </NavLink>
       </div>
       {showChecklistModal === true && (

@@ -2,13 +2,7 @@ import React from "react";
 import getFormattedNumber from "../../functions/get-formatted-number";
 import Countdown from "react-countdown";
 import "./bridge.css";
-import eth from "./assets/eth.svg";
-import bnb from "./assets/bnb.svg";
-import avax from "./assets/avax.svg";
-import wallet from "./assets/wallet.svg";
-import moreinfo from "./assets/more-info.svg";
-import switchicon from "./assets/switch.svg";
-import failMark from "../../assets/failMark.svg";
+
 import Tooltip from "@material-ui/core/Tooltip";
 import Address from "../FARMINNG/address";
 import WalletModal from "../WalletModal";
@@ -18,7 +12,6 @@ import TimelineSeparator from "@mui/lab/TimelineSeparator";
 import TimelineConnector from "@mui/lab/TimelineConnector";
 import TimelineContent from "@mui/lab/TimelineContent";
 import TimelineDot from "@mui/lab/TimelineDot";
-import routeIcon from "./assets/route-icon.svg";
 
 // Renderer callback with condition
 const getRenderer =
@@ -80,6 +73,7 @@ export default function initBridgeidyp({
         ethBalance: 0,
         bnbBalance: 0,
         avaxBalance: 0,
+        destinationChainText: "",
       };
     }
 
@@ -88,8 +82,49 @@ export default function initBridgeidyp({
       this.getChainSymbol();
       this.fetchData();
       this.getAllBalanceiDyp();
+      this.checkNetworkId();
       window._refreshBalInterval = setInterval(this.refreshBalance, 4000);
       window._refreshBalInterval = setInterval(this.getChainSymbol, 500);
+    }
+
+    checkNetworkId = async () => {
+      if (window.ethereum) {
+        await window.ethereum
+          .request({ method: "eth_chainId" })
+          .then((data) => {
+            if (data === "0x1") {
+              this.setState({
+                destinationChainText: "eth",
+              });
+            } else if (data === "0xa86a") {
+              this.setState({
+                destinationChainText: "avax",
+              });
+            } else if (data === "0x38") {
+              this.setState({
+                destinationChainText: "bnb",
+              });
+            } else if (data === "0xcc") {
+              this.setState({
+                destinationChainText: "opbnb",
+              });
+            } else {
+              this.setState({
+                destinationChainText: "",
+              });
+            }
+          })
+          .catch((e) => {
+            console.error(e);
+            return 0;
+          });
+      }
+    };
+
+    async componentDidUpdate(prevProps, prevState) {
+      if (prevProps.sourceChain != this.props.sourceChain) {
+        this.checkNetworkId();
+      }
     }
 
     componentWillUnmount() {
@@ -98,32 +133,47 @@ export default function initBridgeidyp({
 
     fetchData = async () => {
       //Get DYP Balance Ethereum Pool
-      let ethPool = await window.getTokenHolderBalanceAll(
-        this.props.sourceChain === "avax" || this.props.sourceChain === "bnb"
-          ? bridgeBSC._address
-          : bridgeETH._address,
-        bridgeETH.tokenAddress,
-        1
-      );
+      let ethPool = await window
+        .getTokenHolderBalanceAll(
+          this.props.sourceChain === "avax" || this.props.sourceChain === "bnb"
+            ? bridgeBSC._address
+            : bridgeETH._address,
+          bridgeETH.tokenAddress,
+          1
+        )
+        .catch((e) => {
+          console.error(e);
+          return 0;
+        });
       ethPool = ethPool / 1e18;
 
       //Get DYP Balance BNB Chain Pool
-      let avaxPool = await window.getTokenHolderBalanceAll(
-        this.props.sourceChain === "eth"
-          ? bridgeBSC._address
-          : bridgeETH._address,
-        bridgeETH.tokenAddress,
-        2
-      );
+      let avaxPool = await window
+        .getTokenHolderBalanceAll(
+          this.props.sourceChain === "eth"
+            ? bridgeBSC._address
+            : bridgeETH._address,
+          bridgeETH.tokenAddress,
+          2
+        )
+        .catch((e) => {
+          console.error(e);
+          return 0;
+        });
 
       avaxPool = avaxPool / 1e18;
-      let bnbPool = await window.getTokenHolderBalanceAll(
-        this.props.sourceChain === "bnb"
-          ? bridgeETH._address
-          : bridgeBSC._address,
-        bridgeETH.tokenAddress,
-        3
-      );
+      let bnbPool = await window
+        .getTokenHolderBalanceAll(
+          this.props.sourceChain === "bnb"
+            ? bridgeETH._address
+            : bridgeBSC._address,
+          bridgeETH.tokenAddress,
+          3
+        )
+        .catch((e) => {
+          console.error(e);
+          return 0;
+        });
       bnbPool = bnbPool / 1e18;
       this.setState({ ethPool, avaxPool, bnbPool });
     };
@@ -200,6 +250,7 @@ export default function initBridgeidyp({
     handleDeposit = async (e) => {
       let amount = this.state.depositAmount;
       this.setState({ depositLoading: true });
+      this.checkNetworkId();
 
       if (this.props.sourceChain === "eth") {
         if (this.props.destinationChain === "avax") {
@@ -276,7 +327,31 @@ export default function initBridgeidyp({
           });
       }
     };
+    checkApproval = async (amount) => {
+      if (this.props.coinbase) {
+        const result = await window
+          .checkapproveStakePool(
+            this.props.coinbase,
+            tokenETH._address,
+            bridgeETH._address
+          )
+          .then((data) => {
+            console.log(data);
+            return data;
+          });
 
+        let result_formatted = new BigNumber(result).div(1e18).toFixed(6);
+
+        if (
+          Number(result_formatted) >= Number(amount) &&
+          Number(result_formatted) !== 0
+        ) {
+          this.setState({ depositStatus: "deposit" });
+        } else {
+          this.setState({ depositStatus: "initial" });
+        }
+      }
+    };
     getAllBalanceiDyp = async () => {
       const tokenAddress = "0xbd100d061e120b2c67a24453cf6368e63f1be056";
       const walletAddress = this.props.coinbase;
@@ -301,6 +376,10 @@ export default function initBridgeidyp({
             .call()
             .then((data) => {
               this.setState({ ethBalance: data });
+            })
+            .catch((e) => {
+              console.error(e);
+              return 0;
             });
         } else if (this.props.sourceChain === "avax") {
           await contract2.methods
@@ -308,6 +387,10 @@ export default function initBridgeidyp({
             .call()
             .then((data) => {
               this.setState({ avaxBalance: data });
+            })
+            .catch((e) => {
+              console.error(e);
+              return 0;
             });
         } else if (this.props.sourceChain === "bnb") {
           await contract3.methods
@@ -315,8 +398,32 @@ export default function initBridgeidyp({
             .call()
             .then((data) => {
               this.setState({ bnbBalance: data });
+            })
+            .catch((e) => {
+              console.error(e);
+              return 0;
             });
         }
+      }
+    };
+
+    switchToDestinationChain = async (chainID, chainText) => {
+      if (window.ethereum) {
+        await window.ethereum
+          .request({
+            method: "wallet_switchEthereumChain",
+            params: [
+              {
+                chainId: chainID,
+              },
+            ],
+          })
+          .then((data) => {
+            this.setState({ destinationChainText: chainText });
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       }
     };
 
@@ -331,7 +438,7 @@ export default function initBridgeidyp({
           (this.props.sourceChain === "avax" &&
             this.props.destinationChain === "eth")
             ? window.config.SIGNATURE_API_URLAVAXiDYP
-            : window.config.SIGNATURE_API_URLBSCiDYP;
+            : window.config.SIGNATURE_API_URLAVAXiDYP;
         let url =
           signature +
           `/api/withdraw-args?depositNetwork=${
@@ -342,9 +449,15 @@ export default function initBridgeidyp({
               : "BSC"
           }&txHash=${this.state.txHash}`;
         console.log({ url });
-        let args = await window.jQuery.get(url);
-        console.log({ args });
-
+        // let args = await window.jQuery.get(url);
+        // console.log({ args });
+        // window.alertify.message(args.toString())
+        let args = await fetch(url)
+          .then((response) => response.json())
+          .then((data) => {
+            return data;
+          })
+          .catch((error) => console.error("Error:", error));
         bridgeBSC
           .withdraw(args)
           .then(() => {
@@ -354,6 +467,9 @@ export default function initBridgeidyp({
             });
             this.refreshBalance();
             this.getAllBalanceiDyp();
+            window.alertify.message(
+              "Congratulations on successfully withdrawing your iDYP tokens!"
+            );
           })
           .catch((e) => {
             this.setState({ withdrawLoading: false, withdrawStatus: "fail" });
@@ -399,46 +515,57 @@ export default function initBridgeidyp({
         try {
           let chainId = this.props.networkId;
           let network = window.config.chain_ids[chainId] || "UNKNOWN";
+          if (network !== "UNKNOWN") {
+            let token_balance = await (network == "AVAX" || network === "BSC"
+              ? tokenBSC
+              : tokenETH
+            )
+              .balanceOf(coinbase)
+              .catch((e) => {
+                console.error(e);
+                return 0;
+              });
 
-          let token_balance = await (network == "AVAX" || network === "BSC"
-            ? tokenBSC
-            : tokenETH
-          ).balanceOf(coinbase);
+            this.setState({
+              token_balance,
+              network,
+            });
 
-          this.setState({
-            token_balance,
-            network,
-          });
-
-          if (this.state.txHash) {
-            try {
-              let signature =
-                (this.props.sourceChain === "eth" &&
-                  this.props.destinationChain === "avax") ||
-                (this.props.sourceChain === "avax" &&
-                  this.props.destinationChain === "eth")
-                  ? window.config.SIGNATURE_API_URLAVAXiDYP
-                  : window.config.SIGNATURE_API_URLBSCiDYP;
-              let url =
-                signature +
-                `/api/withdraw-args?depositNetwork=${
-                  this.props.sourceChain === "eth"
-                    ? "ETH"
-                    : this.props.sourceChain === "avax"
-                    ? "AVAX"
-                    : "BSC"
-                }&txHash=${
-                  this.state.txHash
-                }&getWithdrawableUnixTimestamp=true`;
-              console.log({ url });
-              let { withdrawableUnixTimestamp } = await window.jQuery.get(url);
-              this.setState({ withdrawableUnixTimestamp });
-              console.log({ withdrawableUnixTimestamp });
-            } catch (e) {
-              console.error(e);
-              this.setState({ withdrawableUnixTimestamp: null });
-            }
-          } else this.setState({ withdrawableUnixTimestamp: null });
+            if (this.state.txHash) {
+              try {
+                let signature =
+                  (this.props.sourceChain === "eth" &&
+                    this.props.destinationChain === "avax") ||
+                  (this.props.sourceChain === "avax" &&
+                    this.props.destinationChain === "eth")
+                    ? window.config.SIGNATURE_API_URLAVAXiDYP
+                    : window.config.SIGNATURE_API_URLBSCiDYP;
+                let url =
+                  signature +
+                  `/api/withdraw-args?depositNetwork=${
+                    this.props.sourceChain === "eth"
+                      ? "ETH"
+                      : this.props.sourceChain === "avax"
+                      ? "AVAX"
+                      : "BSC"
+                  }&txHash=${
+                    this.state.txHash
+                  }&getWithdrawableUnixTimestamp=true`;
+                console.log({ url });
+                let { withdrawableUnixTimestamp } = await window.jQuery
+                  .get(url)
+                  .catch((e) => {
+                    console.error(e);
+                    return 0;
+                  });
+                this.setState({ withdrawableUnixTimestamp });
+                console.log({ withdrawableUnixTimestamp });
+              } catch (e) {
+                console.error(e);
+                this.setState({ withdrawableUnixTimestamp: null });
+              }
+            } else this.setState({ withdrawableUnixTimestamp: null });
+          }
         } catch (e) {
           console.error(e);
         }
@@ -498,7 +625,7 @@ export default function initBridgeidyp({
             <div className="row">
               <div>
                 <div className="d-flex flex-column">
-                  <h6 className="fromtitle mb-2">Deposit</h6>
+                  {/* <h6 className="fromtitle mb-2">Deposit</h6> */}
                   <div className="d-flex flex-column flex-lg-row align-items-center justify-content-between gap-2">
                     <div className="d-flex align-items-center justify-content-between gap-3">
                       <div
@@ -515,7 +642,12 @@ export default function initBridgeidyp({
                         }}
                       >
                         <h6 className="optiontext d-flex align-items-center gap-2">
-                          <img src={eth} alt="" />
+                          <img
+                            src={
+                              "https://cdn.worldofdypians.com/tools/ethSquare.svg"
+                            }
+                            alt=""
+                          />
                           <p className=" mb-0 optiontext d-none d-lg-flex">
                             Ethereum
                           </p>
@@ -537,7 +669,12 @@ export default function initBridgeidyp({
                           }}
                         >
                           <h6 className="optiontext d-flex align-items-center gap-2">
-                            <img src={bnb} alt="" />
+                            <img
+                              src={
+                                "https://cdn.worldofdypians.com/tools/bnbSquare.svg"
+                              }
+                              alt=""
+                            />
                             <p className=" mb-0 optiontext d-none d-lg-flex">
                               BNB Chain
                             </p>
@@ -560,7 +697,12 @@ export default function initBridgeidyp({
                           }}
                         >
                           <h6 className="optiontext d-flex align-items-center gap-2">
-                            <img src={avax} alt="" />
+                            <img
+                              src={
+                                "https://cdn.worldofdypians.com/tools/avaxSquare.svg"
+                              }
+                              alt=""
+                            />
                             <p className=" mb-0 optiontext d-none d-lg-flex">
                               Avalanche
                             </p>
@@ -576,7 +718,13 @@ export default function initBridgeidyp({
                           this.setState({ showWalletModal: true });
                         }}
                       >
-                        <img src={wallet} alt="" />
+                        <img
+                          src={
+                            "https://cdn.worldofdypians.com/tools/walletIcon.svg"
+                          }
+                          alt=""
+                          style={{ height: 20, width: 20 }}
+                        />
                         Connect wallet
                       </button>
                     ) : (
@@ -663,7 +811,12 @@ export default function initBridgeidyp({
                                   </div>
                                 }
                               >
-                                <img src={moreinfo} alt="" />
+                                <img
+                                  src={
+                                    "https://cdn.worldofdypians.com/tools/more-info.svg"
+                                  }
+                                  alt=""
+                                />
                               </Tooltip>
                             </h6>
 
@@ -675,11 +828,12 @@ export default function initBridgeidyp({
                                       ? this.state.depositAmount
                                       : this.state.depositAmount
                                   }
-                                  onChange={(e) =>
+                                  onChange={(e) => {
                                     this.setState({
                                       depositAmount: e.target.value,
-                                    })
-                                  }
+                                    });
+                                    this.checkApproval(e.target.value);
+                                  }}
                                   className="styledinput"
                                   placeholder="0"
                                   type="text"
@@ -751,7 +905,12 @@ export default function initBridgeidyp({
                                   <>Success</>
                                 ) : (
                                   <>
-                                    <img src={failMark} alt="" />
+                                    <img
+                                      src={
+                                        "https://cdn.worldofdypians.com/wod/failMark.svg"
+                                      }
+                                      alt=""
+                                    />
                                     Failed
                                   </>
                                 )}
@@ -776,7 +935,7 @@ export default function initBridgeidyp({
                   </div>
                   <img
                     onClick={this.handleSwapChains}
-                    src={switchicon}
+                    src={"https://cdn.worldofdypians.com/tools/switch.svg"}
                     alt=""
                     style={{
                       width: 55,
@@ -788,7 +947,7 @@ export default function initBridgeidyp({
                       cursor: "pointer",
                     }}
                   />
-                  <div className="col-12 position-relative">
+                  <div className="col-12">
                     <div className="purplediv"></div>
                     <div className="l-box">
                       <div className="pb-0">
@@ -821,7 +980,12 @@ export default function initBridgeidyp({
                                     }}
                                   >
                                     <h6 className="optiontext d-flex align-items-center gap-2">
-                                      <img src={eth} alt="" />
+                                      <img
+                                        src={
+                                          "https://cdn.worldofdypians.com/tools/ethSquare.svg"
+                                        }
+                                        alt=""
+                                      />
                                       <p className=" mb-0 optiontext d-none d-lg-flex">
                                         Ethereum
                                       </p>
@@ -846,7 +1010,12 @@ export default function initBridgeidyp({
                                       }}
                                     >
                                       <h6 className="optiontext d-flex align-items-center gap-2">
-                                        <img src={bnb} alt="" />
+                                        <img
+                                          src={
+                                            "https://cdn.worldofdypians.com/tools/bnbSquare.svg"
+                                          }
+                                          alt=""
+                                        />
                                         <p className=" mb-0 optiontext d-none d-lg-flex">
                                           BNB Chain
                                         </p>
@@ -872,7 +1041,12 @@ export default function initBridgeidyp({
                                       }}
                                     >
                                       <h6 className="optiontext d-flex align-items-center gap-2">
-                                        <img src={avax} alt="" />
+                                        <img
+                                          src={
+                                            "https://cdn.worldofdypians.com/tools/avaxSquare.svg"
+                                          }
+                                          alt=""
+                                        />
                                         <p className=" mb-0 optiontext d-none d-lg-flex">
                                           Avalanche
                                         </p>
@@ -927,7 +1101,12 @@ export default function initBridgeidyp({
                                     </div>
                                   }
                                 >
-                                  <img src={moreinfo} alt="" />
+                                  <img
+                                    src={
+                                      "https://cdn.worldofdypians.com/tools/more-info.svg"
+                                    }
+                                    alt=""
+                                  />
                                 </Tooltip>
                               </div>
                             </h6>
@@ -936,9 +1115,9 @@ export default function initBridgeidyp({
                               <div className="d-flex gap-2 align-items-center">
                                 <input
                                   value={this.state.txHash}
-                                  onChange={(e) =>
-                                    this.setState({ txHash: e.target.value })
-                                  }
+                                  onChange={(e) => {
+                                    this.setState({ txHash: e.target.value });
+                                  }}
                                   className="styledinput"
                                   placeholder="Enter Deposit transaction hash"
                                   type="text"
@@ -947,13 +1126,21 @@ export default function initBridgeidyp({
                               </div>
 
                               <button
-                                style={{ width: "fit-content" }}
+                                style={{
+                                  width: "fit-content",
+                                  textWrap: "nowrap",
+                                }}
                                 disabled={
-                                  this.state.txHash !== "" ? false : true
+                                  this.state.withdrawLoading === true ||
+                                  this.state.txHash === "" ||
+                                  this.state.withdrawStatus === "success"
+                                    ? true
+                                    : false
                                 }
                                 className={`btn filledbtn ${
-                                  canWithdraw === false &&
-                                  this.state.txHash === "" &&
+                                  ((canWithdraw === false &&
+                                    this.state.txHash === "") ||
+                                    this.state.withdrawStatus === "success") &&
                                   "disabled-btn"
                                 } ${
                                   this.state.withdrawStatus === "deposit" ||
@@ -963,9 +1150,22 @@ export default function initBridgeidyp({
                                     ? "fail-button"
                                     : null
                                 } d-flex justify-content-center align-items-center gap-2`}
-                                onClick={this.handleWithdraw}
+                                onClick={() => {
+                                  this.state.destinationChainText ===
+                                  this.props.destinationChain
+                                    ? this.handleWithdraw()
+                                    : this.switchToDestinationChain(
+                                        this.props.destinationChain === "eth"
+                                          ? "0x1"
+                                          : this.props.destinationChain ===
+                                            "avax"
+                                          ? "0xa86a"
+                                          : "0x38",
+                                        this.props.destinationChain
+                                      );
+                                }}
                               >
-                                {this.state.withdrawLoading === true ? (
+                                {this.state.withdrawLoading ? (
                                   <div
                                     class="spinner-border spinner-border-sm text-light"
                                     role="status"
@@ -974,16 +1174,38 @@ export default function initBridgeidyp({
                                       Loading...
                                     </span>
                                   </div>
-                                ) : this.state.withdrawStatus === "initial" ? (
+                                ) : this.state.withdrawStatus === "initial" &&
+                                  this.state.destinationChainText ===
+                                    this.props.destinationChain &&
+                                  this.state.txHash !== "" ? (
                                   <>Withdraw</>
+                                ) : this.state.withdrawStatus === "initial" &&
+                                  this.state.txHash === "" ? (
+                                  <>Withdraw</>
+                                ) : this.state.withdrawStatus === "initial" &&
+                                  this.state.destinationChainText !==
+                                    this.props.destinationChain ? (
+                                  <>
+                                    Switch{" "}
+                                    {this.props.destinationChain === "eth"
+                                      ? "to Ethereum"
+                                      : this.props.destinationChain === "bnb"
+                                      ? "to BNB Chain"
+                                      : "to Avalanche"}
+                                  </>
                                 ) : this.state.withdrawStatus === "success" ? (
                                   <>Success</>
                                 ) : (
                                   <>
-                                    <img src={failMark} alt="" />
+                                    <img
+                                      src={
+                                        "https://cdn.worldofdypians.com/wod/failMark.svg"
+                                      }
+                                      alt=""
+                                    />
                                     Failed
                                   </>
-                                )}{" "}
+                                )}
                                 {this.state.withdrawableUnixTimestamp &&
                                   Date.now() <
                                     this.state.withdrawableUnixTimestamp *
@@ -1007,7 +1229,9 @@ export default function initBridgeidyp({
                             <div className="separator"></div>
                             <div className="d-flex gap-2 align-items-start">
                               <img
-                                src={require("./assets/errorinfo.svg").default}
+                                src={
+                                  "https://cdn.worldofdypians.com/tools/errorinfo.svg"
+                                }
                                 alt=""
                               />
                               <h6 className="bottominfotxt">
@@ -1051,7 +1275,10 @@ export default function initBridgeidyp({
             </div>
             <div>
               <h6 className="guidetitle">
-                <img src={routeIcon} alt="" />
+                <img
+                  src={"https://cdn.worldofdypians.com/tools/route-icon.svg"}
+                  alt=""
+                />
                 Bridge process guide
               </h6>
               <div className="separator"></div>
@@ -1122,14 +1349,16 @@ export default function initBridgeidyp({
                   <TimelineSeparator>
                     <TimelineDot
                       className={
-                        this.state.depositAmount !== ""
+                        this.state.depositAmount !== "" ||
+                        this.state.txHash !== ""
                           ? "greendot"
                           : "passivedot"
                       }
                     />
                     <TimelineConnector
                       className={
-                        this.state.depositAmount !== ""
+                        this.state.depositAmount !== "" ||
+                        this.state.txHash !== ""
                           ? "greenline"
                           : "passiveline"
                       }
@@ -1150,14 +1379,18 @@ export default function initBridgeidyp({
                   <TimelineSeparator>
                     <TimelineDot
                       className={
-                        this.state.depositStatus === "deposit"
+                        this.state.depositStatus === "deposit" ||
+                        this.state.depositStatus === "success" ||
+                        this.state.txHash !== ""
                           ? "greendot"
                           : "passivedot"
                       }
                     />
                     <TimelineConnector
                       className={
-                        this.state.depositStatus === "deposit"
+                        this.state.depositStatus === "deposit" ||
+                        this.state.depositStatus === "success" ||
+                        this.state.txHash !== ""
                           ? "greenline"
                           : "passiveline"
                       }
@@ -1170,6 +1403,36 @@ export default function initBridgeidyp({
                       </h6>
                       Approve the transaction and then deposit the assets. These
                       steps need confirmation in your wallet.
+                    </h6>
+                  </TimelineContent>
+                </TimelineItem>
+                <TimelineItem>
+                  <TimelineSeparator>
+                    <TimelineDot
+                      className={
+                        this.state.depositStatus === "success" ||
+                        this.state.txHash !== ""
+                          ? "greendot"
+                          : "passivedot"
+                      }
+                    />
+                    <TimelineConnector
+                      className={
+                        this.state.depositStatus === "success" ||
+                        this.state.txHash !== ""
+                          ? "greenline"
+                          : "passiveline"
+                      }
+                    />
+                  </TimelineSeparator>
+                  <TimelineContent>
+                    <h6 className="content-text">
+                      <h6 className="content-title2">
+                        <b>Deposit tokens</b>
+                      </h6>
+                      Confirm the transaction and deposit the assets into the
+                      bridge contract. This step needs confirmation in your
+                      wallet.
                     </h6>
                   </TimelineContent>
                 </TimelineItem>

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
-import Web3 from "web3";
+import axios from "axios"; 
 import PropTypes from "prop-types";
 import getFormattedNumber from "../../../../../../functions/get-formatted-number";
 
@@ -249,7 +248,9 @@ const CawsWodNftChecklist = ({
                       style={{ fontSize: 16 }}
                     >
                       <img
-                        src={require("./weth.svg").default}
+                         src={
+                          "https://cdn.worldofdypians.com/tools/ethStakeActive.svg"
+                        } 
                         alt=""
                         style={{ height: 20, width: 20 }}
                       />{" "}

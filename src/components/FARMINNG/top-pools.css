@@ -9,11 +9,16 @@
 }
 
 .pools-card-open {
-  background-image: url("./assets/toppools-bg.png");
+  background-image: url("https://cdn.worldofdypians.com/tools/toppools-bg.png");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
   border: 2px solid #7770df;
+}
+
+.allwrapper-active {
+  border: 2px solid #7770df !important;
+  border-top: none !important;
 }
 .available-nfts {
   font-style: normal;
@@ -25,7 +30,7 @@
 }
 
 .pools-cardcaws-open {
-  background-image: url("./assets/caws-bg.svg") !important;
+  background-image: url("https://cdn.worldofdypians.com/tools/caws-bg.svg") !important;
   background-position: center !important;
   background-repeat: no-repeat !important;
   background-size: cover !important;
@@ -246,7 +251,7 @@
   height: 33px;
   top: -18px;
   right: -2px;
-  background-image: url(./assets/toppick.svg);
+  background-image: url('https://cdn.worldofdypians.com/tools/toppick.svg');
   background-repeat: no-repeat;
   background-position: center;
   border-radius: 6px 0px;
@@ -516,6 +521,14 @@
   line-height: 30px;
   letter-spacing: -0.018em;
   color: #f7f7fc;
+}
+
+.withtitle2 {
+  color: #4ED5D2;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
 }
 
 .select-tokentxt {

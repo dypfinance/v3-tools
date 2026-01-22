@@ -3,18 +3,13 @@ import axios from "axios";
 import _ from "lodash";
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-
-// import ToolTip from "../../../../elements/ToolTip";
-// import X from "../../../../../assets/images/x_close.png";
 import NftPlaceHolder from "../../General/NftPlaceHolder/NftPlaceHolder";
 import NftStakingCawChecklist from "../../General/NftStakingCawChecklist/NftStakingCawChecklist";
 import { formattedNum } from "../../../../../../functions/formatUSD";
 import getFormattedNumber from "../../../../../../functions/get-formatted-number";
-// import EthLogo from "../../../../../assets/General/eth-create-nft.png";
-// import CountDownTimerUnstake from "../../../../elements/CountDownUnstake";
-// import CatLogo from "../../../../../assets/General/cat-totalsupply-icon.svg";
 import "./_nftStakeChecklistModal.scss";
 import CountDownTimerUnstake from "../../../../../locker/Countdown";
+import { ethers } from "ethers";
 
 const NftStakeCheckListModal = ({
   nftItem,
@@ -34,6 +29,8 @@ const NftStakeCheckListModal = ({
   getApprovedNfts,
   hideItem,
   onDepositComplete,
+  showbutton,
+  binanceW3WProvider,
 }) => {
   const style = {
     position: "absolute",
@@ -281,64 +278,121 @@ const NftStakeCheckListModal = ({
   const onEmptyState = () => {};
 
   const handleUnstake = async (value) => {
-    let stake_contract = await window.getContractNFT("NFTSTAKING");
     setStatus("*Processing unstake");
     setColor("#F13227");
-
-    await stake_contract.methods
-      .emergencyWithdraw(
-        checkUnstakebtn === true
-          ? nftIds.length === selectNftIds.length
-            ? nftIds
+    if (window.WALLET_TYPE !== "binance") {
+      let stake_contract = await window.getContractNFT("NFTSTAKING");
+      await stake_contract.methods
+        .emergencyWithdraw(
+          checkUnstakebtn === true
+            ? nftIds.length === selectNftIds.length
+              ? nftIds
+              : selectNftIds
             : selectNftIds
-          : selectNftIds
-      )
-      .send()
-      .then(() => {
+        )
+        .send()
+        .then(() => {
+          setStatus("*Unstaked successfully");
+          setColor("#57AEAA");
+          handleClearStatus();
+          setSelectedNftIds([]);
+        })
+        .catch((err) => {
+          window.alertify.error(err?.message);
+          setStatus("An error occurred, please try again");
+          setColor("#F13227");
+          setSelectedNftIds([]);
+          handleClearStatus();
+        });
+    } else if (window.WALLET_TYPE === "binance") {
+      let stake_contract = new ethers.Contract(
+        window.config.nftstaking_address,
+        window.NFTSTAKING_ABI,
+        binanceW3WProvider.getSigner()
+      );
+      const txResponse = await stake_contract
+        .emergencyWithdraw(
+          checkUnstakebtn === true
+            ? nftIds.length === selectNftIds.length
+              ? nftIds
+              : selectNftIds
+            : selectNftIds
+        )
+        .catch((err) => {
+          window.alertify.error(err?.message);
+          setStatus("An error occurred, please try again");
+          setColor("#F13227");
+          setSelectedNftIds([]);
+          handleClearStatus();
+        });
+      const txReceipt = await txResponse.wait();
+      if (txReceipt) {
         setStatus("*Unstaked successfully");
         setColor("#57AEAA");
         handleClearStatus();
         setSelectedNftIds([]);
-      })
-      .catch((err) => {
-        window.alertify.error(err?.message);
-        setStatus("An error occurred, please try again");
-        setColor("#F13227");
-        setSelectedNftIds([]);
-        handleClearStatus();
-      });
+      }
+    }
   };
 
   const handleClaim = async (itemId) => {
-    let staking_contract = await window.getContractNFT("NFTSTAKING");
-
     setloadingClaim(true);
     setActive(false);
     setStatus("*Claiming rewards...");
     setColor("#F13227");
-
-    await staking_contract.methods
-      .claimRewards(
-        checkUnstakebtn === true
-          ? nftIds.length === selectNftIds.length
-            ? nftIds
+    if (window.WALLET_TYPE !== "binance") {
+      let staking_contract = await window.getContractNFT("NFTSTAKING");
+      await staking_contract.methods
+        .claimRewards(
+          checkUnstakebtn === true
+            ? nftIds.length === selectNftIds.length
+              ? nftIds
+              : selectNftIds
             : selectNftIds
-          : selectNftIds
-      )
-      .send()
-      .then(() => {
+        )
+        .send()
+        .then(() => {
+          setloadingClaim(false);
+          setStatus("*Claimed successfully");
+          handleClearStatus();
+          setColor("#57AEAA");
+          setSelectedNftIds([]);
+        })
+        .catch((err) => {
+          window.alertify.error(err?.message);
+          setloadingClaim(false);
+          setStatus("An error occurred, please try again");
+          setSelectedNftIds([]);
+        });
+    } else if (window.WALLET_TYPE === "binance") {
+      let staking_contract = new ethers.Contract(
+        window.config.nftstaking_address,
+        window.NFTSTAKING_ABI,
+        binanceW3WProvider.getSigner()
+      );
+      const txResponse = await staking_contract
+        .claimRewards(
+          checkUnstakebtn === true
+            ? nftIds.length === selectNftIds.length
+              ? nftIds
+              : selectNftIds
+            : selectNftIds
+        )
+        .catch((err) => {
+          window.alertify.error(err?.message);
+          setloadingClaim(false);
+          setStatus("An error occurred, please try again");
+          setSelectedNftIds([]);
+        });
+      const txReceipt = await txResponse.wait();
+      if (txReceipt) {
         setloadingClaim(false);
         setStatus("*Claimed successfully");
         handleClearStatus();
         setColor("#57AEAA");
         setSelectedNftIds([]);
-      })
-      .catch((err) => {
-        window.alertify.error(err?.message);
-        setloadingClaim(false);
-        setStatus("An error occurred, please try again");
-        setSelectedNftIds([]);
-      });
+      }
+    }
   };
 
   const devicewidth = window.innerWidth;
@@ -374,7 +428,8 @@ const NftStakeCheckListModal = ({
               className="checklist-subtitle mb-2"
               style={{ color: "#C0CBF7" }}
             >
-              A list of your NFT collection that can be added and removed from the staking pools
+              A list of your NFT collection that can be added and removed from
+              the staking pools
             </h6>
           </div>
           {/* <img
@@ -394,7 +449,7 @@ const NftStakeCheckListModal = ({
             className="d-flex justify-content-center align-items-center gap-5 pb-3"
             style={{ borderBottom: "1px solid #565891" }}
           >
-            <div
+            {/* <div
               className={showToStake ? "optionbtn-active" : "optionbtn-passive"}
               style={{ display: hideItem === "tostake" ? "none" : "block" }}
             >
@@ -411,7 +466,7 @@ const NftStakeCheckListModal = ({
               >
                 To Stake
               </h5>
-            </div>
+            </div> */}
             <div
               className={showStaked ? "optionbtn-active" : "optionbtn-passive"}
               style={{ display: hideItem === "staked" ? "none" : "block" }}
@@ -526,10 +581,12 @@ const NftStakeCheckListModal = ({
                         isStake={showStaked}
                         countDownLeft={countDownLeft}
                         checked={
-                        (  (showToStake === true && checkbtn === true) ||
-                          (showStaked === true && checkUnstakebtn === true)) && (selectNftIds.length <=50)
+                          ((showToStake === true && checkbtn === true) ||
+                            (showStaked === true &&
+                              checkUnstakebtn === true)) &&
+                          selectNftIds.length <= 50
                         }
-                        checked2 = {selectNftIds.length <=50 ? true : false}
+                        checked2={selectNftIds.length <= 50 ? true : false}
                         checklistItemID={nftId}
                         onChange={(value) => {
                           selectNftIds.indexOf(value) === -1
@@ -545,6 +602,7 @@ const NftStakeCheckListModal = ({
                         }}
                         coinbase={coinbase}
                         isConnected={isConnected}
+                        showbutton={showbutton}
                       />
                     </>
                   );
@@ -558,8 +616,8 @@ const NftStakeCheckListModal = ({
                 ].map((item, id) => {
                   return (
                     <NftPlaceHolder
-                    width={195}
-                    key={id}
+                      width={195}
+                      key={id}
                       onMintClick={() => {
                         onClose();
                         setCheckUnstakeBtn(false);
@@ -592,10 +650,11 @@ const NftStakeCheckListModal = ({
                       isStake={showStaked}
                       countDownLeft={countDownLeft}
                       checked={
-                        (  (showToStake === true && checkbtn === true) ||
-                          (showStaked === true && checkUnstakebtn === true)) && (selectNftIds.length <=50)
-                        }
-                        checked2 = {selectNftIds.length <=50 ? true : false}
+                        ((showToStake === true && checkbtn === true) ||
+                          (showStaked === true && checkUnstakebtn === true)) &&
+                        selectNftIds.length <= 50
+                      }
+                      checked2={selectNftIds.length <= 50 ? true : false}
                       checklistItemID={nftId}
                       onChange={(value) => {
                         selectNftIds.indexOf(value) === -1
@@ -608,6 +667,7 @@ const NftStakeCheckListModal = ({
                       }}
                       coinbase={coinbase}
                       isConnected={isConnected}
+                      showbutton={showbutton}
                     />
                   </>
                 );
@@ -618,7 +678,10 @@ const NftStakeCheckListModal = ({
       </div>{" "}
       <div style={{ display: "block" }} className="bottom-static-wrapper">
         <p className="d-flex info-text align-items-start gap-3">
-          <img src={require("./more-info.svg").default} alt="" />
+          <img
+            src={"https://cdn.worldofdypians.com/tools/more-info.svg"}
+            alt=""
+          />
           {!showStaked
             ? "Please select which NFTs to Stake."
             : "Please select your NFTs to Claim or to Unstake"}
@@ -680,7 +743,7 @@ const NftStakeCheckListModal = ({
                 </span>
 
                 <img
-                  src={require("./catlogo.svg").default}
+                  src={"https://cdn.worldofdypians.com/tools/catlogo.svg"}
                   alt=""
                   style={{ width: 24, height: 24 }}
                 />
@@ -771,7 +834,7 @@ const NftStakeCheckListModal = ({
               className="mt-4 d-flex flex-column flex-xxl-row flex-lg-row flex-md-row align-items-center justify-content-between"
               style={{ gap: 20 }}
             >
-              <div className="row m-0 claimAll-wrapper">
+              <div className="row m-0 claimAll-wrapper blurrypool">
                 <div
                   className="earn-checklist-container d-flex align-items-start justify-content-between mb-0 w-100"
                   style={{
@@ -805,7 +868,13 @@ const NftStakeCheckListModal = ({
                     </p>
                     <div className="d-flex justify-content-between">
                       <h6 className="rewardstxtCaws d-flex align-items-center gap-2">
-                        <img src={require("./weth.svg").default} alt="" />{" "}
+                        <img
+                          src={
+                            "https://cdn.worldofdypians.com/tools/ethStakeActive.svg"
+                          }
+                          style={{ height: 25, width: 25 }}
+                          alt=""
+                        />{" "}
                         {getFormattedNumber(ETHrewards, 6)} WETH (
                         {formattedNum(ethToUSD, true)})
                       </h6>
@@ -820,6 +889,7 @@ const NftStakeCheckListModal = ({
 
                 <button
                   className="btn claim-reward-button"
+                  disabled
                   onClick={() => {
                     checkUnstakebtn === true &&
                     selectNftIds.length === nftItem.length
@@ -833,14 +903,12 @@ const NftStakeCheckListModal = ({
                     // setCheckUnstakeBtn(false);
                   }}
                   style={{
-                    background:
-                      ETHrewards != 0
-                        ? "linear-gradient(90.74deg, #7770E0 0%, #554FD8 100%)"
-                        : "#14142A",
-                    pointerEvents: ETHrewards != 0 ? "auto" : "none",
+                    background: "#14142A",
+                    pointerEvents: "none",
                     width: "50%",
                     borderRadius: "8px",
                     color: ETHrewards != 0 ? "#FFFFFF" : "#C0C9FF",
+                    border: "none",
                     margin: "auto",
                   }}
                 >
@@ -925,7 +993,9 @@ const NftStakeCheckListModal = ({
                         </span>
 
                         <img
-                          src={require("./catlogo.svg").default}
+                          src={
+                            "https://cdn.worldofdypians.com/tools/catlogo.svg"
+                          }
                           alt=""
                           style={{ width: 24, height: 24 }}
                         />

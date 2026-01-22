@@ -4,21 +4,12 @@ import getFormattedNumber from "../../functions/get-formatted-number";
 import Modal from "../Modal/Modal";
 import Address from "./address";
 import WalletModal from "../WalletModal";
-import "./top-pools.css";
-import ellipse from "./assets/ellipse.svg";
-import failMark from "../../assets/failMark.svg";
+import "./top-pools.css"; 
 import Clipboard from "react-clipboard.js";
-import ReactTooltip from "react-tooltip";
-import arrowup from "./assets/arrow-up.svg";
-import moreinfo from "./assets/more-info.svg";
-import purplestats from "./assets/purpleStat.svg";
-import referralimg from "./assets/referral.svg";
-import copy from "./assets/copy.svg";
-import wallet from "./assets/wallet.svg";
+import ReactTooltip from "react-tooltip"; 
+ 
 import Tooltip from "@material-ui/core/Tooltip";
-import Countdown from "react-countdown";
-import poolsCalculatorIcon from "./assets/poolsCalculatorIcon.svg";
-import statsLinkIcon from "./assets/statsLinkIcon.svg";
+import Countdown from "react-countdown"; 
 import { shortAddress } from "../../functions/shortAddress";
 import { ClickAwayListener } from "@material-ui/core";
 import { handleSwitchNetworkhook } from "../../functions/hooks";
@@ -365,21 +356,18 @@ const StakeBsc = ({
   }, [coinbase, coinbase2]);
 
   useEffect(() => {
-    refreshBalance();
+    if(chainId === '56')
+{    refreshBalance();
     if (depositAmount !== "") {
       checkApproval(depositAmount);
-
-    }
-    else {
-      setdepositStatus('initial')
-
-    }
+    } else {
+      setdepositStatus("initial");
+    }}
   }, [coinbase, coinbase2, staking]);
 
   useEffect(() => {
-      setdepositAmount('');
-      setdepositStatus('initial')
-
+    setdepositAmount("");
+    setdepositStatus("initial");
   }, [staking]);
 
   const handleApprove = (e) => {
@@ -406,7 +394,7 @@ const StakeBsc = ({
           setdepositStatus("fail");
           seterrorMsg(e?.message);
           setTimeout(() => {
-            depositAmount("");
+            setdepositAmount("");
             setdepositStatus("initial");
             seterrorMsg("");
           }, 10000);
@@ -420,44 +408,43 @@ const StakeBsc = ({
   const handleStake = async (e) => {
     //   e.preventDefault();
     if (passivePool === false) {
-    setdepositLoading(true);
+      setdepositLoading(true);
 
-    if (other_info) {
-      window.$.alert("This pool no longer accepts deposits!");
-      setdepositLoading(false);
-      return;
-    }
-
-    let amount = depositAmount;
-    amount = new BigNumber(depositAmount).times(1e18).toFixed(0);
-     
-    let referrer = window.config.ZERO_ADDRESS;
-
-    //NO REFERRER HERE
-
-    staking
-      .stake(amount, referrer)
-      .then(() => {
+      if (other_info) {
+        window.$.alert("This pool no longer accepts deposits!");
         setdepositLoading(false);
-        setdepositStatus("success");
-        refreshBalance();
-        setTimeout(() => {
+        return;
+      }
+
+      let amount = depositAmount;
+      amount = new BigNumber(depositAmount).times(1e18).toFixed(0);
+
+      let referrer = window.config.ZERO_ADDRESS;
+
+      //NO REFERRER HERE
+
+      staking
+        .stake(amount, referrer)
+        .then(() => {
           setdepositLoading(false);
-          setdepositStatus("initial");
-        }, 5000);
-      })
-      .catch((e) => {
-        setdepositLoading(false);
-        setdepositStatus("fail");
-        seterrorMsg(e?.message);
-        setTimeout(() => {
-          depositAmount("");
-          setdepositStatus("initial");
-          seterrorMsg("");
-        }, 10000);
-      });
-    }
-    else if (passivePool === true) {
+          setdepositStatus("success");
+          refreshBalance();
+          setTimeout(() => {
+            setdepositLoading(false);
+            setdepositStatus("initial");
+          }, 5000);
+        })
+        .catch((e) => {
+          setdepositLoading(false);
+          setdepositStatus("fail");
+          seterrorMsg(e?.message);
+          setTimeout(() => {
+            setdepositAmount("");
+            setdepositStatus("initial");
+            seterrorMsg("");
+          }, 10000);
+        });
+    } else if (passivePool === true) {
       window.$.alert("This pool no longer accepts deposits!");
       return;
     }
@@ -725,15 +712,19 @@ const StakeBsc = ({
                   : "gap-3 gap-lg-5"
               }`}
             >
-              <h6 className="activetxt">
-                <img
-                  src={ellipse}
-                  alt=""
-                  className="position-relative"
-                  style={{ top: "-1px" }}
-                />
-                Active status
-              </h6>
+              {expired === true ? (
+                <h6 className="expiredtxt caws-active-txt">Expired Pool</h6>
+              ) : (
+                <h6 className="activetxt">
+                  <img
+                    src={'https://cdn.worldofdypians.com/tools/ellipse.svg'}
+                    alt=""
+                    className="position-relative"
+                    style={{ top: "-1px" }}
+                  />
+                  Active status
+                </h6>
+              )}
               {/* <div className="d-flex align-items-center justify-content-between gap-2">
                     <h6 className="earnrewards-text">Earn rewards in:</h6>
                     <h6 className="earnrewards-token d-flex align-items-center gap-1">
@@ -762,7 +753,7 @@ const StakeBsc = ({
                           }
                         >
                           <img
-                            src={moreinfo}
+                            src={'https://cdn.worldofdypians.com/tools/more-info.svg'}
                             alt=""
                             onClick={performanceOpen}
                           />
@@ -790,7 +781,7 @@ const StakeBsc = ({
                             </div>
                           }
                         >
-                          <img src={moreinfo} alt="" onClick={aprOpen} />
+                          <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={aprOpen} />
                         </Tooltip>
                       </ClickAwayListener>
                     </h6>
@@ -814,7 +805,7 @@ const StakeBsc = ({
                             </div>
                           }
                         >
-                          <img src={moreinfo} alt="" onClick={lockOpen} />
+                          <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={lockOpen} />
                         </Tooltip>
                       </ClickAwayListener>
                     </h6>
@@ -825,7 +816,7 @@ const StakeBsc = ({
                     className="bottomitems"
                     onClick={() => setshowCalculator(true)}
                   >
-                    <img src={poolsCalculatorIcon} alt="" />
+                    <img src={'https://cdn.worldofdypians.com/tools/poolsCalculatorIcon.svg'} alt="" />
                     Calculator
                   </h6>
                   <a
@@ -839,7 +830,7 @@ const StakeBsc = ({
                     rel="noreferrer"
                   >
                     <h6 className="bottomitems">
-                      <img src={arrowup} alt="" />
+                      <img src={'https://cdn.worldofdypians.com/tools/arrow-up.svg'} alt="" />
                       Get DYP
                     </h6>
                   </a>
@@ -849,7 +840,7 @@ const StakeBsc = ({
                     }}
                   >
                     <h6 className="bottomitems">
-                      <img src={purplestats} alt="" />
+                      <img src={'https://cdn.worldofdypians.com/tools/purpleStat.svg'} alt="" />
                       Stats
                     </h6>
                   </div>
@@ -884,7 +875,7 @@ const StakeBsc = ({
                     }}
                   >
                     {" "}
-                    <img src={wallet} alt="" /> Connect wallet
+                    <img src={'https://cdn.worldofdypians.com/tools/walletIcon.svg'} alt="" /> Connect wallet
                   </button>
                 ) : chainId === "56" ? (
                   <div className="addressbtn btn">
@@ -953,7 +944,7 @@ const StakeBsc = ({
                       </div>
                     }
                   >
-                    <img src={moreinfo} alt="" onClick={depositOpen} />
+                    <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={depositOpen} />
                   </Tooltip>
                 </ClickAwayListener>
               </div>
@@ -1022,33 +1013,41 @@ const StakeBsc = ({
                       Max
                     </button>
                   </div>
-                  {/* <button
-                      className="btn filledbtn"
-                      onClick={this.handleApprove}
-                    >
-                      Approve
-                    </button> */}
+
                   <button
                     disabled={
-                      depositAmount === "" || depositLoading === true
+                      depositAmount === "" ||
+                      depositLoading === true ||
+                      depositStatus === "success" ||
+                      staking?._address.toLowerCase() ===
+                        "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487".toLowerCase()
                         ? true
                         : false
                     }
                     className={`btn filledbtn ${
-                      depositAmount === "" &&
-                      depositStatus === "initial" &&
+                      ((depositAmount === "" && depositStatus === "initial") ||
+                        staking?._address.toLowerCase() ===
+                          "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487".toLowerCase()) &&
                       "disabled-btn"
                     } ${
-                      depositStatus === "deposit" || depositStatus === "success"
+                      (depositStatus === "deposit" ||
+                        depositStatus === "success") &&
+                      staking?._address.toLowerCase() !==
+                        "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487".toLowerCase()
                         ? "success-button"
                         : depositStatus === "fail"
                         ? "fail-button"
                         : null
                     } d-flex justify-content-center align-items-center gap-2`}
                     onClick={() => {
-                      depositStatus === "deposit"
+                      depositStatus === "deposit" &&
+                      staking?._address.toLowerCase() !==
+                        "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487".toLowerCase()
                         ? handleStake()
-                        : depositStatus === "initial" && depositAmount !== ""
+                        : depositStatus === "initial" &&
+                          depositAmount !== "" &&
+                          staking?._address.toLowerCase() !==
+                            "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487".toLowerCase()
                         ? handleApprove()
                         : console.log("");
                     }}
@@ -1068,7 +1067,7 @@ const StakeBsc = ({
                       <>Success</>
                     ) : (
                       <>
-                        <img src={failMark} alt="" />
+                        <img src={'https://cdn.worldofdypians.com/wod/failMark.svg'} alt="" />
                         Failed
                       </>
                     )}
@@ -1106,7 +1105,7 @@ const StakeBsc = ({
                         </div>
                       }
                     >
-                      <img src={moreinfo} alt="" onClick={rewardsOpen} />
+                      <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={rewardsOpen} />
                     </Tooltip>
                   </ClickAwayListener>
                 </h6>
@@ -1153,14 +1152,16 @@ const StakeBsc = ({
                         claimStatus === "claimed" ||
                         claimStatus === "success" ||
                         pendingDivs <= 0
-                          ? true
+                          ? //
+                            true
                           : false
                       }
                       className={`btn filledbtn ${
                         (claimStatus === "claimed" &&
                           claimStatus === "initial") ||
                         pendingDivs <= 0
-                          ? "disabled-btn"
+                          ? //
+                            "disabled-btn"
                           : claimStatus === "failed"
                           ? "fail-button"
                           : claimStatus === "success"
@@ -1168,9 +1169,17 @@ const StakeBsc = ({
                           : null
                       } d-flex justify-content-center align-items-center gap-2`}
                       style={{ height: "fit-content" }}
-                      onClick={handleClaimDivs}
+                      // onClick={handleClaimDivs}
+                      onClick={() => {
+                        staking?._address?.toLowerCase() ===
+                        "0xc03cd383bbbd78e54b8a0dc2ee4342e6d027a487"
+                          ? window.$.alert(
+                              "*The rewards earned from the day of the migration until the end of the lock time will be distributed to the users automatically at the end of the contract."
+                            )
+                          : handleClaimDivs();
+                      }}
                     >
-                      {claimLoading === true && claimStatus === "initial" ? (
+                      {claimLoading ? (
                         <div
                           class="spinner-border spinner-border-sm text-light"
                           role="status"
@@ -1179,7 +1188,7 @@ const StakeBsc = ({
                         </div>
                       ) : claimStatus === "failed" ? (
                         <>
-                          <img src={failMark} alt="" />
+                          <img src={'https://cdn.worldofdypians.com/wod/failMark.svg'} alt="" />
                           Failed
                         </>
                       ) : claimStatus === "success" ? (
@@ -1213,7 +1222,7 @@ const StakeBsc = ({
                           </div>
                         ) : reInvestStatus === "failed" ? (
                           <>
-                            <img src={failMark} alt="" />
+                            <img src={'https://cdn.worldofdypians.com/wod/failMark.svg'} alt="" />
                             Failed
                           </>
                         ) : reInvestStatus === "success" ? (
@@ -1251,7 +1260,7 @@ const StakeBsc = ({
                       </div>
                     }
                   >
-                    <img src={moreinfo} alt="" onClick={withdrawOpen} />
+                    <img src={'https://cdn.worldofdypians.com/tools/more-info.svg'} alt="" onClick={withdrawOpen} />
                   </Tooltip>
                 </ClickAwayListener>
               </h6>
@@ -1299,7 +1308,7 @@ const StakeBsc = ({
                             {this.props.coinbase?.slice(0, 10) + "..."}
                           </h6>
                         </a>
-                        <img src={arrowup} alt="" />
+                        <img src={'https://cdn.worldofdypians.com/tools/arrow-up.svg'} alt="" />
                       </h6>
                     </div>
                   </div> */}
@@ -1394,7 +1403,7 @@ const StakeBsc = ({
                 <div className="d-flex align-items-center justify-content-between">
                   <div className="referralwrapper col-8">
                     <div className="d-flex gap-2 align-items-start justify-content-between">
-                      <img src={referralimg} alt="" />
+                      {/* <img src={referralimg} alt="" /> */}
                       <div
                         className="d-flex gap-2 flex-column"
                         style={{ width: "60%" }}
@@ -1454,7 +1463,7 @@ const StakeBsc = ({
                         className=""
                       >
                         <button className="copybtn btn">
-                          <img src={copy} alt="" /> Copy{" "}
+                          <img src={'https://cdn.worldofdypians.com/tools/copyGreen.svg'} alt="" /> Copy{" "}
                         </button>{" "}
                       </Clipboard>
                       <ReactTooltip id={id} effect="solid" />
@@ -1479,7 +1488,7 @@ const StakeBsc = ({
                       className="stats-link"
                     >
                       {shortAddress(coinbase)}{" "}
-                      <img src={statsLinkIcon} alt="" />
+                      <img src={'https://cdn.worldofdypians.com/tools/statsLinkIcon.svg'} alt="" />
                     </a>
                     <a
                       target="_blank"
@@ -1487,7 +1496,7 @@ const StakeBsc = ({
                       href={`https://github.com/dypfinance/staking-governance-security-audits`}
                       className="stats-link"
                     >
-                      Audit <img src={statsLinkIcon} alt="" />
+                      Audit <img src={'https://cdn.worldofdypians.com/tools/statsLinkIcon.svg'} alt="" />
                     </a>
                     <a
                       target="_blank"
@@ -1495,7 +1504,7 @@ const StakeBsc = ({
                       href={`${window.config.bscscan_baseURL}/token/${reward_token._address}?a=${coinbase}`}
                       className="stats-link"
                     >
-                      View transaction <img src={statsLinkIcon} alt="" />
+                      View transaction <img src={'https://cdn.worldofdypians.com/tools/statsLinkIcon.svg'} alt="" />
                     </a>
                   </div>
                 </div>
@@ -1508,7 +1517,7 @@ const StakeBsc = ({
                       style={{ color: "#7770e0" }}
                     >
                       Etherscan
-                      <img src={arrowup} alt="" />
+                      <img src={'https://cdn.worldofdypians.com/tools/arrow-up.svg'} alt="" />
                     </a>
                   </div> */}
               </div>
@@ -1638,7 +1647,7 @@ const StakeBsc = ({
                         </div>
                       ) : withdrawStatus === "failed" ? (
                         <>
-                          <img src={failMark} alt="" />
+                          <img src={'https://cdn.worldofdypians.com/wod/failMark.svg'} alt="" />
                           Failed
                         </>
                       ) : withdrawStatus === "success" ? (

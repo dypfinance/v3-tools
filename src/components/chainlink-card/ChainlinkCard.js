@@ -1,19 +1,17 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import chainlinkLogo from "./assets/chainlinkLogo.svg";
-import eth from "../../assets/earnAssets/ethereumIcon.svg";
-import bnb from "../../assets/earnAssets/bnbIcon.svg";
-import avax from "../../assets/earnAssets/avaxIcon.svg";
 import "./chainlink.css";
 import getFormattedNumber from "../../functions/get-formatted-number";
-import CountUp from "react-countup";
-
+ 
+ 
 const ChainlinkCard = () => {
   const [totalpaid, setTotalPaid] = useState();
 
   const getTotalPaidData = async () => {
     await axios.get("https://api.dyp.finance/api/totalpaid").then((data) => {
       setTotalPaid(data.data);
+    }).catch((err) => {
+      console.log(err);
     });
   };
 
@@ -32,7 +30,7 @@ const ChainlinkCard = () => {
               rel="noreferrer"
             >
               <img
-                src={chainlinkLogo}
+                src={'https://cdn.worldofdypians.com/wod/chainlinkIcon.svg'}
                 className="pe-1"
                 alt=""
                 style={{ width: 20, height: 20 }}
@@ -45,19 +43,19 @@ const ChainlinkCard = () => {
           {/* <span style={{fontSize: '10px', fontWeight: '400', lineHeight: '14px', color: '#857DFA'}}>Earned by users</span> */}
           <div>
             <h6 className="d-flex align-items-center gap-2 totalpaidtxt text-white">
-              <img src={eth} alt="" />
+              <img src={'https://cdn.worldofdypians.com/wod/eth.svg'} alt=""  style={{height: 18, width: 18}}/>
               {getFormattedNumber(totalpaid?.ethTotal.wethPaiOutTotals, 0)} ETH
             </h6>
           </div>
           <div>
             <h6 className="d-flex align-items-center gap-2 totalpaidtxt text-white">
-              <img src={bnb} alt="" />
+              <img src={'https://cdn.worldofdypians.com/wod/bnbIcon.svg'} alt=""  style={{height: 18, width: 18}}/>
               {getFormattedNumber(totalpaid?.bnbTotal.wbnbPaidOutTotals, 0)} BNB
             </h6>
           </div>
           <div>
             <h6 className="d-flex align-items-center gap-2 totalpaidtxt text-white">
-              <img src={avax} alt="" />
+              <img src={'https://cdn.worldofdypians.com/wod/avaxIcon.svg'} alt="" style={{height: 18, width: 18}}/>
               {getFormattedNumber(
                 totalpaid?.avaxTotal.avaxPaidOutTotals,
                 0
@@ -87,7 +85,7 @@ const ChainlinkCard = () => {
             }}
           >
             {/* ${getFormattedNumber(totalpaid?.totalPaidInUsd)} */}
-            <CountUp
+            {/* <CountUp
               className="count-up"
               style={{
                 fontWeight: "300",
@@ -102,7 +100,16 @@ const ChainlinkCard = () => {
               separator=","
               decimals={2}
               prefix="$"
-            />
+            /> */}
+            <span className="count-up" 
+             style={{
+              fontWeight: "300",
+            fontSize: "18px",
+            lineHeight: "27px",
+            color: "#f7f7fc",
+            letterSpacing: '0.05em'
+            }}
+            >${getFormattedNumber(totalpaid?.totalPaidInUsd, 2)}</span>
           </h6>
         </div>
       </div>

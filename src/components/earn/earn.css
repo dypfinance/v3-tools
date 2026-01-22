@@ -15,6 +15,85 @@
   border-radius: 12px;
 }
 
+.popup-chains-icon {
+  position: absolute;
+  left: -5px;
+}
+
+@media only screen and (max-width: 500px) {
+  .popup-chains-icon { 
+    display: none;
+  }
+  .chain-popup-text {
+    font-size: 10px !important;
+  }
+}
+
+.chain-popup-text {
+  color: #c0c9ff;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 12px; /* 120% */
+  letter-spacing: -0.18px;
+}
+
+.chain-popup-text-active {
+  color: #fff;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 12px; /* 120% */
+  letter-spacing: -0.18px;
+}
+
+.chain-popup-item {
+  border-radius: 8px;
+  border: 0.5px solid #272848;
+  padding: 6px 15px;
+  cursor: pointer;
+}
+
+.chain-popup-item-disabled {
+  border-radius: 8px;
+  border: 0.5px solid #272848;
+  padding: 6px 15px;
+  pointer-events: none;
+}
+
+
+.chain-popup-item-eth {
+  border-radius: 8px;
+  border: 0.5px solid #5b75da;
+  background: linear-gradient(95deg, #1e1c40 0%, #5b75da 100%);
+  padding: 6px 15px;
+  cursor: pointer;
+}
+
+.chain-popup-item-bnb {
+  padding: 6px 15px;
+  border-radius: 8px;
+  border: 0.5px solid #ffd632;
+  background: linear-gradient(95deg, #1e1c40 0%, #ffd632 100%);
+  cursor: pointer;
+}
+
+.chain-popup-item-base {
+  padding: 6px 15px;
+  border-radius: 8px;
+  border: 0.5px solid #0052FF;
+  background: linear-gradient(95deg, #1E1C40 0%, #0052FF 100%);
+  cursor: pointer;
+}
+
+.chain-popup-item-avax {
+  padding: 6px 15px;
+  border-radius: 8px;
+  border: 0.5px solid #e84142;
+  background: linear-gradient(95deg, #1e1c40 0%, #e84142 100%);
+  cursor: pointer;
+}
+
 .faq-items-container {
   background: #312f69;
   /* box-shadow: 0px 32px 64px rgba(17, 17, 17, 0.08); */
@@ -23,7 +102,7 @@
 
 .earn-hero {
   background: #282a5c;
-  background-image: url("../../assets/earnAssets/earnHeroBackground.webp");
+  background-image: url("https://cdn.worldofdypians.com/tools/earnHeroBackground.webp");
   min-height: 150px;
   background-size: cover;
   background-repeat: no-repeat;
@@ -110,7 +189,7 @@ hr {
   transition: all 0.25s;
 }
 
-.blur-stake{
+.blur-stake {
   filter: blur(10px);
   pointer-events: none;
 }
@@ -145,6 +224,12 @@ hr {
   background: linear-gradient(277.84deg, #ddad0c 0.89%, #1e1c40 92.83%);
   border: 2px solid #dcad0c;
   box-shadow: 0px 2px 12px rgba(220, 173, 12, 0.22);
+}
+
+.base-item-active {
+  background: linear-gradient(95deg, #1E1C40 0%, #0052FF 100%);
+  border: 2px solid #0052FF;
+  box-shadow: 0px 2px 12px rgba(78, 73, 197, 0.22);
 }
 .avax-item-active {
   background: linear-gradient(277.84deg, #ea4546 0.89%, #1e1c40 92.83%);
@@ -273,7 +358,6 @@ hr {
   border-radius: 12px;
 }
 
-
 .video-container2 {
   display: grid;
   grid-template-columns: repeat(1, 1fr);
@@ -292,12 +376,12 @@ hr {
 
 .video-item2 {
   padding: 10px;
-    border: 2px solid #565891;
-    border-radius: 8px;
+  border: 2px solid #565891;
+  border-radius: 8px;
 }
 
 .video-item2:hover {
-    border: 2px solid #7770df;
+  border: 2px solid #7770df;
 }
 
 .play-button {
@@ -333,9 +417,21 @@ hr {
   border-bottom: 1px solid #3b3c68;
 }
 
+.list-pool-card-active {
+  padding: 15px;
+  background: url('https://cdn.worldofdypians.com/tools/toppools-bg.png'), #26264f;
+  margin-left: 15px;
+  margin-right: 15px;
+  border-bottom: none !important;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  border: 2px solid #7770df;
+}
+
 .calculator-btn {
   background-color: #26264f;
-  background-image: url("../../assets/earnAssets/calculatorButtonBg.png");
+  background-image: url("https://cdn.worldofdypians.com/tools/calculatorButtonBg.png");
   box-shadow: 0px 32px 64px rgba(17, 17, 17, 0.08);
   border-radius: 15px;
   background-size: cover;
@@ -350,7 +446,7 @@ hr {
 
 .total-value-locked-container {
   background-color: #302e68;
-  background-image: url("../../assets/earnAssets/tvlBackground.png");
+  background-image: url("https://cdn.worldofdypians.com/tools/tvlBackground.png");
   background-repeat: no-repeat;
   background-size: cover;
   border-radius: 6px;
@@ -431,7 +527,7 @@ hr {
 }
 
 .total-tvl-wrapper {
-  background-image: url("../../assets/earnAssets/totalTvlBg.svg");
+  background-image: url("https://cdn.worldofdypians.com/tools/totalTvlBg.svg");
   background-size: cover;
   background-repeat: no-repeat;
   border-radius: 6px;
@@ -463,8 +559,12 @@ hr {
 
 @media screen and (max-width: 786px) {
   .earn-hero {
-    background-image: url("../../assets/earnAssets/earnHeroMobileBg.png");
+    background-image: url("https://cdn.worldofdypians.com/tools/earnHeroMobileBg.png");
   }
+
+  .chain-popup-item, .chain-popup-item-avax, .chain-popup-item-base, .chain-popup-item-bnb, .chain-popup-item-eth, .chain-popup-item-disabled {
+    padding: 6px;
+   }
 
   .top-picks-container {
     grid-template-columns: auto;

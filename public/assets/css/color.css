@@ -48,7 +48,7 @@ body.theme-dark,
 body.theme-dark .dropdown.open ul,
 body.theme-dark .form-control {
   background-color: var(--solid-dark-blue);
-  background-image: url('../img/toolsbg.png');
+  background-image: url('https://cdn.worldofdypians.com/tools/toolsbg.png');
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -286,7 +286,7 @@ body.theme-dark .networks {
 }
 
 body.theme-dark .sidebar {
-  background: url(../img/darkmode-sidebar.png), #26264F !important;
+  background:  #26264F !important;
   background-repeat: no-repeat !important;
   background-size: cover !important;
 }

@@ -533,7 +533,7 @@ const LaunchpadForm = () => {
                   <div className="d-flex align-items-center gap-2">
                     {blockChainIcon !== null && (
                       <img
-                        src={require(`../assets/${blockChainIcon}`).default}
+                        src={require(`../assets/${blockChainIcon}`)}
                         alt=""
                       />
                     )}
@@ -558,7 +558,7 @@ const LaunchpadForm = () => {
                       }}
                     >
                       <img
-                        src={require(`../assets/${item.icon}`).default}
+                        src={require(`../assets/${item.icon}`)}
                         alt=""
                       />
                       {item.label}

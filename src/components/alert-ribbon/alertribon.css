@@ -1,0 +1,24 @@
+.ribbon-wrapper {
+  background: #522c9d;
+  z-index: 12;
+  position: relative;
+  width: 100%;
+  transition: all 0.25s;
+}
+
+.ribbon-text {
+  text-align: center;
+}
+
+@media only screen and (max-width: 500px) {
+    .ribbon-text {
+     font-size: 12px; 
+    }
+   
+}
+
+.ribbon-x {
+  width: 12px;
+  height: 12px;
+  cursor: pointer;
+}

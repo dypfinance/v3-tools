@@ -1,12 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./top-pools.css";
-import greenArrow from "./assets/greenarrow.svg";
-import orangeArrow from "./assets/orangearrow.svg";
-import newPool from "./assets/newPool.png";
-import cawsLogo from "./assets/newCawsLogo.png";
-import staked from "./assets/staked.svg";
-import topPick from "./assets/cawsbanner.svg";
-import purpleArrow from "./assets/purpleArrow.svg";
+import topPick from "./assets/cawsbanner.svg"; 
 
 const CawsCard = ({
   cardId,
@@ -74,7 +68,7 @@ const CawsCard = ({
       >
         {isStaked && isPremium && (
           <img
-            src={staked}
+            src={'https://cdn.worldofdypians.com/tools/staked.svg'}
             className="staked"
             alt="staked"
           />
@@ -91,7 +85,7 @@ const CawsCard = ({
           >
             <h6 className="token-name d-flex align-items-center gap-2">
               <img
-                src={cawsLogo}
+                src={'https://cdn.worldofdypians.com/tools/cawslogo.svg'}
                 alt=""
                 className="tokenlogo"
                 style={{ height: 32, width: 32 }}
@@ -127,7 +121,7 @@ const CawsCard = ({
           </div>
           <div
             className={
-              expired === true ? "details-wrapperexpired" : "details-wrapper"
+              expired === true ? "cawsdetails-wrapperexpired" : "details-wrapper"
             }
             onClick={() => {
               handleDetails();
@@ -152,12 +146,12 @@ const CawsCard = ({
               <img
                 src={
                   details === false && expired === false
-                    ? greenArrow
+                    ? 'https://cdn.worldofdypians.com/tools/greenarrow.svg'
                     : details === false && expired === true
-                    ? purpleArrow
+                    ? 'https://cdn.worldofdypians.com/tools/purpleArrow.svg'
                     : details === true && expired === true
-                    ? orangeArrow
-                    : orangeArrow
+                    ? 'https://cdn.worldofdypians.com/tools/orangearrow.svg'
+                    : 'https://cdn.worldofdypians.com/tools/orangearrow.svg'
                 }
                 alt=""
               />

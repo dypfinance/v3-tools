@@ -6,13 +6,13 @@ const NftPlaceHolder = ({ onMintClick, width }) => {
     <div className="placeholder-wrapper nft-caw-card" style={{ width: width }}>
       <a
         className="placeholder-button"
-        href="https://opensea.io/collection/catsandwatchessocietycaws"
+        href="https://www.worldofdypians.com/shop/caws"
         target={"_blank"}
         rel="noreferrer"
       >
         <div className="placeholder-content">
           <img
-            src={require("./cat_desktop.jpeg").default}
+            src={"https://cdn.worldofdypians.com/tools/cat_desktop.jpeg"}
             alt=""
             className="placeholder-content-img"
           />
@@ -21,11 +21,11 @@ const NftPlaceHolder = ({ onMintClick, width }) => {
           </p>
           <a
             className="placeholder-button"
-            href="https://opensea.io/collection/catsandwatchessocietycaws"
+            href="https://www.worldofdypians.com/shop/caws"
             target={"_blank"}
             rel="noreferrer"
           >
-            Buy on OpenSea
+            Buy on WOD Shop
           </a>
         </div>
       </a>

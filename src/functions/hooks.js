@@ -3,8 +3,6 @@ import { useEffect, useState } from "react";
 import { useWeb3React as useWeb3ReactCore } from "@web3-react/core";
 import { injected } from "./connectors";
 
-import Web3 from "web3";
-
 export default function getLibrary(provider) {
   const library = new Web3Provider(provider, "any");
   library.pollingInterval = 15000;
@@ -47,7 +45,8 @@ export function useEagerConnect() {
     if (
       window.ethereum &&
       !window.coin98 &&
-      (window.ethereum.isMetaMask === true || window.ethereum.isTrust === true) &&
+      (window.ethereum.isMetaMask === true ||
+        window.ethereum.isTrust === true) &&
       (!window.ethereum.isCoinbaseWallet || !window.ethereum.overrideIsMetaMask)
     ) {
       injected.isAuthorized().then((isAuthorized) => {
@@ -74,7 +73,8 @@ export function useEagerConnect() {
     if (
       window.ethereum &&
       !window.coin98 &&
-      (window.ethereum.isMetaMask === true || window.ethereum.isTrust === true) &&
+      (window.ethereum.isMetaMask === true ||
+        window.ethereum.isTrust === true) &&
       (!window.ethereum.isCoinbaseWallet || !window.ethereum.overrideIsMetaMask)
     ) {
       if (!tried && active) {
@@ -97,7 +97,8 @@ export function useInactiveListener(suppress = false) {
     if (
       window.ethereum &&
       !window.coin98 &&
-      (window.ethereum.isMetaMask === true || window.ethereum.isTrust === true) &&
+      (window.ethereum.isMetaMask === true ||
+        window.ethereum.isTrust === true) &&
       (!window.ethereum.isCoinbaseWallet || !window.ethereum.overrideIsMetaMask)
     ) {
       if (ethereum && ethereum.on && !active && !error && !suppress) {
@@ -116,12 +117,12 @@ export function useInactiveListener(suppress = false) {
           }
         };
 
-        ethereum.on("chainChanged", handleChainChanged);
+        // ethereum.on("chainChanged", handleChainChanged);
         ethereum.on("accountsChanged", handleAccountsChanged);
 
         return () => {
           if (ethereum.removeListener) {
-            ethereum.removeListener("chainChanged", handleChainChanged);
+            // ethereum.removeListener("chainChanged", handleChainChanged);
             ethereum.removeListener("accountsChanged", handleAccountsChanged);
           }
         };
@@ -160,6 +161,19 @@ export const handleSwitchNetworkhook = async (chainID) => {
     blockExplorerUrls: ["https://snowtrace.io/"],
   };
 
+  const OPBNBPARAMS = {
+    chainId: "0xcc", // A 0x-prefixed hexadecimal string
+    rpcUrls: ["https://opbnb.publicnode.com"],
+    chainName: "opBNB Mainnet",
+    nativeCurrency: {
+      name: "opBNB",
+      symbol: "BNB", // 2-6 characters long
+      decimals: 18,
+    },
+
+    blockExplorerUrls: ["https://mainnet.opbnbscan.com"],
+  };
+
   const BNBPARAMS = {
     chainId: "0x38", // A 0x-prefixed hexadecimal string
     chainName: "Smart Chain",
@@ -172,18 +186,36 @@ export const handleSwitchNetworkhook = async (chainID) => {
     blockExplorerUrls: ["https://bscscan.com"],
   };
 
+  const BASEPARAMS = {
+    chainId: "0x2105", // A 0x-prefixed hexadecimal string
+    chainName: "Base Mainnet",
+    nativeCurrency: {
+      name: "Ethereum",
+      symbol: "ETH", // 2-6 characters long
+      decimals: 18,
+    },
+    rpcUrls: ["https://rpc.ankr.com/base"],
+    blockExplorerUrls: ["https://basescan.org"],
+  };
+
   try {
     await ethereum.request({
       method: "wallet_switchEthereumChain",
       params: [{ chainId: chainID }],
     });
-    if(window.ethereum && window.ethereum.isTrust === true) {
-      window.location.reload()
+    if (window.ethereum && window.ethereum.isTrust === true) {
+      window.location.reload();
     }
   } catch (switchError) {
     // This error code indicates that the chain has not been added to MetaMask.
     console.log(switchError, "switch");
-    if (switchError.code === 4902) {
+    if (
+      switchError.code === 4902 ||
+      (chainID === "0x2105" && switchError.code.toString().includes("32603")) ||
+      (chainID === "0xcc" && switchError.code.toString().includes("32603")) ||
+      (switchError.code === 4902 &&
+        switchError.message.includes("Unrecognized chainID"))
+    ) {
       try {
         await ethereum.request({
           method: "wallet_addEthereumChain",
@@ -194,10 +226,14 @@ export const handleSwitchNetworkhook = async (chainID) => {
               ? [AVAXPARAMS]
               : chainID === "0x38"
               ? [BNBPARAMS]
+              : chainID === "0x2105"
+              ? [BASEPARAMS]
+              : chainID === "0xcc"
+              ? [OPBNBPARAMS]
               : "",
         });
-        if(window.ethereum && window.ethereum.isTrust === true) {
-          window.location.reload()
+        if (window.ethereum && window.ethereum.isTrust === true) {
+          window.location.reload();
         }
       } catch (addError) {
         console.log(addError);

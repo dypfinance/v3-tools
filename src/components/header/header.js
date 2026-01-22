@@ -1,32 +1,18 @@
 import "./header.css";
 import Web3 from "web3";
-import getFormattedNumber from "../../functions/get-formatted-number";
 import React, { useEffect, useState } from "react";
-import coin from "./assets/coins.svg";
-import avax from "./assets/avax.svg";
-import bnb from "./assets/bnb.svg";
-import eth from "./assets/eth.svg";
-import dropdown from "./assets/dropdown.svg";
 import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import { shortAddress } from "../../functions/shortAddress";
-import ellipse from "./assets/ellipse.svg";
-import user from "./assets/user.svg";
-import plans from "./assets/plans.svg";
-import logoutimg from "./assets/logout.svg";
-import walletIcon from "./assets/walletIcon.svg";
 import WalletModal from "../WalletModal";
 import { handleSwitchNetworkhook } from "../../functions/hooks";
 import { NavLink } from "react-router-dom";
 import useWindowSize from "../../functions/useWindowSize";
-import toolsLogo from "../../assets/sidebarIcons/toolsLogo.svg";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
-import error from "../../assets/error.svg";
+
 const Header = ({
   toggleMobileSidebar,
-  toggleTheme,
-  theme,
   chainId,
   coinbase,
   logout,
@@ -36,10 +22,11 @@ const Header = ({
   hideModal,
   handleConnection,
   isConnected,
-  appState,
+  isPremium,
+  onSetCurrencyAmount,
+  showFlyout,
+  handleSwitchChainBinanceWallet,
 }) => {
-  const [gasPrice, setGasprice] = useState();
-  const [ethPrice, setEthprice] = useState();
   const [username, setUsername] = useState();
   // const [chainId, setChainId] = useState(1)
 
@@ -49,59 +36,65 @@ const Header = ({
   const [ethState, setEthState] = useState(true);
   const [bnbState, setBnbState] = useState(false);
   const [avaxState, setAvaxState] = useState(false);
-  const [avatar, setAvatar] = useState("../../assets/img/person.svg");
+  const [baseState, setBaseState] = useState(false);
+
+  const [currencyAmount, setCurrencyAmount] = useState(0);
+
+  const [avatar, setAvatar] = useState(
+    "https://cdn.worldofdypians.com/tools/person.svg"
+  );
   const routeData = useLocation();
 
   const { ethereum } = window;
+  const checklogout = localStorage.getItem("logout");
 
   const setActiveChain = () => {
     if (chainId === 1) {
       setAvaxState(false);
       setBnbState(false);
       setEthState(true);
+      setBaseState(false);
     } else if (chainId === 43114) {
       setAvaxState(true);
       setBnbState(false);
       setEthState(false);
-    } else if (chainId === 56) {
+      setBaseState(false);
+    } else if (chainId === 56 || chainId === 204) {
       setAvaxState(false);
       setBnbState(true);
       setEthState(false);
+      setBaseState(false);
+    } else if (chainId === 8453) {
+      setAvaxState(false);
+      setBnbState(false);
+      setEthState(false);
+      setBaseState(true);
     } else {
       setAvaxState(false);
       setBnbState(false);
+      setBaseState(false);
       setEthState(false);
     }
   };
 
-  const handleEthPool = async () => {
-    await handleSwitchNetworkhook("0x1")
-      .then(() => {
-        handleSwitchNetwork("1");
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  };
-
-  const handleBnbPool = async () => {
-    await handleSwitchNetworkhook("0x38")
-      .then(() => {
-        handleSwitchNetwork("56");
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-  };
-
-  const handleAvaxPool = async () => {
-    await handleSwitchNetworkhook("0xa86a")
-      .then(() => {
-        handleSwitchNetwork("43114");
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+  const switchNetwork = async (hexChainId, chain) => {
+    if (window.ethereum) {
+      if (!window.gatewallet && window.WALLET_TYPE !== "binance") {
+        await handleSwitchNetworkhook(hexChainId)
+          .then(() => {
+            handleSwitchNetwork(chain);
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      } else if (coinbase && window.WALLET_TYPE === "binance") {
+        handleSwitchChainBinanceWallet(chain);
+      }
+    } else if (coinbase && window.WALLET_TYPE === "binance") {
+      handleSwitchChainBinanceWallet(chain);
+    } else {
+      window.alertify.error("No web3 detected. Please install Metamask!");
+    }
   };
 
   function handleChainChanged() {
@@ -131,7 +124,7 @@ const Header = ({
       .then((data) => {
         data.avatar
           ? setAvatar(data.avatar)
-          : setAvatar("/assets/img/person.svg");
+          : setAvatar("https://cdn.worldofdypians.com/tools/person.svg");
       })
       .catch(console.error);
 
@@ -151,42 +144,178 @@ const Header = ({
         })
         .catch((err) => {
           console.log(err);
+          setUsername("Dypian");
         });
     } else {
       setUsername("Dypian");
     }
   };
-  const [currencyAmount, setCurrencyAmount] = useState(0);
-  const checklogout = localStorage.getItem("logout");
+
+  const handleSkaleRefill = async (address) => {
+    const result = await axios
+      .get(`https://api.worldofdypians.com/claim/${address}`)
+      .catch((e) => {
+        console.error(e);
+      });
+
+    console.log(result);
+  };
+
   //  console.log(isConnected)
   const getEthBalance = async () => {
     if (checklogout === "false" && coinbase) {
-      const balance = await ethereum.request({
-        method: "eth_getBalance",
-        params: [coinbase, "latest"],
-      });
+      const infuraWeb3 = new Web3(window.config.infura_endpoint);
 
-      if (balance) {
-        const infuraWeb3 = new Web3(window.config.infura_endpoint);
+      const bscWeb3 = new Web3(window.config.bsc_endpoint);
+      const opbnbWeb3 = new Web3(window.config.opbnb_endpoint);
 
-        const bscWeb3 = new Web3(window.config.bsc_endpoint);
-        const avaxWeb3 = new Web3(window.config.avax_endpoint);
-        if (chainId === 1) {
-          const stringBalance = infuraWeb3.utils.hexToNumberString(balance);
-          const amount = infuraWeb3.utils.fromWei(stringBalance, "ether");
-          setCurrencyAmount(amount.slice(0, 7));
+      const avaxWeb3 = new Web3(window.config.avax_endpoint);
+      const web3cfx = new Web3(window.config.conflux_endpoint);
+      const web3base = new Web3(window.config.base_endpoint);
+      const web3skale = new Web3(window.config.skale_endpoint);
+
+      if (window.WALLET_TYPE === "binance") {
+        const balance_eth = await infuraWeb3.eth
+          .getBalance(coinbase)
+          .catch((e) => {
+            console.error(e);
+            return 0;
+          });
+
+        const balance_avax = await avaxWeb3.eth
+          .getBalance(coinbase)
+          .catch((e) => {
+            console.error(e);
+            return 0;
+          });
+
+        const balance_bnb = await bscWeb3.eth
+          .getBalance(coinbase)
+          .catch((e) => {
+            console.error(e);
+            return 0;
+          });
+
+        const balance_opbnb = await opbnbWeb3.eth
+          .getBalance(coinbase)
+          .catch((e) => {
+            console.error(e);
+            return 0;
+          });
+
+        const balance_base = await web3base.eth
+          .getBalance(coinbase)
+          .catch((e) => {
+            console.error(e);
+            return 0;
+          });
+
+        const balance_cfx = await web3cfx.eth
+          .getBalance(coinbase)
+          .catch((e) => {
+            console.error(e);
+            return 0;
+          });
+        if (
+          balance_eth !== undefined &&
+          balance_cfx !== undefined &&
+          balance_base !== undefined &&
+          balance_opbnb !== undefined &&
+          balance_avax !== undefined &&
+          balance_bnb !== undefined
+        ) {
+          if (chainId === 1) {
+            const amount = infuraWeb3.utils.fromWei(balance_eth, "ether");
+            onSetCurrencyAmount(amount);
+            setCurrencyAmount(amount.slice(0, 7));
+          } else if (chainId === 43114) {
+            const amount = avaxWeb3.utils.fromWei(balance_avax, "ether");
+            onSetCurrencyAmount(amount);
+
+            setCurrencyAmount(amount.slice(0, 7));
+          } else if (chainId === 56) {
+            const amount = bscWeb3.utils.fromWei(balance_bnb, "ether");
+            onSetCurrencyAmount(amount);
+
+            setCurrencyAmount(amount.slice(0, 7));
+          } else if (chainId === 204) {
+            const amount = opbnbWeb3.utils.fromWei(balance_opbnb, "ether");
+            onSetCurrencyAmount(amount);
+
+            setCurrencyAmount(amount.slice(0, 7));
+          } else if (chainId === 1030) {
+            const amount = web3cfx.utils.fromWei(balance_cfx, "ether");
+            onSetCurrencyAmount(amount);
+
+            setCurrencyAmount(amount.slice(0, 7));
+          } else if (chainId === 8453) {
+            const amount = web3base.utils.fromWei(balance_base, "ether");
+            onSetCurrencyAmount(amount);
+
+            setCurrencyAmount(amount.slice(0, 7));
+          }
         }
+      } else {
+        const balance = await ethereum
+          .request({
+            method: "eth_getBalance",
+            params: [coinbase, "latest"],
+          })
+          .catch((e) => {
+            console.error(e);
+            return 0;
+          });
 
-        if (chainId === 43114) {
-          const stringBalance = avaxWeb3.utils.hexToNumberString(balance);
-          const amount = avaxWeb3.utils.fromWei(stringBalance, "ether");
-          setCurrencyAmount(amount.slice(0, 7));
-        }
+        if (balance) {
+          if (chainId === 1) {
+            const stringBalance = infuraWeb3.utils.hexToNumberString(balance);
+            const amount = infuraWeb3.utils.fromWei(stringBalance, "ether");
+            onSetCurrencyAmount(amount);
+            setCurrencyAmount(amount.slice(0, 7));
+          } else if (chainId === 43114) {
+            const stringBalance = avaxWeb3.utils.hexToNumberString(balance);
+            const amount = avaxWeb3.utils.fromWei(stringBalance, "ether");
+            onSetCurrencyAmount(amount);
 
-        if (chainId === 56) {
-          const stringBalance = bscWeb3.utils.hexToNumberString(balance);
-          const amount = bscWeb3.utils.fromWei(stringBalance, "ether");
-          setCurrencyAmount(amount.slice(0, 7));
+            setCurrencyAmount(amount.slice(0, 7));
+          } else if (chainId === 56) {
+            const stringBalance = bscWeb3.utils.hexToNumberString(balance);
+            const amount = bscWeb3.utils.fromWei(stringBalance, "ether");
+            onSetCurrencyAmount(amount);
+
+            setCurrencyAmount(amount.slice(0, 7));
+          } else if (chainId === 204) {
+            const stringBalance = opbnbWeb3.utils.hexToNumberString(balance);
+            const amount = opbnbWeb3.utils.fromWei(stringBalance, "ether");
+            onSetCurrencyAmount(amount);
+
+            setCurrencyAmount(amount.slice(0, 7));
+          } else if (chainId === 1030) {
+            const stringBalance = web3cfx.utils.hexToNumberString(balance);
+            const amount = web3cfx.utils.fromWei(stringBalance, "ether");
+            onSetCurrencyAmount(amount);
+
+            setCurrencyAmount(amount.slice(0, 7));
+          } else if (chainId === 8453) {
+            const stringBalance = web3base.utils.hexToNumberString(balance);
+            const amount = web3base.utils.fromWei(stringBalance, "ether");
+            onSetCurrencyAmount(amount);
+
+            setCurrencyAmount(amount.slice(0, 7));
+          } else if (chainId === 1482601649) {
+            const stringBalance = web3skale.utils.hexToNumberString(balance);
+            const amount = web3skale.utils.fromWei(stringBalance, "ether");
+            const formatted_amount = Number(amount);
+
+            if (formatted_amount <= 0.000005) {
+              handleSkaleRefill(coinbase);
+            } else {
+              console.log("formatted_amount", formatted_amount);
+            }
+            onSetCurrencyAmount(amount);
+
+            setCurrencyAmount(amount.slice(0, 7));
+          }
         }
       }
     }
@@ -208,36 +337,33 @@ const Header = ({
 
   useEffect(() => {
     getEthBalance();
-    if (chainId === 1) {
-      handleSwitchNetwork("1");
-    }
-
-    if (chainId === 56) {
-      handleSwitchNetwork("56");
-    }
-
-    if (chainId === 43114) {
-      handleSwitchNetwork("43114");
-    }
-  }, [chainId, currencyAmount, coinbase]);
+  }, [chainId, coinbase]);
 
   useEffect(() => {
-    // fetchData().then();
-    // refreshHotPairs().then();
     setActiveChain();
-    ethereum?.on("chainChanged", handleChainChanged);
   }, [chainId, ethState]);
 
   useEffect(() => {
     if (coinbase !== undefined && coinbase !== null) {
-      fetchAvatar();
-      fetchUsername();
-    }
+      // fetchAvatar();
+      // fetchUsername();
+    } else setUsername("Dypian");
   }, [coinbase, checklogout]);
 
   return (
     <>
-      <header className="header-wrap" style={{ zIndex: 5 }}>
+      <header
+        className="header-wrap"
+        style={{
+          zIndex: 5,
+          top:
+            windowSize.width < 991 && showFlyout === true
+              ? "40px"
+              : windowSize.width < 991 && showFlyout === false
+              ? 0
+              : 0,
+        }}
+      >
         <div className="container-fluid d-flex justify-content-center justify-content-lg-start">
           <div className="row w-100">
             <div className="col-1"></div>
@@ -268,18 +394,24 @@ const Header = ({
                   </span>
                 </div>
                 <NavLink to="/">
-                  <img src={toolsLogo} className="d-flex d-lg-none" alt="" />
+                  <img
+                    src={"https://cdn.worldofdypians.com/tools/toolsLogo.svg"}
+                    className="d-flex d-lg-none"
+                    alt=""
+                  />
                 </NavLink>
                 <div className="d-flex m-0 justify-content-between gap-3 align-items-center">
                   <NavLink className="buydyp-btn btn" to="/buydyp">
-                    <img src={coin} alt="" />
+                    <img
+                      src={"https://cdn.worldofdypians.com/tools/coins.svg"}
+                      alt=""
+                    />
                     <span className="buy-dyp-text d-none d-lg-flex">
                       Buy DYP
                     </span>
                   </NavLink>
                   <div className="d-flex justify-content-between gap-3 align-items-center">
                     {routeData.pathname &&
-                      routeData.pathname !== "/bridge" &&
                       routeData.pathname !== "/swap" &&
                       routeData.pathname !== "/migration" && (
                         <DropdownButton
@@ -290,12 +422,14 @@ const Header = ({
                               <img
                                 src={
                                   ethState === true
-                                    ? eth
+                                    ? "https://cdn.worldofdypians.com/wod/eth.svg"
                                     : bnbState === true
-                                    ? bnb
+                                    ? "https://cdn.worldofdypians.com/wod/bnbIcon.svg"
                                     : avaxState === true
-                                    ? avax
-                                    : error
+                                    ? "https://cdn.worldofdypians.com/wod/avaxIcon.svg"
+                                    : baseState === true
+                                    ? "https://cdn.worldofdypians.com/wod/base.svg"
+                                    : "https://cdn.worldofdypians.com/wod/error.svg"
                                 }
                                 height={16}
                                 width={16}
@@ -305,92 +439,110 @@ const Header = ({
                                 {ethState === true
                                   ? "Ethereum"
                                   : bnbState === true
-                                  ? "BNB Chain"
+                                  ? chainId === 56
+                                    ? "BNB Chain"
+                                    : "opBNB Chain"
                                   : avaxState === true
                                   ? "Avalanche"
+                                  : baseState === true
+                                  ? "Base"
                                   : "Unsupported Chain"}
                               </span>
 
-                              <img src={dropdown} alt="" />
+                              <img
+                                src={
+                                  "https://cdn.worldofdypians.com/wod/dropdown.svg"
+                                }
+                                alt=""
+                              />
                             </span>
                           }
                         >
-                          <Dropdown.Item onClick={() => handleEthPool()}>
-                            <img src={eth} alt="" />
+                          <Dropdown.Item
+                            onClick={() => switchNetwork("0x1", "1")}
+                          >
+                            <img
+                              src={"https://cdn.worldofdypians.com/wod/eth.svg"}
+                              alt=""
+                              height={20}
+                              width={20}
+                            />
                             Ethereum
                           </Dropdown.Item>
-                          <Dropdown.Item onClick={() => handleBnbPool()}>
-                            <img src={bnb} alt="" />
+                          <Dropdown.Item
+                            onClick={() => switchNetwork("0x38", "56")}
+                          >
+                            <img
+                              src={
+                                "https://cdn.worldofdypians.com/wod/bnbIcon.svg"
+                              }
+                              alt=""
+                              height={20}
+                              width={20}
+                            />
                             BNB Chain
                           </Dropdown.Item>
-                          <Dropdown.Item onClick={() => handleAvaxPool()}>
-                            <img src={avax} alt="" />
+                          <Dropdown.Item
+                            onClick={() => switchNetwork("0xcc", "204")}
+                          >
+                            <img
+                              src={
+                                "https://cdn.worldofdypians.com/wod/bnbIcon.svg"
+                              }
+                              alt=""
+                              height={20}
+                              width={20}
+                            />
+                            opBNB Chain
+                          </Dropdown.Item>
+                          <Dropdown.Item
+                            onClick={() => switchNetwork("0xa86a", "43114")}
+                          >
+                            <img
+                              src={
+                                "https://cdn.worldofdypians.com/wod/avaxIcon.svg"
+                              }
+                              alt=""
+                              height={20}
+                              width={20}
+                            />
                             Avalanche
+                          </Dropdown.Item>
+
+                          <Dropdown.Item
+                            onClick={() => switchNetwork("0x2105", "8453")}
+                          >
+                            <img
+                              src={
+                                "https://cdn.worldofdypians.com/wod/base.svg"
+                              }
+                              alt=""
+                              height={20}
+                              width={20}
+                            />
+                            Base
                           </Dropdown.Item>
                         </DropdownButton>
                       )}
-                    {/* <DropdownButton
-                id="dropdown-basic-button2"
-                onClick={checklogout === "true" && showModal}
-                title={
-                  <span className="dropdown-title walletaccount">
-                    {checklogout === "false" && (
-                      <img
-                        src={avatar}
-                        style={{
-                          height: 18,
-                          borderRadius: "50%",
-                          border: "1px solid #00D849",
-                        }}
-                        alt=""
-                      />
-                    )}
-                    {checklogout === "false" ? (
-                      shortAddress(coinbase)
-                    ) : (
-                      <span className="d-flex align-items-center gap-2 connecttitle position-relative" style={{bottom: '5px'}}>
-                        <img
-                          src={walletIcon}
-                          alt=""
-                          className="position-relative"
-                          // style={{ top: 4 }}
-                        />
-                        Connect Wallet
-                      </span>
-                    )}
-                    {checklogout === "false" && <img src={dropdown} alt="" />}
-                  </span>
-                }
-              >
-                <Dropdown.Item
-                  onClick={() => window.location.assign("/account")}
-                >
-                  <img src={user} alt="" />
-                  Your account
-                </Dropdown.Item>
-                {checklogout === "false" && (
-                  <Dropdown.Item onClick={() => logout()}>
-                    <img src={logoutimg} alt="" />
-                    Disconnect wallet
-                  </Dropdown.Item>
-                )}
-              </DropdownButton> */}
+
                     {isConnected === true &&
                       coinbase !== undefined &&
                       coinbase !== null &&
                       routeData.pathname !== "/swap" && (
                         <>
                           <div className="account-info d-none d-lg-flex align-items-center justify-content-center gap-2 gap-lg-3">
-                            {routeData.pathname !== "/bridge" &&
+                            {
                               routeData.pathname !== "/migration" && (
                                 <span className="account-balance d-none d-lg-flex">
                                   {currencyAmount}{" "}
                                   {chainId === 1
                                     ? "ETH"
-                                    : chainId === 56
+                                    : chainId === 56 || chainId === 204
                                     ? "BNB"
                                     : chainId === 43114
                                     ? "AVAX"
+                                    : chainId === 8453
+                                    ? "ETH"
                                     : ""}
                                 </span>
                               )}
@@ -418,17 +570,27 @@ const Header = ({
                           >
                             <Dropdown.Item>
                               <NavLink
-                                to={appState.isPremium ? "/account" : "/plans"}
+                                to={"/account"}
                                 className={"d-flex w-100"}
                               >
                                 <span className="d-flex gap-2 align-items-center">
-                                  <img src={user} alt="" />
+                                  <img
+                                    src={
+                                      "https://cdn.worldofdypians.com/tools/user.svg"
+                                    }
+                                    alt=""
+                                  />
                                   My account
                                 </span>
                               </NavLink>
                             </Dropdown.Item>
                             <Dropdown.Item onClick={() => logout()}>
-                              <img src={logoutimg} alt="" />
+                              <img
+                                src={
+                                  "https://cdn.worldofdypians.com/tools/logout.svg"
+                                }
+                                alt=""
+                              />
                               Disconnect wallet
                             </Dropdown.Item>
                           </DropdownButton>
@@ -438,7 +600,7 @@ const Header = ({
                       (coinbase !== undefined || coinbase !== null) &&
                       routeData.pathname !== "/swap" && (
                         <DropdownButton
-                          onClick={isConnected === false && showModal}
+                          onClick={handleConnection}
                           id="dropdown-basic-button2"
                           title={
                             <div
@@ -446,7 +608,9 @@ const Header = ({
                               style={{ bottom: "5px", fontSize: "12px" }}
                             >
                               <img
-                                src={walletIcon}
+                                src={
+                                  "https://cdn.worldofdypians.com/tools/walletIcon.svg"
+                                }
                                 alt=""
                                 className="position-relative"
                                 // style={{ top: 4 }}
@@ -462,11 +626,13 @@ const Header = ({
                       (coinbase !== undefined || coinbase !== null) &&
                       routeData.pathname !== "/swap" && (
                         <NavLink
-                          to="/plans"
+                          to="/account"
                           className="account-user-wrapper d-flex align-items-center gap-1"
                         >
                           <img
-                            src={require(`./assets/user2.svg`).default}
+                            src={
+                              "https://cdn.worldofdypians.com/tools/user2.svg"
+                            }
                             alt=""
                           />
                           <span className="account-user d-none d-lg-flex">
@@ -482,14 +648,6 @@ const Header = ({
           </div>
         </div>
       </header>
-
-      {show && (
-        <WalletModal
-          show={show}
-          handleClose={hideModal}
-          handleConnection={handleConnection}
-        />
-      )}
     </>
   );
 };

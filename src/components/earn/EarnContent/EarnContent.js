@@ -1,22 +1,10 @@
 import React, { useState } from "react";
-import ethStake from "../../../assets/earnAssets/ethStake.svg";
-import bnbStake from "../../../assets/earnAssets/bnbStake.svg";
-import avaxStake from "../../../assets/earnAssets/avaxStake.svg";
-import ethStakeActive from "../../../assets/earnAssets/ethStakeActive.svg";
-import bnbStakeActive from "../../../assets/earnAssets/bnbStakeActive.svg";
-import avaxStakeActive from "../../../assets/earnAssets/avaxStakeActive.svg";
-import addNewPools from "../../../assets/earnAssets/addNewPools.svg";
-import listIcon from "../../../assets/earnAssets/listIcon.svg";
-import tableIcon from "../../../assets/earnAssets/tableIcon.svg";
-import tableIconActive from "../../../assets/earnAssets/tableIconActive.svg";
-import listIconActive from "../../../assets/earnAssets/listIconActive.svg";
-import EarnTopPicks from "../EarnTopPicks/EarnTopPicks";
-import EarnFaq from "../EarnFaq/EarnFaq";
 import axios from "axios";
 import { useEffect } from "react";
 import getFormattedNumber from "../../../functions/getFormattedNumber2";
-import e from "cors";
 import useWindowSize from "../../../functions/useWindowSize";
+import EarnTopPicks from "../EarnTopPicks/EarnTopPicks";
+import EarnFaq from "../EarnFaq/EarnFaq";
 
 const EarnContent = ({
   coinbase,
@@ -36,7 +24,11 @@ const EarnContent = ({
   faqIndex,
   networkId,
   handleSwitchNetwork,
-  isPremium
+  isPremium,
+  showRibbon,
+  onConnectWallet,
+  handleSwitchChainBinanceWallet,
+  binanceW3WProvider,
 }) => {
   const options = [
     {
@@ -234,48 +226,89 @@ const EarnContent = ({
   };
 
   const fetchFarmingApr = async () => {
-    await axios.get(`https://api.dyp.finance/api/highest-apy`).then((res) => {
-      setEthApr(res.data.highestAPY.highestAPY_ETH_V2);
-      // setBnbApr(res.data.highestAPY.highestAPY_BSC_V2);
-      // if(expiredPools === true){
+    await axios
+      .get(`https://api.dyp.finance/api/highest-apy`)
+      .then((res) => {
+        setEthApr(res.data.highestAPY.highestAPY_ETH_V2);
+        // setBnbApr(res.data.highestAPY.highestAPY_BSC_V2);
+        // if(expiredPools === true){
 
-      //   setBnbApr(138.44)
-      // }else{
-      //   fetchBnbPool();
-      // }
-      setavaxApr(res.data.highestAPY.highestAPY_AVAX_V2);
-    });
+        //   setBnbApr(138.44)
+        // }else{
+        //   fetchBnbPool();
+        // }
+        setavaxApr(res.data.highestAPY.highestAPY_AVAX_V2);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   };
 
-  const fetchEthStaking = async () => {
-    await axios
+  const fetchStakingTVL = async () => {
+    const ethRestult = await axios
       .get(`https://api.dyp.finance/api/get_staking_info_eth`)
-      .then((res) => {
-        setTvl(res.data.totalTVL_ETH);
-      })
       .catch((err) => {
         console.log(err);
       });
-  };
-  const fetchBnbStaking = async () => {
-    await axios
+
+    const ethRestult2 = await axios
+      .get(`https://api.dyp.finance/api/get_staking_info_eth_new`)
+      .catch((err) => {
+        console.log(err);
+      });
+
+    const bnbResult = await axios
       .get(`https://api.dyp.finance/api/get_staking_info_bnb`)
-      .then((res) => {
-        setTvl(res.data.totalTVL_BNB);
-      })
       .catch((err) => {
         console.log(err);
       });
-  };
-  const fetchAvaxStaking = async () => {
-    await axios
+
+    const bnbResult2 = await axios
+      .get(`https://api.dyp.finance/api/get_staking_info_bnb_new`)
+      .catch((err) => {
+        console.log(err);
+      });
+
+    const avaxResult = await axios
       .get(`https://api.dyp.finance/api/get_staking_info_avax`)
-      .then((res) => {
-        setTvl(res.data.totalTVL_AVAX);
-      })
       .catch((err) => {
         console.log(err);
       });
+
+    const avaxResult2 = await axios
+      .get(`https://api.dyp.finance/api/get_staking_info_avax_new`)
+      .catch((err) => {
+        console.log(err);
+      });
+
+    if (
+      ethRestult &&
+      ethRestult.status === 200 &&
+      ethRestult2 &&
+      ethRestult2.status === 200 &&
+      bnbResult &&
+      bnbResult.status === 200 &&
+      bnbResult2 &&
+      bnbResult2.status === 200 &&
+      avaxResult &&
+      avaxResult.status === 200 &&
+      avaxResult2 &&
+      avaxResult2.status === 200
+    ) {
+      const ethv1Tvl = ethRestult.data.totalTVL_ETH;
+
+      const ethv2Tvl = ethRestult2.data.stakingInfoDYPEth[0]?.tvl_usd;
+
+      const avaxtvl1 = avaxResult.data.totalTVL_AVAX;
+
+      const avaxtvl2 = avaxResult2.data.stakingInfoDYPAvax[0].tvl_usd;
+
+      const bnbTvl1 = bnbResult.data.totalTVL_BNB;
+
+      const bnbTvl2 = bnbResult2.data.stakingInfoDYPBnb[0].tvl_usd;
+
+      setTvl(ethv1Tvl + ethv2Tvl + bnbTvl1 + bnbTvl2 + avaxtvl1 + avaxtvl2);
+    }
   };
 
   const fetchEthBuyback = async () => {
@@ -314,7 +347,7 @@ const EarnContent = ({
       fetchEthApr();
       fetchAvaxApr();
       fetchBnbApr();
-      setEthApr(7.35);
+      setEthApr(12.5);
     } else if (option === "Buyback") {
       fetchEthBuybackApr();
       fetchBnbBuybackApr();
@@ -329,12 +362,8 @@ const EarnContent = ({
       fetchFarmingApr();
     }
 
-    if (option === "Staking" && stake === "eth") {
-      fetchEthStaking();
-    } else if (option === "Staking" && stake === "bnb") {
-      fetchBnbStaking();
-    } else if (option === "Staking" && stake === "avax") {
-      fetchAvaxStaking();
+    if (option === "Staking") {
+      fetchStakingTVL();
     } else if (option === "Buyback" && stake === "eth") {
       fetchEthBuyback();
     } else if (option === "Buyback" && stake === "bnb") {
@@ -353,49 +382,16 @@ const EarnContent = ({
   }, [option, stake, chainId]);
 
   const checkNetworkId = () => {
-    if (
-      window.ethereum &&
-      (window.ethereum.isMetaMask === true ||
-        window.coin98 === true ||
-        window.trustwallet ||
-        window.ethereum.isCoinbaseWallet === true)
-    ) {
-      window.ethereum
-        .request({ method: "eth_chainId" })
-        .then((data) => {
-          if (data === "0x1") {
-            setStake("eth");
-          } else if (data === "0xa86a") {
-            setStake("avax");
-          } else if (data === "0x38") {
-            setStake("bnb");
-          } else if (data !== "undefined") {
-            setStake("eth");
-          } else {
-            setStake("eth");
-          }
-        })
-        .catch(console.error);
-    } else if (
-      window.ethereum &&
-      window.ethereum.overrideIsMetaMask === true &&
-      !window.ethereum.isCoinbaseWallet
-    ) {
-      const chainId = window.ethereum.selectedProvider.chainId;
-
-      if (chainId === "0x1") {
+    if (chainId) {
+      if (chainId === "1") {
         setStake("eth");
-      } else if (chainId === "0xa86a") {
-        setStake("avax");
-      } else if (chainId === "0x38") {
+      } else if (chainId === "56") {
         setStake("bnb");
-      } else if (chainId !== "undefined") {
-        setStake("eth");
+      } else if (chainId === "43114") {
+        setStake("avax");
       } else {
         setStake("eth");
       }
-    } else {
-      setStake("eth");
     }
   };
 
@@ -433,7 +429,11 @@ const EarnContent = ({
                 onClick={() => setListStyle("table")}
               >
                 <img
-                  src={listStyle === "table" ? tableIconActive : tableIcon}
+                  src={
+                    listStyle === "table"
+                      ? "https://cdn.worldofdypians.com/tools/tableIconActive.svg"
+                      : "https://cdn.worldofdypians.com/tools/tableIcon.svg"
+                  }
                   alt=""
                 />
               </div>
@@ -444,12 +444,16 @@ const EarnContent = ({
                 onClick={() => setListStyle("list")}
               >
                 <img
-                  src={listStyle === "list" ? listIconActive : listIcon}
+                  src={
+                    listStyle === "list"
+                      ? "https://cdn.worldofdypians.com/tools/listIconActive.svg"
+                      : "https://cdn.worldofdypians.com/tools/listIcon.svg"
+                  }
                   alt=""
                 />
               </div>
             </div>
-            <div className="col-8 row d-flex gap-0 gap-xl-3 justify-content-center p-2">
+            <div className="col-8 row d-flex gap-0 gap-xl-3 justify-content-start p-2">
               {options.map((item, index) => (
                 <div
                   className={`earn-option col-3 col-xl-2 d-flex align-items-center justify-content-center ${
@@ -470,17 +474,17 @@ const EarnContent = ({
                   }}
                 >
                   <img
-                    src={
-                      require(`../../calculator/assets/${item.title.toLowerCase()}Icon.svg`)
-                        .default
-                    }
+                    src={`https://cdn.worldofdypians.com/tools/${item.title.toLowerCase()}Icon.svg`}
                     alt=""
                   />
                   {item.title}
                 </div>
               ))}
             </div>
-            <div className="col-2 d-flex justify-content-end align-items-center gap-1 gap-lg-3">
+
+            <div
+              className={`col-2  justify-content-end align-items-center gap-1 gap-lg-3 d-flex `}
+            >
               <h5 className="text-white inactive-pools">Inactive pools</h5>
               <div
                 className={`pill-box ${myStakes && "pill-box-active"}`}
@@ -508,7 +512,11 @@ const EarnContent = ({
                 onClick={() => setListStyle("table")}
               >
                 <img
-                  src={listStyle === "table" ? tableIconActive : tableIcon}
+                  src={
+                    listStyle === "table"
+                      ? "https://cdn.worldofdypians.com/tools/tableIconActive.svg"
+                      : "https://cdn.worldofdypians.com/tools/tableIcon.svg"
+                  }
                   alt=""
                 />
               </div>
@@ -519,11 +527,16 @@ const EarnContent = ({
                 onClick={() => setListStyle("list")}
               >
                 <img
-                  src={listStyle === "list" ? listIconActive : listIcon}
+                  src={
+                    listStyle === "list"
+                      ? "https://cdn.worldofdypians.com/tools/listIconActive.svg"
+                      : "https://cdn.worldofdypians.com/tools/listIcon.svg"
+                  }
                   alt=""
                 />
               </div>
             </div>
+
             <div className="col-6 px-0 px-lg-2 d-flex justify-content-end align-items-center gap-1 gap-lg-3">
               <h5 className="text-white inactive-pools">Inactive pools</h5>
               <div
@@ -557,10 +570,7 @@ const EarnContent = ({
                   }}
                 >
                   <img
-                    src={
-                      require(`../../calculator/assets/${item.title.toLowerCase()}Icon.svg`)
-                        .default
-                    }
+                    src={`https://cdn.worldofdypians.com/tools/${item.title.toLowerCase()}Icon.svg`}
                     alt=""
                   />
                   {/* <div
@@ -578,7 +588,7 @@ const EarnContent = ({
           option !== "Vault") && (
           <>
             <div
-              className={`row align-items-center gap-5 gap-lg-0 justify-content-between px-0 `}
+              className={`row align-items-center gap-2 gap-lg-0 justify-content-between px-0 `}
               style={{ minHeight: "55px" }}
             >
               <div className="col-12 col-lg-4 col-xl-3 px-0">
@@ -596,14 +606,13 @@ const EarnContent = ({
                   </div>
                 )}
               </div>
-              <div className="col-12 col-lg-8 col-xl-6 d-flex gap-3 justify-content-around justify-content-lg-end justify-content-xl-center px-0 px-xl-2">
-                {option !== "Vault" ? (
+
+              <div className="col-12 col-lg-8 col-xl-7 my-3 my-lg-0 d-flex flex-wrap gap-3 justify-content-center justify-content-lg-end justify-content-xl-center px-0 px-xl-2">
+                {option !== "Vault" && option !== "Staking" ? (
                   <>
                     <div
                       className={`stake-item ${
-                        option === "Farming" &&
-                        expiredPools === false &&
-                        "blur-stake"
+                        option === "Farming" && "blur-stake"
                       } position-relative flex-column flex-lg-row d-flex align-items-center gap-2 ${
                         stake === "eth" ? "eth-item-active" : null
                       }`}
@@ -613,7 +622,11 @@ const EarnContent = ({
                       }}
                     >
                       <img
-                        src={stake === "eth" ? ethStakeActive : ethStake}
+                        src={
+                          stake === "eth"
+                            ? "https://cdn.worldofdypians.com/tools/ethStakeActive.svg"
+                            : "https://cdn.worldofdypians.com/tools/ethStake.svg"
+                        }
                         alt=""
                       />
                       <div className="d-flex flex-column align-items-center align-items-lg-start">
@@ -631,7 +644,7 @@ const EarnContent = ({
                             whiteSpace: "pre",
                           }}
                         >
-                           7.35% APR
+                          12.5% APR
                         </p>
                       </div>
                     </div>
@@ -658,10 +671,14 @@ const EarnContent = ({
                     </span>
                   </div> */}
                       <img
-                        src={stake === "bnb" ? bnbStakeActive : bnbStake}
+                        src={
+                          stake === "bnb"
+                            ? "https://cdn.worldofdypians.com/tools/bnbStakeActive.svg"
+                            : "https://cdn.worldofdypians.com/tools/bnbStake.svg"
+                        }
                         alt=""
                       />
-                      <div className="d-flex flex-column align-items-center align-items-lg-start">
+                      <div className="d-lg-flex d-md-flex d-none flex-column align-items-center align-items-lg-start">
                         <p
                           className="text-white"
                           style={{ fontSize: "12px", fontWeight: "300" }}
@@ -676,16 +693,14 @@ const EarnContent = ({
                             whiteSpace: "pre",
                           }}
                         >
-                          {getFormattedNumber(bnbApr, 0)}% APR
+                          12.5% APR
                         </p>
                       </div>
                     </div>
 
                     <div
                       className={`stake-item ${
-                        option === "Farming" &&
-                        expiredPools === false &&
-                        "blur-stake"
+                        option === "Farming" && "blur-stake"
                       } position-relative flex-column flex-lg-row d-flex align-items-center gap-2 ${
                         stake === "avax" ? "avax-item-active" : null
                       }`}
@@ -708,7 +723,11 @@ const EarnContent = ({
                   </span>
                 </div> */}
                       <img
-                        src={stake === "avax" ? avaxStakeActive : avaxStake}
+                        src={
+                          stake === "avax"
+                            ? "https://cdn.worldofdypians.com/tools/avaxStakeActive.svg"
+                            : "https://cdn.worldofdypians.com/tools/avaxStake.svg"
+                        }
                         alt=""
                       />
                       <div className="d-flex flex-column align-items-center align-items-lg-start">
@@ -726,24 +745,28 @@ const EarnContent = ({
                             whiteSpace: "pre",
                           }}
                         >
-                          {avaxApr}% APR
+                          12.5% APR
                         </p>
                       </div>
                     </div>
                   </>
-                ) : (
+                ) : option === "Staking" ? (
                   <>
                     <div
-                      className={`stake-item d-none position-relative d-flex align-items-center gap-2 ${
+                      className={`stake-item position-relative d-flex align-items-center gap-2 ${
                         stake === "eth" ? "eth-item-active" : null
                       }`}
                       onClick={() => {
                         setStake("eth");
-                        fetchEthTvl();
+                        // fetchEthTvl();
                       }}
                     >
                       <img
-                        src={stake === "eth" ? ethStakeActive : ethStake}
+                        src={
+                          stake === "eth"
+                            ? "https://cdn.worldofdypians.com/tools/ethStakeActive.svg"
+                            : "https://cdn.worldofdypians.com/tools/ethStake.svg"
+                        }
                         alt=""
                       />
                       <div className="d-flex flex-column">
@@ -760,22 +783,25 @@ const EarnContent = ({
                             color: "#f7f7fc",
                           }}
                         >
-                          7.35% APR
+                          35% APR
                         </p>
                       </div>
                     </div>
                     <div
-                      className={`stake-item d-none position-relative d-flex align-items-center gap-2 ${
+                      className={`stake-item  position-relative d-flex align-items-center gap-2 ${
                         stake === "bnb" ? "bsc-item-active" : null
                       }`}
                       onClick={() => {
                         setStake("bnb");
                         // fetchBscTvl();
                       }}
-                      style={{ opacity: "0.5" }}
                     >
                       <img
-                        src={stake === "bnb" ? bnbStakeActive : bnbStake}
+                        src={
+                          stake === "bnb"
+                            ? "https://cdn.worldofdypians.com/tools/bnbStakeActive.svg"
+                            : "https://cdn.worldofdypians.com/tools/bnbStake.svg"
+                        }
                         alt=""
                       />
                       <div className="d-flex flex-column">
@@ -796,15 +822,50 @@ const EarnContent = ({
                         </p>
                       </div>
                     </div>
+
                     <div
-                      className={`stake-item d-none position-relative d-flex align-items-center gap-2 ${
+                      className={`stake-item position-relative d-flex align-items-center gap-2 ${
+                        stake === "base" ? "base-item-active" : null
+                      }`}
+                      onClick={() => {
+                        setStake("base");
+                        // fetchBscTvl();
+                      }}
+                    >
+                      <img
+                        src={
+                          stake === "base"
+                            ? "https://cdn.worldofdypians.com/tools/baseStakeActive.svg"
+                            : "https://cdn.worldofdypians.com/tools/baseStake.svg"
+                        }
+                        alt=""
+                      />
+                      <div className="d-flex flex-column">
+                        <p
+                          className="text-white"
+                          style={{ fontSize: "12px", fontWeight: "300" }}
+                        >
+                          BASE
+                        </p>
+                        <p
+                          style={{
+                            fontSize: "12px",
+                            fontWeight: "500",
+                            color: "#f7f7fc",
+                          }}
+                        >
+                          27.5% APR
+                        </p>
+                      </div>
+                    </div>
+                    <div
+                      className={`stake-item position-relative d-flex align-items-center gap-2 ${
                         stake === "avax" ? "avax-item-active" : null
                       }`}
                       onClick={() => {
                         setStake("avax");
                         // fetchAvaxTvl();
                       }}
-                      style={{ opacity: "0.5" }}
                     >
                       {/* <div className="new-pools d-flex justify-content-start align-items-center gap-2 position-absolute">
                     <img
@@ -817,7 +878,11 @@ const EarnContent = ({
                     </span>
                   </div> */}
                       <img
-                        src={stake === "avax" ? avaxStakeActive : avaxStake}
+                        src={
+                          stake === "avax"
+                            ? "https://cdn.worldofdypians.com/tools/avaxStakeActive.svg"
+                            : "https://cdn.worldofdypians.com/tools/avaxStake.svg"
+                        }
                         alt=""
                       />
                       <div className="d-flex flex-column">
@@ -839,57 +904,62 @@ const EarnContent = ({
                       </div>
                     </div>
                   </>
-                )}
+                ) : null}
               </div>
-              <div className="col-3"></div>
+
+              <div className="col-2"></div>
             </div>
             <div className="d-flex align-items-center justify-content-center  py-0 py-lg-4 px-3"></div>
           </>
         )}
       </div>
-      {option === "Farming" && networkId === "56" && expiredPools === false ? (
-        <EarnTopPicks
-          topList={option}
-          listType={listStyle}
-          chain={stake}
-          coinbase={coinbase}
-          the_graph_result={the_graph_result}
-          lp_id={lp_id}
-          isConnected={isConnected}
-          chainId={chainId}
-          networkId={networkId}
-          handleConnection={handleConnection}
-          the_graph_resultavax={the_graph_resultavax}
-          the_graph_resultbsc={the_graph_resultbsc}
-          referrer={referrer}
-          pool={pool}
-          routeOption={routeOption}
-          customChain={customChain}
-          handleSwitchNetwork={handleSwitchNetwork}
-          expiredPools={expiredPools}
-          isPremium={isPremium}
-        />
+      {option === "Vault" && networkId !== "1" ? (
+        <div className="row mx-0 w-100 align-items-center justify-content-center flex-column p-4 gap-4 purple-wrapper">
+          <img
+            src={"https://cdn.worldofdypians.com/tools/disabledVault.svg"}
+            style={{ width: "150px", height: "150px" }}
+            alt=""
+          />
+          <h6 className="no-farms">No Vault pools available for this chain</h6>
+          <span className="farm-soon">
+            Switch back to Ethereum Chain to view pools
+          </span>
+        </div>
+      ) : option === "Vault" && expiredPools === true ? (
+        <div className="row mx-0 w-100 align-items-center justify-content-center flex-column p-4 gap-4 purple-wrapper">
+          <img
+            src={"https://cdn.worldofdypians.com/tools/disabledVault.svg"}
+            style={{ width: "150px", height: "150px" }}
+            alt=""
+          />
+          <h6 className="no-farms">No Vault pools available</h6>
+        </div>
+      ) : option === "Farming" && expiredPools === false ? (
+        <div className="row mx-0 w-100 align-items-center justify-content-center flex-column p-4 gap-4 purple-wrapper">
+          <img
+            src={"https://cdn.worldofdypians.com/tools/disabledFarming.svg"}
+            style={{ width: "150px", height: "150px" }}
+            alt=""
+          />
+          <h6 className="no-farms"> No Farming pools available</h6>
+        </div>
+      ) : option === "Staking" &&
+        expiredPools === false &&
+        (stake === "avax" || stake === "base") ? (
+        <div className="row mx-0 w-100 align-items-center justify-content-center flex-column p-4 gap-4 purple-wrapper">
+          <img
+            src={"https://cdn.worldofdypians.com/tools/disabledStaking.svg"}
+            style={{ width: "150px", height: "150px" }}
+            alt=""
+          />
+          <h6 className="no-farms"> No Staking pools available</h6>
+        </div>
       ) : (
-         option === "Vault" && networkId !== "1"   ? (
-          <div className="row mx-0 w-100 align-items-center justify-content-center flex-column p-4 gap-4 purple-wrapper">
-            <img
-              src={
-                require("../../../assets/earnAssets/disabledVault.svg").default
-              }
-              style={{ width: "150px", height: "150px" }}
-              alt=""
-            />
-            <h6 className="no-farms">
-              No Vault pools available for this chain
-            </h6>
-            <span className="farm-soon">Switch back to Ethereum Chain to view pools</span>
-          </div>
-        ) : 
         //option === "Farming" && stake === "avax" && expiredPools === false ? (
         //   <div className="row mx-0 w-100 align-items-center justify-content-center flex-column p-4 gap-4 purple-wrapper">
         //     <img
         //       src={
-        //         require("../../../assets/earnAssets/disabledFarming.svg").default
+        //          "https://cdn.worldofdypians.com/tools/disabledFarming.svg"
         //       }
         //       style={{ width: "150px", height: "150px" }}
         //       alt=""
@@ -900,6 +970,7 @@ const EarnContent = ({
         //     <span className="farm-soon">New pools coming soon...</span>
         //   </div>
         <EarnTopPicks
+          onConnectWallet={onConnectWallet}
           topList={option}
           listType={listStyle}
           chain={stake}
@@ -919,6 +990,12 @@ const EarnContent = ({
           handleSwitchNetwork={handleSwitchNetwork}
           expiredPools={expiredPools}
           isPremium={isPremium}
+          showRibbon={showRibbon}
+          onChainSelect={(val) => {
+            setStake(val);
+          }}
+          binanceW3WProvider={binanceW3WProvider}
+          handleSwitchChainBinanceWallet={handleSwitchChainBinanceWallet} 
         />
       )}
 

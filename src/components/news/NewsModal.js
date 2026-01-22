@@ -1,28 +1,11 @@
-import Modal from "../general/Modal";
 import axios from "axios";
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import RelatedNews from "./RelatedNews";
 import OutsideClickHandler from "react-outside-click-handler";
-import VotePassive from "./assets/votepassive.svg";
-import Upvote from "./assets/upvote.svg";
-import Downvote from "./assets/downvote.svg";
-import Clock from "./assets/clock.svg";
 import ToolTip from "./ToolTip";
-import goBackArrow from "./assets/goBackArrow.svg";
-import passiveUpvote from "./assets/passiveUpvote.svg";
-import passiveDownvote from "./assets/passiveDownvote.svg";
-import activeUpvote from "./assets/activeUpvote.svg";
-import activeDownvote from "./assets/activeDownvote.svg";
-import calendar from "../newsCard/assets/calendar.svg";
-import newsReddit from "./assets/newsReddit.svg";
-import newsShare from "./assets/newsShare.svg";
-import newsTelegram from "./assets/newsTelegram.svg";
-import newsTwitter from "./assets/newsTwitter.svg";
-import sourceLinkIcon from "./assets/sourceLinkIcon.svg";
 
-import { useState } from "react";
-
+ 
 const NewsModal = ({
   title,
   image,
@@ -30,7 +13,6 @@ const NewsModal = ({
   newsId,
   latestNewsData,
   pressData,
-  theme,
   onHandleUpvote,
   onHandleDownvote,
   onSelectOtherNews,
@@ -50,6 +32,9 @@ const NewsModal = ({
   bal1,
   bal2,
   bal3,
+  bal4,
+  bal5,
+  bal6,
 }) => {
   const getItemsWithoutCurrentItem = (currentItemId, arrayOfItems) => {
     return arrayOfItems.filter((item) => item?.id !== currentItemId);
@@ -61,7 +46,7 @@ const NewsModal = ({
   const [showTooltip, setShowTooltip] = useState(false);
   const [votes, setVotes] = useState([]);
 
-  const [alreadyVoted, setalreadyVoted] = useState(true);
+  const [alreadyVoted, setalreadyVoted] = useState(false);
   const [canVote, setCanVote] = useState(false);
   const [newContent, setnewContent] = useState(content);
 
@@ -80,45 +65,90 @@ const NewsModal = ({
   const logout = localStorage.getItem("logout");
 
   useEffect(() => {
-    if (bal1 === "0" && bal2 === "0" && bal3 === "0" && isPremium === true) {
+    if (
+      bal1 === "0" &&
+      bal2 === "0" &&
+      bal3 === "0" &&
+      bal4 === "0" &&
+      bal5 === "0" &&
+      bal6 === "0" &&
+      isPremium === true
+    ) {
       setCanVote(true);
     } else if (
       bal1 !== "0" &&
       bal2 !== "0" &&
       bal3 !== "0" &&
+      bal4 !== "0" &&
+      bal5 !== "0" &&
+      bal6 !== "0" &&
       isPremium === true
     ) {
       setCanVote(true);
     } else if (
-      (bal1 !== "0" || bal2 !== "0" || bal3 !== "0") &&
+      (bal1 !== "0" ||
+        bal2 !== "0" ||
+        bal3 !== "0" ||
+        bal4 !== "0" ||
+        bal5 !== "0" ||
+        bal6 !== "0") &&
       isPremium === false
+    ) {
+      setCanVote(true);
+    }else if (
+      (bal1 !== "0" ||
+        bal2 !== "0" ||
+        bal3 !== "0" ||
+        bal4 !== "0" ||
+        bal5 !== "0" ||
+        bal6 !== "0") &&
+      isPremium === true
     ) {
       setCanVote(true);
     } else if (
       bal1 === "0" &&
       bal2 === "0" &&
-      bal3 === "0" &&
+      bal3 !== "0" &&
       isPremium === false
     ) {
       setCanVote(false);
     } else if (logout === "true") {
       setCanVote(false);
     }
-  }, [alreadyVoted, bal1, bal2, bal3, isPremium, logout, coinbase]);
+  }, [
+    alreadyVoted,
+    bal1,
+    bal2,
+    bal3,
+    bal4,
+    bal5,
+    bal6,
+    isPremium,
+    logout,
+    coinbase,
+  ]);
 
   const handleLikeStates = () => {
     if (
       logout === "false" &&
-      (bal1 !== "0" || bal2 !== "0" || bal3 !== "0" || isPremium !== false)
+      (bal1 !== "0" ||
+        bal2 !== "0" ||
+        bal3 !== "0" ||
+        bal4 !== "0" ||
+        bal5 !== "0" ||
+        bal6 !== "0" ||
+        isPremium !== false)
     ) {
       checkUpVoting(newsId);
-    } else {
-      setShowTooltip(true);
-    }
-    if (
-      (bal1 === "0" && bal2 === "0" && bal3 === "0" && isPremium === false) ||
-      logout === "true" ||
-      alreadyVoted === false
+    } else if (
+      (bal1 === "0" &&
+        bal2 === "0" &&
+        bal3 === "0" &&
+        bal4 === "0" &&
+        bal5 === "0" &&
+        bal6 === "0" &&
+        isPremium === false) ||
+      logout === "true"
     ) {
       setLikeIndicator(false);
       setDislikeIndicator(false);
@@ -138,16 +168,24 @@ const NewsModal = ({
   const handleDisLikeStates = () => {
     if (
       logout === "false" &&
-      (bal1 !== "0" || bal2 !== "0" || isPremium !== false)
+      (bal1 !== "0" ||
+        bal2 !== "0" ||
+        bal3 !== "0" ||
+        bal4 !== "0" ||
+        bal5 !== "0" ||
+        bal6 !== "0" ||
+        isPremium !== false)
     ) {
       checkDownVoting(newsId);
-    } else {
-      setShowTooltip(true);
-    }
-    if (
-      (bal1 === "0" && bal2 === "0" && isPremium === false) ||
-      logout === "true" ||
-      alreadyVoted === false
+    } else if (
+      (bal1 === "0" &&
+        bal2 === "0" &&
+        bal3 === "0" &&
+        bal4 === "0" &&
+        bal5 === "0" &&
+        bal6 === "0" &&
+        isPremium === false) ||
+      logout === "true"  
     ) {
       setLikeIndicator(false);
       setShowTooltip(true);
@@ -170,12 +208,20 @@ const NewsModal = ({
       )
       .then((data) => {
         if (data.data.status === "success") {
-          fetchVotingdata().then();
+          fetchVotingdata().then(()=>{
+            setalreadyVoted(true)
+          })
+        } else  if (data.data.status === "already voted") {
+          setShowTooltip(true);
+          setLikeIndicator(false);
+          setalreadyVoted(true)
+         
         } else {
           setalreadyVoted(false);
           setShowTooltip(true);
           setLikeIndicator(false);
         }
+ 
       })
       .catch(console.error);
   };
@@ -187,7 +233,9 @@ const NewsModal = ({
       )
       .then((data) => {
         if (data.data.status === "success") {
-          fetchVotingdata();
+          fetchVotingdata().then(()=>{
+               setalreadyVoted(true)
+          });
         } else {
           setalreadyVoted(false);
           setShowTooltip(true);
@@ -223,7 +271,7 @@ const NewsModal = ({
 
   return (
     <>
-      <div className="newmodal col-8 ps-0">
+      <div className="newmodal col-12 col-lg-8 ps-lg-0" style={{overflow: "hidden"}}>
         <div className="news-modal">
           <div className="details-modal-content">
             <div className="left-col" ref={elementRef}>
@@ -236,11 +284,11 @@ const NewsModal = ({
                     className="btn go-back-btn d-flex align-items-center gap-2"
                     onClick={onModalClose}
                   >
-                    <img src={goBackArrow} alt="goback" />
+                    <img src={'https://cdn.worldofdypians.com/tools/goBackArrow.svg'} alt="goback" />
                     <span className="go-back-text">Go Back</span>
                   </button>
                   <div className="date-wrapper">
-                    <img src={calendar} alt="calendar" />
+                    <img src={'https://cdn.worldofdypians.com/tools/calendar.svg'} alt="calendar" />
                     <span className="news-date-text">
                       {formattedDate.toLocaleDateString("en-US", options)}
                     </span>
@@ -286,7 +334,7 @@ const NewsModal = ({
                     rel="noreferrer"
                     aria-label=""
                   >
-                    <img src={newsTwitter} alt="twitter share" />
+                    <img src={'https://cdn.worldofdypians.com/tools/newsTwitter.svg'} alt="twitter share" />
                   </a>
 
                   <a
@@ -309,7 +357,7 @@ const NewsModal = ({
                       </svg>
                     </div>
                   </div> */}
-                    <img src={newsReddit} alt="reddit share" />
+                    <img src={'https://cdn.worldofdypians.com/tools/newsReddit.svg'} alt="reddit share" />
                   </a>
 
                   <a
@@ -332,10 +380,10 @@ const NewsModal = ({
                       </svg>
                     </div>
                   </div> */}
-                    <img src={newsTelegram} alt="telegram share" />
+                    <img src={'https://cdn.worldofdypians.com/tools/newsTelegram.svg'} alt="telegram share" />
                   </a>
                   <img
-                    src={newsShare}
+                    src={'https://cdn.worldofdypians.com/tools/newsShare.svg'}
                     alt="share news"
                     onClick={() =>
                       navigator.clipboard.writeText(
@@ -428,10 +476,10 @@ const NewsModal = ({
                   <img
                     src={
                       likeIndicator === false && dislikeIndicator === false
-                        ? passiveUpvote
-                        : likeIndicator === true
-                        ? activeUpvote
-                        : passiveUpvote
+                    ? 'https://cdn.worldofdypians.com/tools/passiveUpvote.svg'
+                    : dislikeIndicator === true
+                    ? 'https://cdn.worldofdypians.com/tools/activeDownvote.svg'
+                    : 'https://cdn.worldofdypians.com/tools/passiveUpvote.svg'
                     }
                     alt=""
                     className="like-indicator"
@@ -440,7 +488,7 @@ const NewsModal = ({
                       e.stopPropagation();
                     }}
                   />
-                  <span className="votes-amount">
+                  <span className="votes-amount d-none">
                     {/* {Number(upvotes) - Number(downvotes)} */}
                     {Number(votes.find((obj) => obj.id === newsId)?.up) -
                       Number(votes.find((obj) => obj.id === newsId)?.down)}
@@ -449,10 +497,10 @@ const NewsModal = ({
                     style={{ transform: "rotate(0deg)" }}
                     src={
                       likeIndicator === false && dislikeIndicator === false
-                        ? passiveDownvote
-                        : dislikeIndicator === true
-                        ? activeDownvote
-                        : passiveDownvote
+                      ? 'https://cdn.worldofdypians.com/tools/passiveDownvote.svg'
+                      : dislikeIndicator === true
+                      ? 'https://cdn.worldofdypians.com/tools/activeDownvote.svg'
+                      : 'https://cdn.worldofdypians.com/tools/passiveDownvote.svg'
                     }
                     alt=""
                     className="like-indicator"
@@ -471,7 +519,7 @@ const NewsModal = ({
                       <ToolTip
                         status={
                           logout === "false" && canVote === false
-                            ? "You need to be holding DYP to vote"
+                            ? "You need to be holding DYPv1 or DYPv2 to vote"
                             : logout === "true"
                             ? "Please connect your wallet"
                             : alreadyVoted === true && canVote === true
@@ -491,7 +539,7 @@ const NewsModal = ({
               </a>
             </p> */}
                 <div className="d-flex align-items-center gap-2">
-                  <img src={sourceLinkIcon} alt="source link" />
+                  <img src={'https://cdn.worldofdypians.com/tools/sourceLinkIcon.svg'} alt="source link" />
                   <a
                     href={link}
                     target="_blank"
@@ -513,7 +561,7 @@ const NewsModal = ({
             style={{ left: "0px", top: "20px", background: "#8E97CD" }}
           ></div>
           <div className="d-flex align-items-center gap-2 mt-2">
-            <img src={require(`./assets/relatedNewsIcon.svg`).default} alt="" />
+            <img src={`https://cdn.worldofdypians.com/tools/relatedNewsIcon.svg`} alt="" />
             <h3 className="related-news-side-title">Top voted news</h3>
           </div>
           <div className="related-news-wrapper">
@@ -531,7 +579,6 @@ const NewsModal = ({
                       >
                         <RelatedNews
                           newsId={item.id}
-                          theme={theme}
                           title={item.title}
                           date={item.date}
                           month={item.month}
@@ -540,6 +587,9 @@ const NewsModal = ({
                           bal1={bal1}
                           bal2={bal2}
                           bal3={bal3}
+                          bal4={bal4}
+                          bal5={bal5}
+                          bal6={bal6}
                           upvotes={
                             votes.length !== 0
                               ? votes.find((obj) => obj.id === item.id)?.up !==

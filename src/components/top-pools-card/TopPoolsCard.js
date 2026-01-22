@@ -1,18 +1,5 @@
 import React, { useEffect, useState } from "react";
 import "./top-pools.css";
-import greenArrow from "./assets/greenarrow.svg";
-import purpleArrow from "./assets/purpleArrow.svg";
-
-import orangeArrow from "./assets/orangearrow.svg";
-import TopPoolsDetails from "./TopPoolsDetails";
-import newPool from "./assets/newPool.png";
-import staked from "./assets/staked.svg";
-import topPick from "./assets/toppick.svg";
-import stakeTag from "../../assets/earnAssets/stakeTag.svg";
-import vaultTag from "../../assets/earnAssets/vaultTag.svg";
-import cawsLabel from "./assets/cawsLabel.svg";
-
-import buybackTag from "../../assets/earnAssets/buybackTag.svg";
 
 const TopPoolsCard = ({
   isAccount,
@@ -35,8 +22,7 @@ const TopPoolsCard = ({
   display,
   expired,
   network,
-  isPremium
-
+  isPremium,
 }) => {
   const ethCoins = ["ethereum", "wbtc", "usdc", "usdt"];
   const bscCoins = [
@@ -62,9 +48,7 @@ const TopPoolsCard = ({
     "link",
   ];
 
-  const avaxCoins2 = [
-    "avax",
-  ];
+  const avaxCoins2 = ["avax"];
 
   const [showDetails, setShowDetails] = useState(false);
   const [coins, setCoins] = useState(ethCoins);
@@ -86,15 +70,12 @@ const TopPoolsCard = ({
       setCoins(bscCoins2);
     } else if (chain === "bnb" && expired === true) {
       setCoins(bscCoins);
-    } else if (chain === "avax"&& expired === false) {
+    } else if (chain === "avax" && expired === false) {
       setCoins(avaxCoins2);
-    }
-    else if (chain === "avax"&& expired === true) {
+    } else if (chain === "avax" && expired === true) {
       setCoins(avaxCoins);
     }
   }, [chain]);
-
-  // console.log(network)
 
   return (
     <>
@@ -113,26 +94,43 @@ const TopPoolsCard = ({
       >
         {isStaked && isPremium && (
           <img
-            src={staked}
+            src={"https://cdn.worldofdypians.com/tools/staked.svg"}
             className="staked"
             alt="staked"
             style={{ right: isAccount === true ? 60 : "" }}
           />
         )}
         {top_pick === true && (
-          <img src={topPick} className="toppick" alt="top pick" />
+          <img
+            src={"https://cdn.worldofdypians.com/tools/toppick.svg"}
+            className="toppick"
+            alt="top pick"
+          />
         )}
-        {isNewPool && <img src={newPool} className="new-pool" alt="new pool" />}
+        {tvl === "--" && (
+          <img
+            src={"https://cdn.worldofdypians.com/tools/comingSoon.svg"}
+            className="comingsoon"
+            alt="top pick"
+          />
+        )}
+        {isNewPool && (
+          <img
+            src={"https://cdn.worldofdypians.com/tools/newPool.png"}
+            className="new-pool"
+            alt="new pool"
+          />
+        )}
         {tag && (
           <img
             src={
               tag === "stake"
-                ? stakeTag
+                ? "https://cdn.worldofdypians.com/tools/stakeTag.svg"
                 : tag === "vault"
-                ? vaultTag
+                ? "https://cdn.worldofdypians.com/tools/vaultTag.svg"
                 : tag === "nft"
-                ? cawsLabel
-                : buybackTag
+                ? "https://cdn.worldofdypians.com/tools/cawsLabel.svg"
+                : "https://cdn.worldofdypians.com/tools/buybackTag.svg"
             }
             alt="pool-tag"
             className="dashboard-pool-tag d-none d-lg-flex"
@@ -146,25 +144,24 @@ const TopPoolsCard = ({
         <div className="d-flex flex-column gap-0">
           <div className="d-flex m-0 justify-content between gap-2 align-items-center justify-content-between title-apr-wrapper">
             <div className="d-flex align-items-center">
-              {cardType === "Farming" || cardType === "Buyback"
+              {(cardType === "Farming" || cardType === "Buyback") &&
+              tokenLogo !== "bsc.svg"
                 ? coins.length > 0 &&
-                  coins
-                    .slice(0, 5)
-                    .map((coin, index) => (
-                      <h6 className="token-name d-flex align-items-center gap-2">
+                  coins.slice(0, 5).map((coin, index) => (
+                    <h6 className="token-name d-flex align-items-center gap-2">
                       <img
                         key={index}
-                        src={require(`./assets/${coin}.svg`).default}
+                        src={`https://cdn.worldofdypians.com/tools/${coin}.svg`}
                         alt=""
                         className="pool-coins"
                       />
                       {tokenName}
-                      </h6>
-                    ))
+                    </h6>
+                  ))
                 : tokenLogo !== undefined && (
                     <h6 className="token-name d-flex align-items-center gap-2">
                       <img
-                        src={require(`./assets/${tokenLogo}`).default}
+                        src={`https://cdn.worldofdypians.com/tools/${tokenLogo}`}
                         alt=""
                         className="tokenlogo"
                         width={32}
@@ -200,44 +197,46 @@ const TopPoolsCard = ({
               <h6 className="locktime-amount">{lockTime}</h6>
             </div>
           </div>
-          <div
-            className={
-              expired === true ? "details-wrapperexpired" : "details-wrapper"
-            }
-            onClick={() => {
-              handleDetails();
-            }}
-          >
-            <h6
-              className="details-text gap-1 d-flex align-items-center"
-              style={{
-                color:
-                  details === false && expired === false
-                    ? "#75CAC2"
-                    : details === false && expired === true
-                    ? "#C1CCF8"
-                    : "#C0C9FF",
+          {tvl != "--" && (
+            <div
+              className={
+                expired === true ? "details-wrapperexpired" : "details-wrapper"
+              }
+              onClick={() => {
+                handleDetails();
               }}
             >
-              {details === false && expired === false
-                ? "Deposit"
-                : details === false && expired === true
-                ? "Details"
-                : "Close"}
-              <img
-                src={
-                  details === false && expired === false
-                    ? greenArrow
-                    : details === false && expired === true
-                    ? purpleArrow
-                    : details === true && expired === true
-                    ? orangeArrow
-                    : orangeArrow
-                }
-                alt=""
-              />
-            </h6>
-          </div>
+              <h6
+                className="details-text gap-1 d-flex align-items-center"
+                style={{
+                  color:
+                    details === false && expired === false
+                      ? "#75CAC2"
+                      : details === false && expired === true
+                      ? "#C1CCF8"
+                      : "#C0C9FF",
+                }}
+              >
+                {details === false && expired === false
+                  ? "Deposit"
+                  : details === false && expired === true
+                  ? "Details"
+                  : "Close"}
+                <img
+                  src={
+                    details === false && expired === false
+                      ? "https://cdn.worldofdypians.com/tools/greenarrow.svg"
+                      : details === false && expired === true
+                      ? "https://cdn.worldofdypians.com/tools/purpleArrow.svg"
+                      : details === true && expired === true
+                      ? "https://cdn.worldofdypians.com/tools/orangearrow.svg"
+                      : "https://cdn.worldofdypians.com/tools/orangearrow.svg"
+                  }
+                  alt=""
+                />
+              </h6>
+            </div>
+          )}
         </div>
       </div>
     </>

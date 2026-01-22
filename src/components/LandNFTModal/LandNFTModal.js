@@ -8,6 +8,7 @@ import { formattedNum } from "../../functions/formatUSD";
 import getFormattedNumber from "../../functions/get-formatted-number";
 import LandNFTPlaceHolder from "./LandNFTPlaceHolder";
 import "../caws/NftMinting/components/NftMinting/NftStakeChecklistModal/_nftStakeChecklistModal.scss";
+import { ethers } from "ethers";
 
 const LandNftStakeCheckListModal = ({
   nftItem,
@@ -27,8 +28,8 @@ const LandNftStakeCheckListModal = ({
   getApprovedNfts,
   hideItem,
   approvedNfts,
-  onDepositComplete
-
+  onDepositComplete,
+  binanceW3WProvider,
 }) => {
   const style = {
     position: "absolute",
@@ -186,7 +187,7 @@ const LandNftStakeCheckListModal = ({
         setSelectedNftIds([]);
         setColor("#57AEAA");
         handleClearStatus();
-        onDepositComplete()
+        onDepositComplete();
       })
       .catch((err) => {
         setloadingdeposit(false);
@@ -204,9 +205,6 @@ const LandNftStakeCheckListModal = ({
   useEffect(() => {
     setUSDPrice().then();
   }, [ETHrewards]);
-
-
-
 
   useEffect(() => {
     if (
@@ -271,67 +269,125 @@ const LandNftStakeCheckListModal = ({
     }
   }, [hideItem, showStaked, showToStake]);
 
-
   const onEmptyState = () => {};
 
   const handleUnstake = async (value) => {
-    let stake_contract = await window.getContractLandNFT("LANDNFTSTAKING");
     setStatus("*Processing unstake");
     setColor("#52A8A4");
-
-    await stake_contract.methods
-      .withdraw(
-        checkUnstakebtn === true
-          ? nftIds.length === selectNftIds.length
-            ? nftIds
+    if (window.WALLET_TYPE !== "binance") {
+      let stake_contract = await window.getContractLandNFT("LANDNFTSTAKING");
+      await stake_contract.methods
+        .withdraw(
+          checkUnstakebtn === true
+            ? nftIds.length === selectNftIds.length
+              ? nftIds
+              : selectNftIds
             : selectNftIds
-          : selectNftIds
-      )
-      .send()
-      .then(() => {
+        )
+        .send()
+        .then(() => {
+          setStatus("*Unstaked successfully");
+          setColor("#57AEAA");
+          handleClearStatus();
+          setSelectedNftIds([]);
+        })
+        .catch((err) => {
+          window.alertify.error(err?.message);
+          setStatus("An error occurred, please try again");
+          setColor("#F13227");
+          setSelectedNftIds([]);
+          handleClearStatus();
+        });
+    } else if (window.WALLET_TYPE === "binance") {
+      let stake_contract = new ethers.Contract(
+        window.config.landnftstake_address,
+        window.LANDSTAKING_ABI,
+        binanceW3WProvider.getSigner()
+      );
+      const txResponse = await stake_contract
+        .withdraw(
+          checkUnstakebtn === true
+            ? nftIds.length === selectNftIds.length
+              ? nftIds
+              : selectNftIds
+            : selectNftIds
+        )
+        .catch((err) => {
+          window.alertify.error(err?.message);
+          setStatus("An error occurred, please try again");
+          setColor("#F13227");
+          setSelectedNftIds([]);
+          handleClearStatus();
+        });
+      const txReceipt = await txResponse.wait();
+      if (txReceipt) {
         setStatus("*Unstaked successfully");
         setColor("#57AEAA");
         handleClearStatus();
         setSelectedNftIds([]);
-      })
-      .catch((err) => {
-        window.alertify.error(err?.message);
-        setStatus("An error occurred, please try again");
-        setColor("#F13227");
-        setSelectedNftIds([]);
-        handleClearStatus();
-      });
+      }
+    }
   };
 
   const handleClaim = async (itemId) => {
-    let staking_contract = await window.getContractLandNFT("LANDNFTSTAKING");
     setColor("#52A8A4");
     setloadingClaim(true);
     setActive(false);
     setStatus("*Claiming rewards...");
-
-    await staking_contract.methods
-      .claimRewards(
-        checkUnstakebtn === true
-          ? nftIds.length === selectNftIds.length
-            ? nftIds
+    if (window.WALLET_TYPE !== "binance") {
+      let staking_contract = await window.getContractLandNFT("LANDNFTSTAKING");
+      await staking_contract.methods
+        .claimRewards(
+          checkUnstakebtn === true
+            ? nftIds.length === selectNftIds.length
+              ? nftIds
+              : selectNftIds
             : selectNftIds
-          : selectNftIds
-      )
-      .send()
-      .then(() => {
+        )
+        .send()
+        .then(() => {
+          setloadingClaim(false);
+          setStatus("*Claimed successfully");
+          handleClearStatus();
+          setColor("#57AEAA");
+          setSelectedNftIds([]);
+        })
+        .catch((err) => {
+          window.alertify.error(err?.message);
+          setloadingClaim(false);
+          setStatus("An error occurred, please try again");
+          setSelectedNftIds([]);
+        });
+    } else if (window.WALLET_TYPE === "binance") {
+      let staking_contract = new ethers.Contract(
+        window.config.landnftstake_address,
+        window.LANDSTAKING_ABI,
+        binanceW3WProvider.getSigner()
+      );
+      const txResponse = await staking_contract
+        .claimRewards(
+          checkUnstakebtn === true
+            ? nftIds.length === selectNftIds.length
+              ? nftIds
+              : selectNftIds
+            : selectNftIds
+        )
+        .catch((err) => {
+          window.alertify.error(err?.message);
+          setloadingClaim(false);
+          setStatus("An error occurred, please try again");
+          setSelectedNftIds([]);
+        });
+
+      const txReceipt = await txResponse.wait();
+      if (txReceipt) {
         setloadingClaim(false);
         setStatus("*Claimed successfully");
         handleClearStatus();
         setColor("#57AEAA");
         setSelectedNftIds([]);
-      })
-      .catch((err) => {
-        window.alertify.error(err?.message);
-        setloadingClaim(false);
-        setStatus("An error occurred, please try again");
-        setSelectedNftIds([]);
-      });
+      }
+    }
   };
 
   const devicewidth = window.innerWidth;
@@ -367,7 +423,8 @@ const LandNftStakeCheckListModal = ({
               className="checklist-subtitle mb-2"
               style={{ color: "#C0CBF7" }}
             >
-              A list of your NFT collection that can be added and removed from the staking pools
+              A list of your NFT collection that can be added and removed from
+              the staking pools
             </h6>
           </div>
           {/* <img
@@ -387,7 +444,7 @@ const LandNftStakeCheckListModal = ({
             className="d-flex justify-content-center align-items-center gap-5 pb-3"
             style={{ borderBottom: "1px solid #565891" }}
           >
-            <div
+            {/* <div
               className={showToStake ? "optionbtn-active" : "optionbtn-passive"}
               style={{ display: hideItem === "tostake" ? "none" : "block" }}
             >
@@ -404,7 +461,7 @@ const LandNftStakeCheckListModal = ({
               >
                 To Stake
               </h5>
-            </div>
+            </div> */}
             <div
               className={showStaked ? "optionbtn-active" : "optionbtn-passive"}
               style={{ display: hideItem === "staked" ? "none" : "block" }}
@@ -519,10 +576,12 @@ const LandNftStakeCheckListModal = ({
                         isStake={showStaked}
                         countDownLeft={countDownLeft}
                         checked={
-                          (  (showToStake === true && checkbtn === true) ||
-                            (showStaked === true && checkUnstakebtn === true)) && (selectNftIds.length <=50)
-                          }
-                          checked2 = {selectNftIds.length <=50 ? true : false}
+                          ((showToStake === true && checkbtn === true) ||
+                            (showStaked === true &&
+                              checkUnstakebtn === true)) &&
+                          selectNftIds.length <= 50
+                        }
+                        checked2={selectNftIds.length <= 50 ? true : false}
                         checklistItemID={nftId}
                         onChange={(value) => {
                           selectNftIds.indexOf(value) === -1
@@ -582,18 +641,16 @@ const LandNftStakeCheckListModal = ({
                       isStake={showStaked}
                       countDownLeft={countDownLeft}
                       checked={
-                        (  (showToStake === true && checkbtn === true) ||
-                          (showStaked === true && checkUnstakebtn === true)) && (selectNftIds.length <=50)
-                        }
-                        checked2 = {selectNftIds.length <=50 ? true : false}
+                        ((showToStake === true && checkbtn === true) ||
+                          (showStaked === true && checkUnstakebtn === true)) &&
+                        selectNftIds.length <= 50
+                      }
+                      checked2={selectNftIds.length <= 50 ? true : false}
                       checklistItemID={nftId}
                       onChange={(value) => {
                         selectNftIds.indexOf(value) === -1
                           ? selectNftIds.push(value)
-                          : selectNftIds.splice(
-                              selectNftIds.indexOf(value),
-                              1
-                            );
+                          : selectNftIds.splice(selectNftIds.indexOf(value), 1);
                         setSelectedNftIds(selectNftIds);
                         getApprovedNfts(selectNftIds);
                         setVal(value);
@@ -611,10 +668,7 @@ const LandNftStakeCheckListModal = ({
       <div style={{ display: "block" }} className="bottom-static-wrapper">
         <p className="d-flex info-text align-items-start gap-3">
           <img
-            src={
-              require("../caws/NftMinting/components/NftMinting/NftStakeChecklistModal/more-info.svg")
-                .default
-            }
+            src={"https://cdn.worldofdypians.com/tools/more-info.svg"}
             alt=""
           />
           {!showStaked
@@ -678,7 +732,9 @@ const LandNftStakeCheckListModal = ({
                 </span>
 
                 <img
-                  src={require("./landplaceholder.svg").default}
+                  src={
+                    "https://cdn.worldofdypians.com/tools/landplaceholder2.svg"
+                  }
                   alt=""
                   style={{ width: 24, height: 24 }}
                 />
@@ -700,7 +756,7 @@ const LandNftStakeCheckListModal = ({
                 }}
                 style={{
                   background:
-                    active && nftItem.length > 0 
+                    active && nftItem.length > 0
                       ? "linear-gradient(90.74deg, #7770E0 0%, #554FD8 100%)"
                       : "#14142A",
                   pointerEvents: active && nftItem.length > 0 ? "auto" : "none",
@@ -806,9 +862,9 @@ const LandNftStakeCheckListModal = ({
                       <h6 className="rewardstxtCaws d-flex align-items-center gap-2">
                         <img
                           src={
-                            require("../caws/NftMinting/components/NftMinting/NftStakeChecklistModal/weth.svg")
-                              .default
+                            "https://cdn.worldofdypians.com/tools/ethStakeActive.svg"
                           }
+                          style={{ height: 25, width: 25 }}
                           alt=""
                         />{" "}
                         {getFormattedNumber(ETHrewards, 6)} WETH (
@@ -890,7 +946,7 @@ const LandNftStakeCheckListModal = ({
                             color: "#4CD0CD",
                           }}
                         >
-                         {selectNftIds.length}
+                          {selectNftIds.length}
                           /50
                         </span>
                         <span
@@ -907,8 +963,7 @@ const LandNftStakeCheckListModal = ({
 
                         <img
                           src={
-                            require("../caws/NftMinting/components/NftMinting/NftStakeChecklistModal/catlogo.svg")
-                              .default
+                            "https://cdn.worldofdypians.com/tools/catlogo.svg"
                           }
                           alt=""
                           style={{ width: 24, height: 24 }}
@@ -958,7 +1013,8 @@ const LandNftStakeCheckListModal = ({
                           selectNftIds.length === 0
                         ? "auto"
                         : "none",
-                    width: "100%", maxWidth: '100%',
+                    width: "100%",
+                    maxWidth: "100%",
                     borderRadius: "8px",
                     color: ETHrewards !== 0 ? "#FFFFFF" : "#C0C9FF",
                     margin: "auto",

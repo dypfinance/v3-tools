@@ -8,18 +8,17 @@
   color: #d6d8e7 !important;
 }
 
-
-.account-user-wrapper{
-  background: #3A377A;
-border-radius: 8px;
-padding: 7px;
+.account-user-wrapper {
+  background: #3a377a;
+  border-radius: 8px;
+  padding: 7px;
 }
 
-.account-user{
+.account-user {
   font-weight: 500;
-font-size: 12px;
-line-height: 18px;
-color: #C0C9FF !important;
+  font-size: 12px;
+  line-height: 18px;
+  color: #c0c9ff !important;
 }
 
 .buydyp-btn {
@@ -47,22 +46,22 @@ color: #C0C9FF !important;
   height: 34px;
 }
 
-.buy-dyp-text{
+.buy-dyp-text {
   font-weight: 500;
-font-size: 12px;
-line-height: 18px;
-color: #2A2859 !important;
+  font-size: 12px;
+  line-height: 18px;
+  color: #2a2859 !important;
 }
 
-.change-chain-text{
+.change-chain-text {
   font-weight: 500;
-font-size: 12px;
-line-height: 18px;
-color: #F7F7FC !important;
+  font-size: 12px;
+  line-height: 18px;
+  color: #f7f7fc !important;
 }
 
 .dropdown-toggle {
-  background: #3A377A;
+  background: #3a377a;
   border-radius: 8px;
   height: 34px;
   padding: 8px;
@@ -92,13 +91,17 @@ color: #F7F7FC !important;
   line-height: 18px;
   color: #f7f7fc !important;
   padding: 10px 8px;
+  cursor: pointer;
+
 }
 
 .dropdown-item:nth-child(1) {
   border-bottom: 1px solid #3b3c68 !important;
 }
 
-.dropdown-item:nth-child(2) {
+.dropdown-item:nth-child(2),
+.dropdown-item:nth-child(3),
+.dropdown-item:nth-child(4) {
   border-bottom: 1px solid #3b3c68 !important;
 }
 
@@ -116,7 +119,10 @@ color: #F7F7FC !important;
   line-height: 18px;
   color: #8e97cd;
 }
-
+#dropdown-basic-button-migration {
+  width: 100% !important;
+  height: 42px !important;
+}
 #dropdown-basic-button2 {
   background: #2a2859 !important;
   border-radius: 8px;
@@ -132,7 +138,6 @@ color: #F7F7FC !important;
   width: 56px !important;
   height: 56px !important;
 }
-
 
 .connecttitle {
   color: #75cac2 !important;
@@ -167,5 +172,5 @@ color: #F7F7FC !important;
   color: #2a2859 !important;
   padding: 6px;
   border-radius: 6px;
-  background: linear-gradient(273.23deg, #1EC2BE 0.45%, #85ECE9 100%);
+  background: linear-gradient(273.23deg, #1ec2be 0.45%, #85ece9 100%);
 }

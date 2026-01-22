@@ -1,6 +1,5 @@
 .popup-wrapper{
     position: fixed;
-    width: fit-content;
     height: fit-content;
     top: -10000px;
     left: 0%;
@@ -12,9 +11,12 @@
     border-radius: 24px;
     pointer-events: auto  !important;
     transition: all .25s ease-in-out;
-    width: 50%;
+    max-width: 540px;
+    width: 100%;
 
 }
+
+
 
 .popup-active{
     box-shadow:0 0 0 10000px rgba(0,0,0,.50);
@@ -24,18 +26,30 @@
 
 .popup-title{
     font-weight: 600;
-font-size: 28px;
+font-size: 26px;
 line-height: 28px;
 letter-spacing: -0.018em;
 color: #F7F7FC !important;
 text-align: center;
 }
 
+@media only screen and (max-width: 600px) {
+    .popup-title{
+        font-weight: 600;
+    font-size: 20px;
+    line-height: 28px;
+    letter-spacing: -0.018em;
+    color: #F7F7FC !important;
+    text-align: center;
+    }
+    
+}
+
 .popup-content{
     font-style: normal;
     font-weight: 300;
-    font-size: 24px;
-    line-height: 36px;
+    font-size: 16px;
+    line-height: 24px;
     color: #FFFFFF !important;
     padding: 5px 30px;
     text-align: center;
@@ -54,7 +68,7 @@ color: #C0CBF7 !important;
 }
 
 .land-nft-image{
-    width: 450px;
+    width: 350px;
 
 }
 

@@ -14,7 +14,7 @@ const NftConfirmClaimAllModal = ({ visible, onSuccessClick, onCancelClick, setIs
                 {title}
                 </h1>
                 <p className="loading-modal-content-text">
-                By Claiming your NFT you will still be able to recieve your current amout of ETH rewards that will be added to your wallet.
+                By Claiming your NFT you will still be able to receive your current amout of ETH rewards that will be added to your wallet.
                 </p>
                 <div className="loading-modal-content-buttons">
                     <button onClick={onSuccessClick} className="btn btn-primary" data-dismiss="modal">

@@ -2,20 +2,15 @@ import React from "react";
 import Web3 from "web3";
 import getFormattedNumber from "../../functions/get-formatted-number";
 import { NavLink } from "react-router-dom";
-import Error from "../../assets/error.svg";
-import Placeholder from "../../assets/person.svg";
-import "./account.css";
-import NftCawCard from "../caws/NftMinting/components/General/NftCawCard/NftCawCard";
-import TierLevels from "../launchpad/tierlevels/TierLevels";
-import coinStackIcon from "../launchpad/assets/coinStackIcon.svg";
 import axios from "axios";
-import openNameChange from "./assets/openNameChange.svg";
 import { ClickAwayListener, Tooltip } from "@material-ui/core";
 import { shortAddress } from "../../functions/shortAddress";
+import "../caws/NftMinting/components/General/NftStakingCawCard/_nftStakeCawCard.scss";
+import "./account.css";
+
+import NftCawCard from "../caws/NftMinting/components/General/NftCawCard/NftCawCard";
 import TopPoolsCard from "../top-pools-card/TopPoolsCard";
-import useWindowSize from "../../functions/useWindowSize";
-import gotoWod from "./assets/gotoWod.svg";
-import { useHistory } from "react-router-dom";
+import Plans from "./Plans";
 
 const { BigNumber } = window;
 
@@ -34,7 +29,7 @@ export default class Subscription extends React.Component {
       favorites: [],
       favoritesETH: [],
       selectedFile: null,
-      image: Placeholder,
+      image: "https://cdn.worldofdypians.com/tools/person.svg",
       lockActive: false,
       status: "",
       loadspinner: false,
@@ -53,6 +48,7 @@ export default class Subscription extends React.Component {
       myLandNFTs: [],
       landStakes: [],
       viewall: false,
+      showPremiumPopup: false,
       username: "",
       userNameInput: "",
       showInput: false,
@@ -67,106 +63,223 @@ export default class Subscription extends React.Component {
       avaxFarm: [],
       ethBalance: "0.0",
       bnbBalance: "0.0",
+      baseBalance: "0.0",
+
       avaxBalance: "0.0",
     };
   }
 
   fetchUserPools = async () => {
-    if (this.props.coinbase && this.props.coinbase.includes("0x")) {
+    if (
+      this.props.email &&
+      this.props.address !== undefined &&
+      this.props.address.includes("0x")
+    ) {
       const result = await axios
-        .get(`https://api.dyp.finance/api/user_pools/${this.props.coinbase}`)
+        .get(`https://api.dyp.finance/api/user_pools/${this.props.address}`)
         .then((data) => {
           return data.data.PoolsUserIn;
+        })
+        .catch((e) => {
+          console.error(e);
         });
       this.setState({ userPools: result });
-      // console.log(result)
+    } else {
+      if (this.props.isConnected && this.props.coinbase) {
+        const result = await axios
+          .get(`https://api.dyp.finance/api/user_pools/${this.props.coinbase}`)
+          .then((data) => {
+            return data.data.PoolsUserIn;
+          })
+          .catch((e) => {
+            console.error(e);
+          });
+        this.setState({ userPools: result });
+      } else this.setState({ userPools: [] });
     }
   };
 
   fetchEthStaking = async () => {
-    await axios
+    const eth_result = await axios
       .get(`https://api.dyp.finance/api/get_staking_info_eth`)
-      .then((res) => {
-        const dypIdyp = res.data.stakingInfoDYPEth.concat(
-          res.data.stakingInfoiDYPEth
-        );
-
-        const expiredEth = dypIdyp.filter((item) => {
-          return item.expired !== "No";
-        });
-        const activeEth = dypIdyp.filter((item) => {
-          return item.expired !== "Yes";
-        });
-
-        const sortedExpired = expiredEth.sort(function (a, b) {
-          return b.tvl_usd - a.tvl_usd;
-        });
-        const allEthPools = [...activeEth, ...sortedExpired];
-        this.setState({ ethStake: allEthPools });
-      })
       .catch((err) => {
         console.log(err);
       });
+    const eth_result2 = await axios
+      .get(`https://api.dyp.finance/api/get_staking_info_eth_new`)
+      .catch((err) => {
+        console.log(err);
+      });
+
+    if (
+      eth_result &&
+      eth_result.status === 200 &&
+      eth_result2 &&
+      eth_result2.status === 200
+    ) {
+      const dypIdyp = eth_result.data.stakingInfoiDYPEth.concat(
+        eth_result.data.stakingInfoDYPEth
+      );
+      const dypData = eth_result2.data.stakingInfoDYPEth;
+      const object2 = dypData.map((item) => {
+        return { ...item, tvl_usd: item.tvl_usd };
+      });
+      const expiredEth = dypIdyp.filter((item) => {
+        return item.expired !== "No";
+      });
+      const activeEth = dypIdyp.filter((item) => {
+        return item.expired !== "Yes";
+      });
+
+      const expiredEth2 = object2.filter((item) => {
+        return item.expired !== "No";
+      });
+      const activeEth2 = object2.filter((item) => {
+        return item.expired !== "Yes";
+      });
+
+      const allActiveEth = [...activeEth, ...activeEth2];
+      const allExpireEth = [...expiredEth, ...expiredEth2];
+
+      const sortedActive = allActiveEth.sort(function (a, b) {
+        return b.tvl_usd - a.tvl_usd;
+      });
+      const sortedExpired = allExpireEth.sort(function (a, b) {
+        return b.tvl_usd - a.tvl_usd;
+      });
+      if (this.props.showRibbon === true) {
+        const allEthPools = [...sortedActive, ...sortedExpired];
+        this.setState({ ethStake: allEthPools });
+      } else if (this.props.showRibbon === false) {
+        const allEthPools = [...sortedActive];
+        this.setState({ ethStake: allEthPools });
+      }
+    }
   };
 
   fetchBnbStaking = async () => {
-    await axios
+    const bnb_result = await axios
       .get(`https://api.dyp.finance/api/get_staking_info_bnb`)
-      .then((res) => {
-        const dypIdypBnb = res.data.stakingInfoDYPBnb.concat(
-          res.data.stakingInfoiDYPBnb
-        );
-
-        const expiredBnb = dypIdypBnb.filter((item) => {
-          return item.expired !== "No";
-        });
-        const activeBnb = dypIdypBnb.filter((item) => {
-          return item.expired !== "Yes";
-        });
-        const sortedActive = activeBnb.sort(function (a, b) {
-          return b.tvl_usd - a.tvl_usd;
-        });
-        const sortedExpired = expiredBnb.sort(function (a, b) {
-          return b.tvl_usd - a.tvl_usd;
-        });
-
-        const allBnbPools = [...sortedActive, ...sortedExpired];
-        this.setState({ bnbStake: allBnbPools });
-      })
       .catch((err) => {
         console.log(err);
       });
+
+    const bnb_result2 = await axios
+      .get(`https://api.dyp.finance/api/get_staking_info_bnb_new`)
+      .catch((err) => {
+        console.log(err);
+      });
+
+    if (
+      bnb_result &&
+      bnb_result.status === 200 &&
+      bnb_result2 &&
+      bnb_result2.status === 200
+    ) {
+      const dypIdypBnb = bnb_result.data.stakingInfoDYPBnb.concat(
+        bnb_result.data.stakingInfoiDYPBnb
+      );
+
+      const dypBnb = bnb_result2.data.stakingInfoDYPBnb;
+      const object2 = dypBnb.map((item) => {
+        return { ...item, tvl_usd: item.tvl_usd };
+      });
+
+      const expiredBnb = dypIdypBnb.filter((item) => {
+        return item.expired !== "No";
+      });
+      const activeBnb = dypIdypBnb.filter((item) => {
+        return item.expired !== "Yes";
+      });
+
+      const activeBnb2 = object2.filter((item) => {
+        return item.expired === "No";
+      });
+
+      const expiredBnb2 = object2.filter((item) => {
+        return item.expired === "Yes";
+      });
+
+      const allActiveBnb = [...activeBnb, ...activeBnb2];
+      const allExpireBnb = [...expiredBnb, ...expiredBnb2];
+
+      const sortedActive = allActiveBnb.sort(function (a, b) {
+        return b.tvl_usd - a.tvl_usd;
+      });
+      const sortedExpired = allExpireBnb.sort(function (a, b) {
+        return b.tvl_usd - a.tvl_usd;
+      });
+
+      if (this.props.showRibbon === true) {
+        const allBnbPools = [...sortedActive, ...sortedExpired];
+        this.setState({ bnbStake: allBnbPools });
+      } else if (this.props.showRibbon === false) {
+        const allBnbPools = [...sortedActive];
+        this.setState({ bnbStake: allBnbPools });
+      }
+    }
   };
 
   fetchAvaxStaking = async () => {
-    await axios
+    const avax_result = await axios
       .get(`https://api.dyp.finance/api/get_staking_info_avax`)
-      .then((res) => {
-        const dypIdypAvax = res.data.stakingInfoDYPAvax.concat(
-          res.data.stakingInfoiDYPAvax
-        );
-
-        const expiredAvax = dypIdypAvax.filter((item) => {
-          return item.expired !== "No";
-        });
-
-        const activeAvax = dypIdypAvax.filter((item) => {
-          return item.expired !== "Yes";
-        });
-
-        const sortedActive = activeAvax.sort(function (a, b) {
-          return b.tvl_usd - a.tvl_usd;
-        });
-        const sortedExpired = expiredAvax.sort(function (a, b) {
-          return b.tvl_usd - a.tvl_usd;
-        });
-
-        const avaxAllPools = [...sortedActive, ...sortedExpired];
-        this.setState({ avaxStake: avaxAllPools });
-      })
       .catch((err) => {
         console.log(err);
       });
+
+    const avax_result2 = await axios
+      .get(`https://api.dyp.finance/api/get_staking_info_avax_new`)
+      .catch((err) => {
+        console.log(err);
+      });
+
+    if (
+      avax_result &&
+      avax_result.status === 200 &&
+      avax_result2 &&
+      avax_result2.status === 200
+    ) {
+      const dypIdypAvax = avax_result.data.stakingInfoiDYPAvax.concat(
+        avax_result.data.stakingInfoDYPAvax
+      );
+      const dypAvax = avax_result2.data.stakingInfoDYPAvax;
+      const object2 = dypAvax.map((item) => {
+        return { ...item, tvl_usd: item.tvl_usd };
+      });
+      const expiredAvax = dypIdypAvax.filter((item) => {
+        return item.expired !== "No";
+      });
+
+      const activeAvax = dypIdypAvax.filter((item) => {
+        return item.expired !== "Yes";
+      });
+
+      const expiredAvax2 = object2.filter((item) => {
+        return item.expired !== "No";
+      });
+
+      const activeAvax2 = object2.filter((item) => {
+        return item.expired !== "Yes";
+      });
+
+      const allActiveAvax = [...activeAvax, ...activeAvax2];
+      const allExpireAvax = [...expiredAvax, ...expiredAvax2];
+
+      const sortedActive = allActiveAvax.sort(function (a, b) {
+        return b.tvl_usd - a.tvl_usd;
+      });
+      const sortedExpired = allExpireAvax.sort(function (a, b) {
+        return b.tvl_usd - a.tvl_usd;
+      });
+
+      if (this.props.showRibbon === true) {
+        const avaxAllPools = [...sortedActive, ...sortedExpired];
+        this.setState({ avaxStake: avaxAllPools });
+      } else if (this.props.showRibbon === false) {
+        const avaxAllPools = [...sortedActive];
+        this.setState({ avaxStake: avaxAllPools });
+      }
+    }
   };
 
   fetchEthFarming = async () => {
@@ -193,8 +306,13 @@ export default class Subscription extends React.Component {
           return b.tvl_usd - a.tvl_usd;
         });
 
-        const ethAllPools = [...sortedActive, ...sortedExpired];
-        this.setState({ ethFarm: ethAllPools });
+        if (this.props.showRibbon === true) {
+          const ethAllPools = [...sortedActive, ...sortedExpired];
+          this.setState({ ethFarm: ethAllPools });
+        } else if (this.props.showRibbon === false) {
+          const ethAllPools = [...sortedActive];
+          this.setState({ ethFarm: ethAllPools });
+        }
       })
       .catch((err) => console.error(err));
   };
@@ -222,8 +340,13 @@ export default class Subscription extends React.Component {
           return b.tvl_usd - a.tvl_usd;
         });
 
-        const bnbAllpools = [...sortedActive, ...sortedExpired];
-        this.setState({ bscFarm: bnbAllpools });
+        if (this.props.showRibbon === true) {
+          const bnbAllpools = [...sortedActive, ...sortedExpired];
+          this.setState({ bscFarm: bnbAllpools });
+        } else if (this.props.showRibbon === false) {
+          const bnbAllpools = [...sortedActive];
+          this.setState({ bscFarm: bnbAllpools });
+        }
       })
       .catch((err) => console.error(err));
   };
@@ -329,19 +452,24 @@ export default class Subscription extends React.Component {
     );
     const web3avax = new Web3("https://api.avax.network/ext/bc/C/rpc");
     const web3bsc = new Web3("https://bsc-dataseed.binance.org/");
-    const tokenAddress = "0x961C8c0B1aaD0c0b10a51FeF6a867E3091BCef17";
+    const tokenAddress = window.config.token_dypius_new_address;
+    const tokenAddress_bsc = window.config.token_dypius_new_bsc_address;
     const walletAddress = this.props.coinbase;
     const TokenABI = window.ERC20_ABI;
     if (walletAddress && walletAddress !== undefined) {
       const contract1 = new web3eth.eth.Contract(TokenABI, tokenAddress);
-      const contract2 = new web3avax.eth.Contract(TokenABI, tokenAddress);
-      const contract3 = new web3bsc.eth.Contract(TokenABI, tokenAddress);
+      const contract2 = new web3avax.eth.Contract(TokenABI, tokenAddress_bsc);
+      const contract3 = new web3bsc.eth.Contract(TokenABI, tokenAddress_bsc);
 
       const baleth = await contract1.methods
         .balanceOf(walletAddress)
         .call()
         .then((data) => {
           return web3eth.utils.fromWei(data, "ether");
+        })
+        .catch((e) => {
+          console.error(e);
+          return 0;
         });
 
       const balavax = await contract2.methods
@@ -349,6 +477,10 @@ export default class Subscription extends React.Component {
         .call()
         .then((data) => {
           return web3avax.utils.fromWei(data, "ether");
+        })
+        .catch((e) => {
+          console.error(e);
+          return 0;
         });
 
       const balbnb = await contract3.methods
@@ -356,6 +488,10 @@ export default class Subscription extends React.Component {
         .call()
         .then((data) => {
           return web3bsc.utils.fromWei(data, "ether");
+        })
+        .catch((e) => {
+          console.error(e);
+          return 0;
         });
 
       if (this.props.networkId === 43114) {
@@ -369,21 +505,89 @@ export default class Subscription extends React.Component {
   };
 
   getAllBalance = async () => {
-    const tokenAddress = "0x961C8c0B1aaD0c0b10a51FeF6a867E3091BCef17";
+    const tokenAddress = window.config.token_dypius_new_address;
+    const tokenAddress_bsc = window.config.token_dypius_new_bsc_address;
+    const tokenAddress_base = window.config.reward_token_dypiusv2_base_address;
+
     const walletAddress = this.props.coinbase;
     const TokenABI = window.ERC20_ABI;
+    const contract1 = new window.infuraWeb3.eth.Contract(
+      TokenABI,
+      tokenAddress
+    );
+    const contract2 = new window.avaxWeb3.eth.Contract(
+      TokenABI,
+      tokenAddress_bsc
+    );
+    const contract3 = new window.bscWeb3.eth.Contract(
+      TokenABI,
+      tokenAddress_bsc
+    );
 
-    if (this.props.coinbase && this.props.coinbase != undefined) {
-      const contract1 = new window.infuraWeb3.eth.Contract(
-        TokenABI,
-        tokenAddress
-      );
-      const contract2 = new window.avaxWeb3.eth.Contract(
-        TokenABI,
-        tokenAddress
-      );
-      const contract3 = new window.bscWeb3.eth.Contract(TokenABI, tokenAddress);
+    const contract4 = new window.baseWeb3.eth.Contract(
+      TokenABI,
+      tokenAddress_base
+    );
 
+    if (
+      this.props.email &&
+      this.props.address !== undefined &&
+      this.props.address.includes("0x")
+    ) {
+      await contract1.methods
+        .balanceOf(this.props.address)
+        .call()
+        .then((data) => {
+          let depositedTokens = new BigNumber(data).div(1e18).toFixed(2);
+
+          this.setState({ ethBalance: depositedTokens });
+        })
+        .catch((e) => {
+          console.error(e);
+          return 0;
+        });
+      await contract2.methods
+        .balanceOf(this.props.address)
+        .call()
+        .then((data) => {
+          let depositedTokens = new BigNumber(data).div(1e18).toFixed(2);
+
+          this.setState({ avaxBalance: depositedTokens });
+        })
+        .catch((e) => {
+          console.error(e);
+          return 0;
+        });
+
+      await contract3.methods
+        .balanceOf(this.props.address)
+        .call()
+        .then((data) => {
+          let depositedTokens = new BigNumber(data).div(1e18).toFixed(2);
+
+          this.setState({ bnbBalance: depositedTokens });
+        })
+        .catch((e) => {
+          console.error(e);
+          return 0;
+        });
+      await contract4.methods
+        .balanceOf(this.props.address)
+        .call()
+        .then((data) => {
+          let depositedTokens = new BigNumber(data).div(1e18).toFixed(2);
+
+          this.setState({ baseBalance: depositedTokens });
+        })
+        .catch((e) => {
+          console.error(e);
+          return 0;
+        });
+    } else if (
+      this.props.coinbase &&
+      this.props.coinbase != undefined &&
+      this.props.isConnected
+    ) {
       await contract1.methods
         .balanceOf(walletAddress)
         .call()
@@ -391,6 +595,10 @@ export default class Subscription extends React.Component {
           let depositedTokens = new BigNumber(data).div(1e18).toFixed(2);
 
           this.setState({ ethBalance: depositedTokens });
+        })
+        .catch((e) => {
+          console.error(e);
+          return 0;
         });
       await contract2.methods
         .balanceOf(walletAddress)
@@ -399,6 +607,10 @@ export default class Subscription extends React.Component {
           let depositedTokens = new BigNumber(data).div(1e18).toFixed(2);
 
           this.setState({ avaxBalance: depositedTokens });
+        })
+        .catch((e) => {
+          console.error(e);
+          return 0;
         });
 
       await contract3.methods
@@ -408,31 +620,60 @@ export default class Subscription extends React.Component {
           let depositedTokens = new BigNumber(data).div(1e18).toFixed(2);
 
           this.setState({ bnbBalance: depositedTokens });
+        })
+        .catch((e) => {
+          console.error(e);
+          return 0;
         });
+      await contract4.methods
+        .balanceOf(walletAddress)
+        .call()
+        .then((data) => {
+          let depositedTokens = new BigNumber(data).div(1e18).toFixed(2);
+
+          this.setState({ baseBalance: depositedTokens });
+        })
+        .catch((e) => {
+          console.error(e);
+          return 0;
+        });
+    } else {
+      this.setState({
+        ethBalance: "0.00",
+        bnbBalance: "0.00",
+        baseBalance: "0.00",
+        avaxBalance: "0.00",
+      });
     }
   };
 
   componentDidUpdate(prevProps) {
     // Typical usage (don't forget to compare props):
 
-    if (this.props.isPremium === false) {
-      window.location.href = "https://app.dypius.com/plans";
-    }
+    // if (this.props.isPremium === false) {
+    //   window.location.href = "https://app.dypius.com/plans";
+    // }
 
     if (this.props.coinbase !== prevProps.coinbase) {
       this.fetchUserPools();
       // this.getDypBalance();
-      this.fetchAvatar();
-      this.fetchUsername();
-      this.fetchUserPools();
-      this.fetchAvaxFarming();
-      this.fetchAvaxStaking();
-      this.fetchBnbStaking();
-      this.fetchBscFarming();
-      this.fetchEthFarming();
-      this.fetchEthStaking();
+      // this.fetchAvatar();
+      // this.fetchUsername();
       this.getAllBalance();
-      this.props.onSubscribe()
+      // this.props.onSubscribe(this.props.coinbase);
+      this.myNft().then();
+      this.myStakes().then();
+      this.myLandNft().then();
+      this.myLandStakes().then();
+    }
+
+    if (this.props.address !== prevProps.address) {
+      this.fetchUserPools();
+      // this.getDypBalance();
+      // this.fetchAvatar();
+      // this.fetchUsername();
+      this.getAllBalance();
+      // this.props.onSubscribe(this.props.address);
       this.myNft().then();
       this.myStakes().then();
       this.myLandNft().then();
@@ -449,16 +690,16 @@ export default class Subscription extends React.Component {
   }
 
   componentDidMount() {
-    if (this.props.isPremium === false) {
-      window.location.href = "https://app.dypius.com/plans";
-    }
+    // if (this.props.isPremium === false) {
+    //   window.location.href = "https://app.dypius.com/plans";
+    // }
     // window._refreshBalIntervalDyp = setInterval(this.getDypBalance, 2000);
+    this.props.onPlayerFetch();
     this.getAllBalance();
     this.fetchUserPools();
-    this.props.onSubscribe()
-    this.fetchAvatar();
-    this.fetchUsername();
-    this.fetchUserPools();
+    // this.props.onSubscribe(this.props.coinbase);
+    // this.fetchAvatar();
+    // this.fetchUsername();
     this.fetchAvaxFarming();
     this.fetchAvaxStaking();
     this.fetchBnbStaking();
@@ -543,24 +784,36 @@ export default class Subscription extends React.Component {
   // };
 
   myNft = async () => {
-    if (this.props.coinbase !== null && this.props.coinbase !== undefined) {
-      const infura_web3 = window.infuraWeb3;
-      let nfts_contract = new infura_web3.eth.Contract(
-        window.NFT_ABI,
-        window.config.nft_address
-      );
+    const infura_web3 = window.infuraWeb3;
+    let nfts_contract = new infura_web3.eth.Contract(
+      window.NFT_ABI,
+      window.config.nft_address
+    );
 
+    if (
+      this.props.email &&
+      this.props.address !== undefined &&
+      this.props.address.includes("0x")
+    ) {
       let getBalanceOf = await nfts_contract.methods
-        .balanceOf(this.props.coinbase)
-        .call();
+        .balanceOf(this.props.address)
+        .call()
+        .catch((e) => {
+          console.error(e);
+          return 0;
+        });
 
       let nftList = [];
 
       for (let i = 0; i < getBalanceOf; i++)
         nftList.push(
           await nfts_contract.methods
-            .tokenOfOwnerByIndex(this.props.coinbase, i)
+            .tokenOfOwnerByIndex(this.props.address, i)
             .call()
+            .catch((e) => {
+              console.error(e);
+              return 0;
+            })
         );
 
       let nfts = nftList.map((nft) => window.getNft(nft));
@@ -568,19 +821,18 @@ export default class Subscription extends React.Component {
       nfts = await Promise.all(nfts);
       nfts.reverse();
       this.setState({ myNFTs: nfts });
-    }
-  };
-  myLandNft = async () => {
-    if (this.props.coinbase !== null && this.props.coinbase !== undefined) {
-      const infura_web3 = window.infuraWeb3;
-      let nfts_contract = new infura_web3.eth.Contract(
-        window.LANDMINTING_ABI,
-        window.config.landnft_address
-      );
-
+    } else if (
+      this.props.coinbase !== null &&
+      this.props.coinbase !== undefined &&
+      this.props.isConnected
+    ) {
       let getBalanceOf = await nfts_contract.methods
         .balanceOf(this.props.coinbase)
-        .call();
+        .call()
+        .catch((e) => {
+          console.error(e);
+          return 0;
+        });
 
       let nftList = [];
 
@@ -589,6 +841,52 @@ export default class Subscription extends React.Component {
           await nfts_contract.methods
             .tokenOfOwnerByIndex(this.props.coinbase, i)
             .call()
+            .catch((e) => {
+              console.error(e);
+              return 0;
+            })
+        );
+
+      let nfts = nftList.map((nft) => window.getNft(nft));
+
+      nfts = await Promise.all(nfts);
+      nfts.reverse();
+      this.setState({ myNFTs: nfts });
+    } else {
+      this.setState({ myNFTs: [] });
+    }
+  };
+  myLandNft = async () => {
+    const infura_web3 = window.infuraWeb3;
+    let nfts_contract = new infura_web3.eth.Contract(
+      window.LANDMINTING_ABI,
+      window.config.landnft_address
+    );
+
+    if (
+      this.props.address !== undefined &&
+      this.props.address.includes("0x") &&
+      this.props.email
+    ) {
+      let getBalanceOf = await nfts_contract.methods
+        .balanceOf(this.props.address)
+        .call()
+        .catch((e) => {
+          console.error(e);
+          return 0;
+        });
+
+      let nftList = [];
+
+      for (let i = 0; i < getBalanceOf; i++)
+        nftList.push(
+          await nfts_contract.methods
+            .tokenOfOwnerByIndex(this.props.address, i)
+            .call()
+            .catch((e) => {
+              console.error(e);
+              return 0;
+            })
         );
 
       let nfts = nftList.map((nft) => window.getLandNft(nft));
@@ -596,6 +894,39 @@ export default class Subscription extends React.Component {
       nfts = await Promise.all(nfts);
       nfts.reverse();
       this.setState({ myLandNFTs: nfts });
+    } else if (
+      this.props.coinbase !== null &&
+      this.props.coinbase !== undefined &&
+      this.props.isConnected
+    ) {
+      let getBalanceOf = await nfts_contract.methods
+        .balanceOf(this.props.coinbase)
+        .call()
+        .catch((e) => {
+          console.error(e);
+          return 0;
+        });
+
+      let nftList = [];
+
+      for (let i = 0; i < getBalanceOf; i++)
+        nftList.push(
+          await nfts_contract.methods
+            .tokenOfOwnerByIndex(this.props.coinbase, i)
+            .call()
+            .catch((e) => {
+              console.error(e);
+              return 0;
+            })
+        );
+
+      let nfts = nftList.map((nft) => window.getLandNft(nft));
+
+      nfts = await Promise.all(nfts);
+      nfts.reverse();
+      this.setState({ myLandNFTs: nfts });
+    } else {
+      this.setState({ myLandNFTs: [] });
     }
   };
 
@@ -635,33 +966,131 @@ export default class Subscription extends React.Component {
   // };
   getStakesIds = async () => {
     const address = this.props.coinbase;
-    if (address !== null && address !== undefined) {
-      const infura_web3 = window.infuraWeb3;
-      let staking_contract = new infura_web3.eth.Contract(
-        window.NFTSTAKING_ABI,
-        window.config.nftstaking_address
-      );
+    const infura_web3 = window.infuraWeb3;
+    let staking_contract = new infura_web3.eth.Contract(
+      window.NFTSTAKING_ABI,
+      window.config.nftstaking_address
+    );
+    if (address !== null && address !== undefined && this.props.isConnected) {
       let stakenft = [];
       let myStakes = await staking_contract.methods
         .depositsOf(address)
+        .call()
+        .then((result) => {
+          for (let i = 0; i < result.length; i++)
+            stakenft.push(parseInt(result[i]));
+          return stakenft;
+        })
+        .catch((e) => {
+          console.error(e);
+          return 0;
+        });
+
+      return myStakes;
+    } else if (
+      this.props.email &&
+      this.props.address !== undefined &&
+      this.props.address.includes("0x")
+    ) {
+      let stakenft = [];
+      let myStakes = await staking_contract.methods
+        .depositsOf(this.props.address)
+        .call()
+        .then((result) => {
+          for (let i = 0; i < result.length; i++)
+            stakenft.push(parseInt(result[i]));
+          return stakenft;
+        })
+        .catch((e) => {
+          console.error(e);
+          return 0;
+        });
+
+      return myStakes;
+    } else {
+      return [];
+    }
+  };
+
+  getStakesIdsCawsPremium = async () => {
+    let staking_contract = await new window.infuraWeb3.eth.Contract(
+      window.CAWSPREMIUM_ABI,
+      window.config.nft_caws_premiumstake_address
+    );
+    let stakenft = [];
+    if (
+      this.props.email &&
+      this.props.address !== undefined &&
+      this.props.address.includes("0x")
+    ) {
+      let myStakes = await staking_contract.methods
+        .depositsOf(this.props.address)
         .call()
         .then((result) => {
           for (let i = 0; i < result.length; i++)
             stakenft.push(parseInt(result[i]));
           return stakenft;
         });
-
+      return myStakes;
+    } else if (this.props.coinbase && this.props.isConnected) {
+      let myStakes = await staking_contract.methods
+        .depositsOf(this.props.coinbase)
+        .call()
+        .then((result) => {
+          for (let i = 0; i < result.length; i++)
+            stakenft.push(parseInt(result[i]));
+          return stakenft;
+        });
       return myStakes;
     }
   };
+
+  getStakesIdsLandPremium = async () => {
+    let staking_contract = await new window.infuraWeb3.eth.Contract(
+      window.LANDPREMIUM_ABI,
+      window.config.nft_land_premiumstake_address
+    );
+    let stakenft = [];
+    if (
+      this.props.email &&
+      this.props.address !== undefined &&
+      this.props.address.includes("0x")
+    ) {
+      let myStakes = await staking_contract.methods
+        .depositsOf(this.props.address)
+        .call()
+        .then((result) => {
+          for (let i = 0; i < result.length; i++)
+            stakenft.push(parseInt(result[i]));
+          return stakenft;
+        });
+      return myStakes;
+    } else if (this.props.coinbase && this.props.isConnected) {
+      let myStakes = await staking_contract.methods
+        .depositsOf(this.props.coinbase)
+        .call()
+        .then((result) => {
+          for (let i = 0; i < result.length; i++)
+            stakenft.push(parseInt(result[i]));
+          return stakenft;
+        });
+      return myStakes;
+    }
+  };
+
   getLandStakesIds = async () => {
     const address = this.props.coinbase;
-    if (address !== null && this.props.coinbase !== undefined) {
-      const infura_web3 = window.infuraWeb3;
-      let staking_contract = new infura_web3.eth.Contract(
-        window.LANDSTAKING_ABI,
-        window.config.landnftstake_address
-      );
+    const infura_web3 = window.infuraWeb3;
+    let staking_contract = new infura_web3.eth.Contract(
+      window.LANDSTAKING_ABI,
+      window.config.landnftstake_address
+    );
+
+    if (
+      address !== null &&
+      this.props.coinbase !== undefined &&
+      this.props.isConnected
+    ) {
       let stakenft = [];
       let myStakes = await staking_contract.methods
         .depositsOf(address)
@@ -670,6 +1099,30 @@ export default class Subscription extends React.Component {
           for (let i = 0; i < result.length; i++)
             stakenft.push(parseInt(result[i]));
           return stakenft;
+        })
+        .catch((e) => {
+          console.error(e);
+          return 0;
+        });
+
+      return myStakes;
+    } else if (
+      this.props.email &&
+      this.props.address !== undefined &&
+      this.props.address.includes("0x")
+    ) {
+      let stakenft = [];
+      let myStakes = await staking_contract.methods
+        .depositsOf(this.props.address)
+        .call()
+        .then((result) => {
+          for (let i = 0; i < result.length; i++)
+            stakenft.push(parseInt(result[i]));
+          return stakenft;
+        })
+        .catch((e) => {
+          console.error(e);
+          return 0;
         });
 
       return myStakes;
@@ -678,19 +1131,45 @@ export default class Subscription extends React.Component {
 
   myStakes = async () => {
     let myStakes = await this.getStakesIds();
-    if(myStakes && myStakes.length > 0)
-   { let stakes = myStakes.map((stake) => window.getNft(stake));
-    stakes = await Promise.all(stakes);
-    stakes.reverse();
-    this.setState({ myStakess: stakes });}
+    let myStakesCawsPremium = await this.getStakesIdsCawsPremium();
+    let stakes = [];
+    let stakesCawsPremium = [];
+    if (myStakes && myStakes.length > 0) {
+      stakes = myStakes.map((stake) => window.getNft(stake));
+      stakes = await Promise.all(stakes);
+      stakes.reverse();
+    }
+    if (myStakesCawsPremium && myStakesCawsPremium.length > 0) {
+      stakesCawsPremium = myStakesCawsPremium.map((stake) =>
+        window.getNft(stake)
+      );
+      stakesCawsPremium = await Promise.all(stakesCawsPremium);
+      stakesCawsPremium.reverse();
+    }
+    this.setState({ myStakess: [...stakes, ...stakesCawsPremium] });
   };
   myLandStakes = async () => {
     let myStakes = await this.getLandStakesIds();
-    if(myStakes && myStakes.length > 0)
-   { let stakes = myStakes.map((stake) => window.getLandNft(stake));
-    stakes = await Promise.all(stakes);
-    stakes.reverse();
-    this.setState({ landStakes: stakes });}
+    let myStakesLandPremium = await this.getStakesIdsLandPremium();
+
+    let stakes = [];
+    let stakesLandPremium = [];
+
+    if (myStakes && myStakes.length > 0) {
+      stakes = myStakes.map((stake) => window.getLandNft(stake));
+      stakes = await Promise.all(stakes);
+      stakes.reverse();
+    }
+
+    if (myStakesLandPremium && myStakesLandPremium.length > 0) {
+      stakesLandPremium = myStakesLandPremium.map((stake) =>
+        window.getLandNft(stake)
+      );
+      stakesLandPremium = await Promise.all(stakesLandPremium);
+      stakesLandPremium.reverse();
+    }
+
+    this.setState({ landStakes: [...stakes, ...stakesLandPremium] });
   };
 
   handleApprove = async (e) => {
@@ -742,7 +1221,11 @@ export default class Subscription extends React.Component {
         const result = await subscribeTokencontract.methods
           .allowance(this.props.coinbase, ethsubscribeAddress)
           .call()
-          .then();
+          .then()
+          .catch((e) => {
+            console.error(e);
+            return 0;
+          });
 
         if (result != 0) {
           this.setState({ lockActive: true });
@@ -757,7 +1240,11 @@ export default class Subscription extends React.Component {
         const result = await subscribeTokencontract.methods
           .allowance(this.props.coinbase, avaxsubscribeAddress)
           .call()
-          .then();
+          .then()
+          .catch((e) => {
+            console.error(e);
+            return 0;
+          });
 
         if (result != 0) {
           this.setState({ lockActive: true });
@@ -774,7 +1261,7 @@ export default class Subscription extends React.Component {
 
   handleSubscribe = async (e) => {
     e.preventDefault();
-    
+
     let subscriptionContract = await window.getContract({
       key: this.props.networkId === 1 ? "SUBSCRIPTIONETH" : "SUBSCRIPTION",
     });
@@ -880,7 +1367,9 @@ export default class Subscription extends React.Component {
       .then((response) => response.json())
       .then((result) => {
         console.log("Success:", result);
-        window.location.reload();
+        setTimeout(() => {
+          window.location.reload();
+        }, 3000);
       })
       .catch((error) => {
         console.error("Error:", error);
@@ -892,18 +1381,50 @@ export default class Subscription extends React.Component {
   };
 
   fetchAvatar = async () => {
-    const response = await fetch(
-      `https://api-image.dyp.finance/api/v1/avatar/${this.props.coinbase}`
-    )
-      .then((res) => {
-        return res.json();
-      })
-      .then((data) => {
-        this.setState({ image: data.status === 0 ? Placeholder : data.avatar });
-      })
-      .catch(console.error);
+    if (
+      this.props.email &&
+      this.props.address !== undefined &&
+      this.props.address.includes("0x")
+    ) {
+      const response = await fetch(
+        `https://api-image.dyp.finance/api/v1/avatar/${this.props.address}`
+      )
+        .then((res) => {
+          return res.json();
+        })
+        .then((data) => {
+          this.setState({
+            image:
+              data.status === 0
+                ? "https://cdn.worldofdypians.com/tools/person.svg"
+                : data.avatar,
+          });
+        })
+        .catch(console.error);
 
-    return response;
+      return response;
+    } else if (this.props.isConnected && this.props.coinbase) {
+      const response = await fetch(
+        `https://api-image.dyp.finance/api/v1/avatar/${this.props.coinbase}`
+      )
+        .then((res) => {
+          return res.json();
+        })
+        .then((data) => {
+          this.setState({
+            image:
+              data.status === 0
+                ? "https://cdn.worldofdypians.com/tools/person.svg"
+                : data.avatar,
+          });
+        })
+        .catch(console.error);
+
+      return response;
+    } else
+      this.setState({
+        image: "https://cdn.worldofdypians.com/tools/person.svg",
+      });
   };
 
   deleteAvatar = async () => {
@@ -914,7 +1435,9 @@ export default class Subscription extends React.Component {
         return res.json();
       })
       .then(() => {
-        this.setState({ image: Placeholder });
+        this.setState({
+          image: "https://cdn.worldofdypians.com/tools/person.svg",
+        });
       })
       .catch(console.error);
 
@@ -967,39 +1490,50 @@ export default class Subscription extends React.Component {
       this.setState({ openTooltip: true });
     };
 
-    
+    const handleLogout = () => {
+      this.props.onLogout();
+    };
 
-
-    return this.props.isPremium ? (
-      <div>
-        <div className="d-flex align-items-start align-items-lg-0 justify-content-between flex-column flex-lg-row gap-4 gap-lg-0">
+    return (
+      <>
+        <div>
           <div
-            className={`d-flex flex-column ${
-              this.state.showInput ? "gap-5 gap-lg-2" : "gap-2"
-            }`}
+            className={` p-0 ${
+              this.props.isPremium === true
+                ? "user-cardImg-active-premium"
+                : "user-cardImg"
+            }  bordereddiv `}
           >
-            <div
-              className={`d-flex align-items-center w-100 justify-content-between justify-content-lg-start gap-3`}
-              // style={{ height: 38 }}
-            >
-              <div className="position-relative">
-                <div className="avatar-border"></div>
-                <img
-                  src={require("./assets/changeImage.svg").default}
-                  alt=""
-                  className="add-image"
-                />
-                <img
-                  src={this.state.image}
-                  alt="your image"
-                  className="avatarimg"
-                />
-                <input
-                  type="file"
-                  id="group_image"
-                  onChange={this.onImageChange}
-                />
-                {/* {this.state.showSavebtn === true ? (
+            <div className="d-flex bordereddiv align-items-start align-items-lg-0 justify-content-between flex-column flex-lg-row gap-4 gap-lg-0">
+              <div
+                className={`d-flex flex-column ${
+                  this.state.showInput ? "gap-5 gap-lg-2" : "gap-2"
+                }`}
+              >
+                <div
+                  className={`d-flex align-items-center w-100 justify-content-between justify-content-lg-start gap-3`}
+                  // style={{ height: 38 }}
+                >
+                  <div className="position-relative">
+                    <div className="avatar-border"></div>
+                    <img
+                      src={
+                        "https://cdn.worldofdypians.com/tools/changeImage.svg"
+                      }
+                      alt=""
+                      className="add-image"
+                    />
+                    <img
+                      src={this.state.image}
+                      alt="your image"
+                      className="avatarimg"
+                    />
+                    <input
+                      type="file"
+                      id="group_image"
+                      onChange={this.onImageChange}
+                    />
+                    {/* {this.state.showSavebtn === true ? (
                 <div
                   className="savebtn"
                   type=""
@@ -1019,7 +1553,7 @@ export default class Subscription extends React.Component {
                 <></>
               )}
               {this.state.showRemovebtn === true ||
-              this.state.image !== Placeholder ? (
+              this.state.image !== 'https://cdn.worldofdypians.com/tools/person.svg' ? (
                 <div className="removebtn" type="" onClick={this.deleteAvatar}>
                   {this.state.loadspinnerRemove === true ? (
                     <div
@@ -1034,198 +1568,325 @@ export default class Subscription extends React.Component {
               ) : (
                 <></>
               )} */}
-              </div>
-              <div className="d-flex flex-column gap-2">
-                <div className="d-flex flex-column flex-lg-row align-items-start align-items-lg-center gap-2 gap-lg-3">
-                  <h6 className="account-username">
-                    {this.state.username ? this.state.username : "Dypian"}
-                  </h6>
-                  {this.state.showInput ? (
-                    <div className="d-flex align-items-center gap-2">
-                      <div
-                        className="input-container px-0"
-                        style={{ width: "190px" }}
-                      >
-                        <input
-                          type="text"
-                          min={1}
-                          max={365}
-                          id="username"
-                          name="username"
-                          placeholder=" "
-                          className="text-input"
-                          style={{ width: "100%" }}
-                          value={this.state.userNameInput}
-                          onChange={(e) =>
-                            this.setState({ userNameInput: e.target.value })
-                          }
-                        />
-                        <label
-                          htmlFor="username"
-                          className="label"
-                          onClick={() => focusInput("username")}
-                        >
-                          Enter a new name
-                        </label>
+                  </div>
+                  <div className="d-flex flex-column gap-2">
+                    <div className="d-flex flex-column flex-lg-row align-items-start align-items-lg-center gap-2 gap-lg-3">
+                      <h6 className="account-username">
+                        {this.props.email
+                          ? this.props.game_username
+                          : this.state.username
+                          ? this.state.username
+                          : "Dypian"}
+                      </h6>
+                      {/* {this.state.showInput ? (
+                        <div className="d-flex align-items-center gap-2">
+                          <div
+                            className="input-container px-0"
+                            style={{ width: "190px" }}
+                          >
+                            <input
+                              type="text"
+                              min={1}
+                              max={365}
+                              id="username"
+                              name="username"
+                              placeholder=" "
+                              className="text-input"
+                              style={{ width: "100%" }}
+                              value={this.state.userNameInput}
+                              onChange={(e) =>
+                                this.setState({ userNameInput: e.target.value })
+                              }
+                            />
+                            <label
+                              htmlFor="username"
+                              className="label"
+                              onClick={() => focusInput("username")}
+                            >
+                              Enter a new name
+                            </label>
+                            <img
+                              src={
+                                require(`./assets/clearFieldIcon.svg`).default
+                              }
+                              className="clear-icon cursor-pointer"
+                              alt="clear field"
+                              onClick={() =>
+                                this.setState({ showInput: false })
+                              }
+                            />
+                          </div>
+                          <button
+                            className="btn outline-btn py-2"
+                            onClick={() =>
+                              this.postUsername(this.state.userNameInput)
+                            }
+                          >
+                            Submit
+                          </button>
+                        </div>
+                      ) : (
                         <img
-                          src={require(`./assets/clearFieldIcon.svg`).default}
-                          className="clear-icon cursor-pointer"
-                          alt="clear field"
-                          onClick={() => this.setState({ showInput: false })}
+                          src={openNameChange}
+                          className="cursor-pointer"
+                          alt=""
+                          onClick={() => this.setState({ showInput: true })}
+                          style={{ zIndex: 2 }}
                         />
-                      </div>
-                      <button
-                        className="btn outline-btn py-2"
-                        onClick={() =>
-                          this.postUsername(this.state.userNameInput)
+                      )} */}
+                    </div>
+                    <div className="d-flex align-items-center gap-2">
+                      <span className="account-wallet-address">
+                        {shortAddress(
+                          this.props.email
+                            ? this.props.address !== undefined
+                              ? this.props.address
+                              : this.props.isConnected === true
+                              ? this.props.coinbase
+                              : ""
+                            : this.props.coinbase
+                        )}
+                      </span>
+
+                      {this.props.isConnected &&
+                        (this.props.coinbase || this.props.address) && (
+                          <ClickAwayListener onClickAway={handleTooltipClose}>
+                            <Tooltip
+                              PopperProps={{
+                                disablePortal: true,
+                              }}
+                              onClose={handleTooltipClose}
+                              open={this.state.openTooltip}
+                              disableFocusListener
+                              disableHoverListener
+                              disableTouchListener
+                              placement="top"
+                              title={
+                                <div className="tooltip-text">
+                                  {"Wallet address copied!"}
+                                </div>
+                              }
+                            >
+                              <img
+                                src={
+                                  "https://cdn.worldofdypians.com/tools/clipboardIcon.svg"
+                                }
+                                className="cursor-pointer"
+                                alt="clipboard"
+                                onClick={() => {
+                                  navigator.clipboard.writeText(
+                                    this.props.coinbase
+                                  );
+                                  handleTooltipOpen();
+                                }}
+                              />
+                            </Tooltip>
+                          </ClickAwayListener>
+                        )}
+                    </div>
+                    <span className="account-wallet-address">
+                      {this.props.email}
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div
+                className={
+                  "d-flex justify-content-between justify-content-lg-end"
+                }
+              >
+                <div className="d-flex flex-column align-items-start gap-3 align-items-lg-start w-100 justify-content-between justify-content-lg-end gap-1">
+                  {/* <span className=" my-plan-tag">My plan</span> */}
+
+                  {this.props.isPremium === true ? (
+                    <div className="plan-tag py-2 px-4 d-flex align-items-center gap-2">
+                      <img
+                        src={
+                          "https://cdn.worldofdypians.com/tools/premiumDypIcon.svg"
                         }
-                      >
-                        Submit
-                      </button>
+                        alt=""
+                        style={{ width: 28, height: 28 }}
+                      />
+                      <span className="plan-tag-title">Premium</span>
                     </div>
                   ) : (
-                    <img
-                      src={openNameChange}
-                      className="cursor-pointer"
-                      alt=""
-                      onClick={() => this.setState({ showInput: true })}
-                      style={{ zIndex: 2 }}
-                    />
-                  )}
-                </div>
-                <div className="d-flex align-items-center gap-2">
-                  <span className="account-wallet-address">
-                    {shortAddress(this.props.coinbase)}
-                  </span>
-                  <ClickAwayListener onClickAway={handleTooltipClose}>
-                    <Tooltip
-                      PopperProps={{
-                        disablePortal: true,
+                    <button
+                      className="plan-tag py-2 px-4 d-flex align-items-center gap-2"
+                      onClick={() => {
+                        this.setState({ showPremiumPopup: true });
                       }}
-                      onClose={handleTooltipClose}
-                      open={this.state.openTooltip}
-                      disableFocusListener
-                      disableHoverListener
-                      disableTouchListener
-                      placement="top"
-                      title={
-                        <div className="tooltip-text">
-                          {"Wallet address copied!"}
-                        </div>
-                      }
                     >
                       <img
-                        src={require("./assets/clipboardIcon.svg").default}
-                        className="cursor-pointer"
-                        alt="clipboard"
-                        onClick={() => {
-                          navigator.clipboard.writeText(this.props.coinbase);
-                          handleTooltipOpen();
-                        }}
+                        src={
+                          "https://cdn.worldofdypians.com/tools/premiumDypIcon.svg"
+                        }
+                        alt=""
+                        style={{ width: 28, height: 28 }}
                       />
-                    </Tooltip>
-                  </ClickAwayListener>
+                      <span className="plan-tag-title">Become Premium</span>
+                    </button>
+                  )}
+                  {!this.props.email ? (
+                    <NavLink
+                      to="/sign-in"
+                      className="btn pill-btn px-4 py-1 w-100"
+                    >
+                      Sign in
+                    </NavLink>
+                  ) : this.props.email &&
+                    this.props.address &&
+                    this.props.userId ? (
+                    <button
+                      className="w-100 errorbtn px-4 py-1"
+                      onClick={handleLogout}
+                    >
+                      Log out
+                    </button>
+                  ) : !this.props.userId && this.props.email ? (
+                    <NavLink
+                      className="walletconnectBtn d-flex justify-content-center w-100 align-items-center"
+                      to="/player"
+                    >
+                      Create Player
+                    </NavLink>
+                  ) : (
+                    <button
+                      onClick={this.props.onLinkWallet}
+                      className="walletconnectBtn w-100 d-flex justify-content-center w-100 align-items-center"
+                    >
+                      Link wallet
+                    </button>
+                  )}
                 </div>
               </div>
             </div>
+            {this.props.address &&
+              this.props.email &&
+              this.props.coinbase &&
+              this.props.syncStatus !== "" &&
+              this.props.address.toLowerCase() !==
+                this.props.coinbase.toLowerCase() && (
+                <div className="bordereddiv border-0 py-2">
+                  <div className="d-flex align-items-center gap-2 justify-content-between">
+                    <h6 className="premiumtext-alert">
+                      {" "}
+                      Your gaming account is not linked to the wallet you
+                      connected. To update the game wallet address, press the
+                      synchronize button.
+                    </h6>{" "}
+                    <button
+                      className="d-flex align-items-center justify-content-center gap-1 syncbtn"
+                      onClick={this.props.onSyncClick}
+                    >
+                      {this.props.syncStatus === "initial"
+                        ? "Synchronize"
+                        : this.props.syncStatus === "loading"
+                        ? "Synchronising..."
+                        : this.props.syncStatus === "success"
+                        ? "Success"
+                        : "Error"}
+                    </button>
+                  </div>
+                </div>
+              )}
           </div>
-          <div
-            className={
-              this.props.coinbase
-                ? "mb-3 d-flex justify-content-between justify-content-lg-end"
-                : "d-none"
-            }
-          >
-            <div className="d-flex flex-column align-items-start align-items-lg-start w-100 justify-content-between justify-content-lg-end gap-1">
-              {/* <span className=" my-plan-tag">My plan</span> */}
-              <div className="plan-tag py-2 px-4 d-flex align-items-center gap-2">
-                <img
-                  src={require("./assets/premiumDypIcon.svg").default}
-                  alt=""
-                  style={{ width: 28, height: 28 }}
-                />
-                <span className="plan-tag-title">
-                  {this.props.isPremium ? "Premium" : "Free"}
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="row mt-4 gap-3 gap-lg-0">
-          <div className="col-12 col-lg-6">
-            <div className="dyp-balances-wrapper d-flex flex-column gap-4 p-3">
-              <h6 className="balances-title">Multichain DYP Balance</h6>
-              <div className="d-flex flex-column flex-lg-row gap-3 align-items-center justify-content-between">
-                <div className="dyp-balance-wrapper d-flex align-items-center justify-content-between justify-content-lg-center p-2 gap-3 gap-xxl-3 gap-lg-1">
-                  <img
-                    src={require(`./assets/wethIcon.svg`).default}
-                    width={20}
-                    height={20}
-                    alt=""
-                  />
-                  <div className="d-flex align-items-center gap-1">
-                    <span className="balance-amount mb-0">
-                      {getFormattedNumber(this.state.ethBalance)} DYP
-                    </span>
+          <div className={`bordereddiv border-0`}></div>
+          <div className="row mx-0 mt-4 gap-3 gap-lg-0">
+            <div className="col-12 ps-0 col-lg-6">
+              <div className="dyp-balances-wrapper d-flex flex-column gap-4 p-3">
+                <h6 className="balances-title">Multichain DYP Balance</h6>
+                <div className=" balance-item-wrapper gap-3 ">
+                  <div className="dyp-balance-wrapper d-flex align-items-center justify-content-between justify-content-lg-center p-2 gap-3 gap-xxl-3 gap-lg-1">
                     <img
-                      src={require(`./assets/dypIcon.svg`).default}
+                      src={"https://cdn.worldofdypians.com/wod/eth.svg"}
                       width={20}
                       height={20}
                       alt=""
                     />
+                    <div className="d-flex align-items-center gap-1">
+                      <span className="balance-amount mb-0">
+                        {getFormattedNumber(this.state.ethBalance)} DYP
+                      </span>
+                      <img
+                        src={"https://cdn.worldofdypians.com/tools/dyplogo.svg"}
+                        width={20}
+                        height={20}
+                        alt=""
+                      />
+                    </div>
                   </div>
-                </div>
-                <div className="dyp-balance-wrapper d-flex align-items-center justify-content-between justify-content-lg-center p-2  gap-3 gap-xxl-3 gap-lg-1">
-                  <img
-                    src={require(`./assets/wbnbIcon.svg`).default}
-                    width={20}
-                    height={20}
-                    alt=""
-                  />
-                  <div className="d-flex align-items-center gap-1">
-                    <span className="balance-amount mb-0">
-                      {getFormattedNumber(this.state.bnbBalance)} DYP
-                    </span>
+                  <div className="dyp-balance-wrapper d-flex align-items-center justify-content-between justify-content-lg-center p-2  gap-3 gap-xxl-3 gap-lg-1">
                     <img
-                      src={require(`./assets/dypIcon.svg`).default}
+                      src={"https://cdn.worldofdypians.com/wod/bnbIcon.svg"}
                       width={20}
                       height={20}
                       alt=""
                     />
+                    <div className="d-flex align-items-center gap-1">
+                      <span className="balance-amount mb-0">
+                        {getFormattedNumber(this.state.bnbBalance)} DYP
+                      </span>
+                      <img
+                        src={"https://cdn.worldofdypians.com/tools/dyplogo.svg"}
+                        width={20}
+                        height={20}
+                        alt=""
+                      />
+                    </div>
                   </div>
-                </div>
-                <div className="dyp-balance-wrapper d-flex align-items-center justify-content-between justify-content-lg-center p-2 gap-3 gap-xxl-3 gap-lg-1">
-                  <img src={require(`./assets/wavaxIcon.svg`).default} alt="" />
-                  <div className="d-flex align-items-center gap-1">
-                    <span className="balance-amount mb-0">
-                      {getFormattedNumber(this.state.avaxBalance)} DYP
-                    </span>
+                  <div className="dyp-balance-wrapper d-flex align-items-center justify-content-between justify-content-lg-center p-2 gap-3 gap-xxl-3 gap-lg-1">
                     <img
-                      src={require(`./assets/dypIcon.svg`).default}
+                      src={"https://cdn.worldofdypians.com/wod/avaxIcon.svg"}
+                      alt=""
                       width={20}
                       height={20}
-                      alt=""
                     />
+                    <div className="d-flex align-items-center gap-1">
+                      <span className="balance-amount mb-0">
+                        {getFormattedNumber(this.state.avaxBalance)} DYP
+                      </span>
+                      <img
+                        src={"https://cdn.worldofdypians.com/tools/dyplogo.svg"}
+                        width={20}
+                        height={20}
+                        alt=""
+                      />
+                    </div>
+                  </div>
+                  <div className="dyp-balance-wrapper d-flex align-items-center justify-content-between justify-content-lg-center p-2 gap-3 gap-xxl-3 gap-lg-1">
+                    <img
+                      src={"https://cdn.worldofdypians.com/wod/base.svg"}
+                      alt=""
+                      width={20}
+                      height={20}
+                    />
+                    <div className="d-flex align-items-center gap-1">
+                      <span className="balance-amount mb-0">
+                        {getFormattedNumber(this.state.baseBalance)} DYP
+                      </span>
+                      <img
+                        src={"https://cdn.worldofdypians.com/tools/dyplogo.svg"}
+                        width={20}
+                        height={20}
+                        alt=""
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
+            <div className="col-12 pe-lg-0 p-0 col-lg-6">
+              <NavLink
+                className="wod-wrapper d-flex flex-column align-items-start gap-3 p-3 justify-content-end"
+                to="/games"
+              >
+                <div className="btn hero-stake-eth-btn2 px-5 py-1 ">
+                  <span className="explore-wod">Explore</span>
+                </div>
+              </NavLink>
+            </div>
           </div>
-          <div className="col-12 col-lg-6">
-            <a
-              href="https://www.worldofdypians.com/"
-              target={"_blank"}
-              className="wod-wrapper d-flex flex-column align-items-end gap-3 p-3"
-            >
-              <h6 className="wod-title">Experience unique gameplay</h6>
-              <div className="d-flex align-items-center gap-1">
-                <span className="explore-wod">Explore more</span>
-                <img src={gotoWod} alt="" />
-              </div>
-            </a>
-          </div>
-        </div>
-        {/* <div className="row mt-5 gap-4 gap-lg-0">
+          {/* <div className="row mt-5 gap-4 gap-lg-0">
           <div className="col-12 col-lg-6 position-relative d-flex justify-content-center">
             <div
               className="purplediv"
@@ -1539,7 +2200,7 @@ export default class Subscription extends React.Component {
         ) : (
           <></>
         )} */}
-        {/* <form onSubmit={this.handleSubscribe}>     
+          {/* <form onSubmit={this.handleSubscribe}>     
           <div>
             {!this.props.appState.isPremium ? (
               <table className="w-100">
@@ -1874,432 +2535,431 @@ export default class Subscription extends React.Component {
           )}
         </form> */}
 
-        {this.state.userPools && this.state.userPools.length > 0 && (
-          <>
-            <h4 className="d-block mb-5 mt-5" id="my-fav">
-              My Earnings
-            </h4>
-            <div
-              style={{
-                gap: "50px 0px",
-                display: "grid",
-                gridTemplateColumns: "repeat(1, 1fr)",
-              }}
-            >
-              <div
-                className="row p-0 m-0 poolrows"
-                style={{
-                  gap: "50px 0px",
-                }}
-              >
-                {this.state.ethStake &&
-                  this.state.ethStake
-                    .slice(0, this.state.ethStake.length)
-                    .map((pool, index) => (
-                      <NavLink
-                        to="/earn"
-                        style={{
-                          display:
-                            this.state.userPools.length > 0
-                              ? this.state.userPools.find(
-                                  (obj) => obj.contract_address == pool.id
-                                )
-                                ? "block"
-                                : "none"
-                              : "none",
-                          position: "relative",
-                        }}
-                      >
-                        <div
-                          style={{
-                            display:
-                              this.state.userPools.length > 0
-                                ? this.state.userPools.find(
-                                    (obj) => obj.contract_address == pool.id
-                                  )
-                                  ? "block"
-                                  : "none"
-                                : "none",
-                            position: "relative",
-                          }}
-                        >
-                          <div
-                            className="d-flex justify-content-center align-items-center"
+          {this.state.userPools &&
+            this.state.userPools.length > 0 &&
+            this.props.isPremium === true && (
+              <>
+                <h4 className="d-block mb-5 mt-5" id="my-fav">
+                  My Earnings
+                </h4>
+                <div
+                  style={{
+                    gap: "50px 0px",
+                    display: "grid",
+                    gridTemplateColumns: "repeat(1, 1fr)",
+                  }}
+                >
+                  <div
+                    className="row p-0 m-0 poolrows"
+                    style={{
+                      gap: "50px 0px",
+                    }}
+                  >
+                    {this.state.ethStake &&
+                      this.state.ethStake
+                        .slice(0, this.state.ethStake.length)
+                        .map((pool, index) => (
+                          <NavLink
+                            to="/earn/dypius"
                             style={{
-                              position: "absolute",
-                              top: "-23px",
-                              left: "33%",
-                              width: "106px",
-                              height: "34px",
-                              transform: "translateX(-50%)",
-                              borderRadius: "50px",
-                              background:
-                                "linear-gradient(93.99deg, #4ED5CD 0%, #524FD8 100%)",
-                              gap: "5px",
-                              zIndex: 1,
+                              display:
+                                this.state.userPools.length > 0
+                                  ? this.state.userPools.find(
+                                      (obj) => obj.contract_address == pool.id
+                                    )
+                                    ? "block"
+                                    : "none"
+                                  : "none",
+                              position: "relative",
                             }}
                           >
-                            <img src="/assets/img/ethereum.svg"></img>
-                            <div style={{ color: "#F7F7FC" }}>Ethereum</div>
-                          </div>
-                          <TopPoolsCard
-                            key={index}
-                            chain={this.props.networkId}
-                            top_pick={pool.top_pick}
-                            tokenName={pool.pair_name}
-                            apr={pool.apy_percent + "%"}
-                            tvl={"$" + getFormattedNumber(pool.tvl_usd)}
-                            lockTime={
-                              pool.lock_time ? pool.lock_time : "No Lock"
-                            }
-                            tokenLogo={
-                              pool.icon
-                                ? pool.icon
-                                : pool.pair_name === "DYP"
-                                ? "dyplogo.svg"
-                                : "idypius.svg"
-                            }
-                            onShowDetailsClick={() => {}}
-                            onHideDetailsClick={() => {}}
-                            cardType={"table"}
-                            details={false}
-                            isNewPool={pool.new_pool === "Yes" ? true : false}
-                            isStaked={
-                              this.state.userPools.length > 0
-                                ? this.state.userPools.find(
-                                    (obj) => obj.contract_address == pool.id
-                                  )
-                                  ? true
-                                  : false
-                                : false
-                            }
-                            isAccount={true}
-                            expired={pool.expired === "Yes" ? true : false}
-                          />
-                        </div>
-                      </NavLink>
-                    ))}
+                            <div
+                              style={{
+                                display:
+                                  this.state.userPools.length > 0
+                                    ? this.state.userPools.find(
+                                        (obj) => obj.contract_address == pool.id
+                                      )
+                                      ? "block"
+                                      : "none"
+                                    : "none",
+                                position: "relative",
+                              }}
+                            >
+                              <div className="d-flex justify-content-center align-items-center ethereumTagwrapper">
+                                <img
+                                  src="https://cdn.worldofdypians.com/wod/eth.svg"
+                                  className="popup-chains-icon"
+                                />
+                                <h6
+                                  className={`d-flex justify-content-center align-items-center chain-popup-text-active`}
+                                >
+                                  Ethereum
+                                </h6>
+                              </div>
+                              <TopPoolsCard
+                                key={index}
+                                chain={this.props.networkId}
+                                top_pick={pool.top_pick}
+                                tokenName={pool.pair_name}
+                                apr={pool.apy_percent + "%"}
+                                tvl={"$" + getFormattedNumber(pool.tvl_usd)}
+                                lockTime={
+                                  pool.lock_time ? pool.lock_time : "No Lock"
+                                }
+                                tokenLogo={
+                                  pool.icon
+                                    ? pool.icon
+                                    : pool.pair_name === "DYP"
+                                    ? "dyplogo.svg"
+                                    : "idypius.svg"
+                                }
+                                onShowDetailsClick={() => {}}
+                                onHideDetailsClick={() => {}}
+                                cardType={"table"}
+                                details={false}
+                                isNewPool={
+                                  pool.new_pool === "Yes" ? true : false
+                                }
+                                isStaked={
+                                  this.state.userPools.length > 0
+                                    ? this.state.userPools.find(
+                                        (obj) => obj.contract_address == pool.id
+                                      )
+                                      ? true
+                                      : false
+                                    : false
+                                }
+                                isAccount={true}
+                                expired={pool.expired === "Yes" ? true : false}
+                              />
+                            </div>
+                          </NavLink>
+                        ))}
                     {this.state.bnbStake &&
-                  this.state.bnbStake
-                    .slice(0, this.state.bnbStake.length)
-                    .map((pool, index) => (
-                      <NavLink
-                        to="/earn"
-                        style={{
-                          display:
-                            this.state.userPools.length > 0
-                              ? this.state.userPools.find(
-                                  (obj) => obj.contract_address == pool.id
-                                )
-                                ? "block"
-                                : "none"
-                              : "none",
-                          position: "relative",
-                        }}
-                      >
-                        <div
-                          style={{
-                            display:
-                              this.state.userPools.length > 0
-                                ? this.state.userPools.find(
-                                    (obj) => obj.contract_address == pool.id
-                                  )
-                                  ? "block"
-                                  : "none"
-                                : "none",
-                            position: "relative",
-                          }}
-                        >
-                          <div
-                            className="d-flex justify-content-center align-items-center"
+                      this.state.bnbStake
+                        .slice(0, this.state.bnbStake.length)
+                        .map((pool, index) => (
+                          <NavLink
+                            to="/earn/dypius"
                             style={{
-                              position: "absolute",
-                              top: "-23px",
-                              left: "33%",
-                              width: "115px",
-                              height: "34px",
-                              transform: "translateX(-50%)",
-                              borderRadius: "50px",
-                              background:
-                                "linear-gradient(93.99deg, #DAAA0A 0%, #EDB90B 100%)",
-                              gap: "5px",
-                              zIndex: 1,
+                              display:
+                                this.state.userPools.length > 0
+                                  ? this.state.userPools.find(
+                                      (obj) => obj.contract_address == pool.id
+                                    )
+                                    ? "block"
+                                    : "none"
+                                  : "none",
+                              position: "relative",
                             }}
                           >
-                            <img
-                              src={require("../../assets/bnblogo.svg").default}
-                              alt=""
-                              style={{ height: 20, width: 20 }}
-                            ></img>
-                            <div style={{ color: "#F7F7FC" }}>BNB Chain</div>
-                          </div>
+                            <div
+                              style={{
+                                display:
+                                  this.state.userPools.length > 0
+                                    ? this.state.userPools.find(
+                                        (obj) => obj.contract_address == pool.id
+                                      )
+                                      ? "block"
+                                      : "none"
+                                    : "none",
+                                position: "relative",
+                              }}
+                            >
+                              <div className="d-flex justify-content-center align-items-center bnbTagwrapper">
+                                <img
+                                  src={
+                                    "https://cdn.worldofdypians.com/wod/bnbIcon.svg"
+                                  }
+                                  alt=""
+                                  style={{ height: 20, width: 20 }}
+                                  className="popup-chains-icon"
+                                ></img>
+                                <h6
+                                  className={`d-flex justify-content-center align-items-center chain-popup-text-active`}
+                                >
+                                  BNB Chain
+                                </h6>
+                              </div>
 
-                          <TopPoolsCard
-                            key={index}
-                            chain={this.props.networkId}
-                            top_pick={pool.top_pick}
-                            tokenName={pool.pair_name}
-                            apr={pool.apy_percent + "%"}
-                            tvl={"$" + getFormattedNumber(pool.tvl_usd)}
-                            lockTime={
-                              pool.lock_time ? pool.lock_time : "No Lock"
-                            }
-                            tokenLogo={
-                              pool.icon
-                                ? pool.icon
-                                : pool.pair_name === "DYP"
-                                ? "dyplogo.svg"
-                                : "idypius.svg"
-                            }
-                            onShowDetailsClick={() => {}}
-                            onHideDetailsClick={() => {}}
-                            cardType={"table"}
-                            details={false}
-                            isNewPool={pool.new_pool === "Yes" ? true : false}
-                            isStaked={
-                              this.state.userPools.length > 0
-                                ? this.state.userPools.find(
-                                    (obj) => obj.contract_address == pool.id
-                                  )
-                                  ? true
-                                  : false
-                                : false
-                            }
-                            isAccount={true}
-                            expired={pool.expired === "Yes" ? true : false}
-                          />
-                        </div>
-                      </NavLink>
-                    ))}
+                              <TopPoolsCard
+                                key={index}
+                                chain={this.props.networkId}
+                                top_pick={pool.top_pick}
+                                tokenName={pool.pair_name}
+                                apr={pool.apy_percent + "%"}
+                                tvl={"$" + getFormattedNumber(pool.tvl_usd)}
+                                lockTime={
+                                  pool.lock_time ? pool.lock_time : "No Lock"
+                                }
+                                tokenLogo={
+                                  pool.icon
+                                    ? pool.icon
+                                    : pool.pair_name === "DYP"
+                                    ? "dyplogo.svg"
+                                    : "idypius.svg"
+                                }
+                                onShowDetailsClick={() => {}}
+                                onHideDetailsClick={() => {}}
+                                cardType={"table"}
+                                details={false}
+                                isNewPool={
+                                  pool.new_pool === "Yes" ? true : false
+                                }
+                                isStaked={
+                                  this.state.userPools.length > 0
+                                    ? this.state.userPools.find(
+                                        (obj) => obj.contract_address == pool.id
+                                      )
+                                      ? true
+                                      : false
+                                    : false
+                                }
+                                isAccount={true}
+                                expired={pool.expired === "Yes" ? true : false}
+                              />
+                            </div>
+                          </NavLink>
+                        ))}
                     {this.state.avaxStake &&
-                  this.state.avaxStake
-                    .slice(0, this.state.avaxStake.length)
-                    .map((pool, index) => (
-                      <NavLink
-                        to="/earn"
-                        style={{
-                          display:
-                            this.state.userPools.length > 0
-                              ? this.state.userPools.find(
-                                  (obj) => obj.contract_address == pool.id
-                                )
-                                ? "block"
-                                : "none"
-                              : "none",
-                          position: "relative",
-                        }}
-                      >
-                        <div
-                          style={{
-                            display:
-                              this.state.userPools.length > 0
-                                ? this.state.userPools.find(
-                                    (obj) => obj.contract_address == pool.id
-                                  )
-                                  ? "block"
-                                  : "none"
-                                : "none",
-                            position: "relative",
-                          }}
-                        >
-                          <div
-                            className="d-flex justify-content-center align-items-center"
+                      this.state.avaxStake
+                        .slice(0, this.state.avaxStake.length)
+                        .map((pool, index) => (
+                          <NavLink
+                            to="/earn/dypius"
                             style={{
-                              position: "absolute",
-                              top: "-23px",
-                              left: "33%",
-                              width: "115px",
-                              height: "34px",
-                              transform: "translateX(-50%)",
-                              borderRadius: "50px",
-                              background:
-                                "linear-gradient(93.99deg, #DF2C2D 0%, #F86465 100%)",
-                              gap: "5px",
-                              zIndex: 1,
+                              display:
+                                this.state.userPools.length > 0
+                                  ? this.state.userPools.find(
+                                      (obj) => obj.contract_address == pool.id
+                                    )
+                                    ? "block"
+                                    : "none"
+                                  : "none",
+                              position: "relative",
                             }}
                           >
-                            <img
-                              src={require("../../assets/wavax.svg").default}
-                              alt=""
-                              style={{ height: 20, width: 20 }}
-                            ></img>
-                            <div style={{ color: "#F7F7FC" }}>Avalanche</div>
-                          </div>
+                            <div
+                              style={{
+                                display:
+                                  this.state.userPools.length > 0
+                                    ? this.state.userPools.find(
+                                        (obj) => obj.contract_address == pool.id
+                                      )
+                                      ? "block"
+                                      : "none"
+                                    : "none",
+                                position: "relative",
+                              }}
+                            >
+                              <div className="d-flex justify-content-center align-items-center avaxTagWrapper">
+                                <img
+                                  src={
+                                    "https://cdn.worldofdypians.com/wod/avaxIcon.svg"
+                                  }
+                                  alt=""
+                                  style={{ height: 20, width: 20 }}
+                                  className="popup-chains-icon"
+                                ></img>
+                                <h6
+                                  className={`d-flex justify-content-center align-items-center chain-popup-text-active`}
+                                >
+                                  Avalanche
+                                </h6>
+                              </div>
 
-                          <TopPoolsCard
-                            key={index}
-                            chain={this.props.networkId}
-                            top_pick={pool.top_pick}
-                            tokenName={pool.pair_name}
-                            apr={pool.apy_percent + "%"}
-                            tvl={"$" + getFormattedNumber(pool.tvl_usd)}
-                            lockTime={
-                              pool.lock_time ? pool.lock_time : "No Lock"
-                            }
-                            tokenLogo={
-                              pool.icon
-                                ? pool.icon
-                                : pool.pair_name === "DYP"
-                                ? "dyplogo.svg"
-                                : "idypius.svg"
-                            }
-                            onShowDetailsClick={() => {}}
-                            onHideDetailsClick={() => {}}
-                            cardType={"table"}
-                            details={false}
-                            isNewPool={pool.new_pool === "Yes" ? true : false}
-                            isStaked={
-                              this.state.userPools.length > 0
-                                ? this.state.userPools.find(
-                                    (obj) => obj.contract_address == pool.id
-                                  )
-                                  ? true
-                                  : false
-                                : false
-                            }
-                            isAccount={true}
-                            expired={pool.expired === "Yes" ? true : false}
-                          />
-                        </div>
-                      </NavLink>
-                    ))}
+                              <TopPoolsCard
+                                key={index}
+                                chain={this.props.networkId}
+                                top_pick={pool.top_pick}
+                                tokenName={pool.pair_name}
+                                apr={pool.apy_percent + "%"}
+                                tvl={"$" + getFormattedNumber(pool.tvl_usd)}
+                                lockTime={
+                                  pool.lock_time ? pool.lock_time : "No Lock"
+                                }
+                                tokenLogo={
+                                  pool.icon
+                                    ? pool.icon
+                                    : pool.pair_name === "DYP"
+                                    ? "dyplogo.svg"
+                                    : "idypius.svg"
+                                }
+                                onShowDetailsClick={() => {}}
+                                onHideDetailsClick={() => {}}
+                                cardType={"table"}
+                                details={false}
+                                isNewPool={
+                                  pool.new_pool === "Yes" ? true : false
+                                }
+                                isStaked={
+                                  this.state.userPools.length > 0
+                                    ? this.state.userPools.find(
+                                        (obj) => obj.contract_address == pool.id
+                                      )
+                                      ? true
+                                      : false
+                                    : false
+                                }
+                                isAccount={true}
+                                expired={pool.expired === "Yes" ? true : false}
+                              />
+                            </div>
+                          </NavLink>
+                        ))}
+                  </div>
+                </div>
+              </>
+            )}
+          <div
+            className="row"
+            // style={{ marginTop: mycaws.length === 0 || lands.length === 0 ? "6rem" : "" }}
+          >
+            <div className="col-12 col-lg-6">
+              <div className="mycawsCollection position-relative mb-5">
+                <div className="nft-ethereum-tag p-2 d-flex align-items-center gap-2">
+                  <img
+                    src={"https://cdn.worldofdypians.com/wod/eth.svg"}
+                    alt=""
+                  />
+                  <span className="nft-ethereum-span">Ethereum</span>
+                </div>
+                <div className="d-flex flex-column gap-2 justify-content-between align-items-start">
+                  <div className="col-xxl-2 col-lg-2 col-12 col-md-2">
+                    <h6 className="mycawscollection-title">CAWS NFTs</h6>
+                  </div>
+                  <div
+                    className={
+                      this.state.viewall === false
+                        ? "cawscontaier"
+                        : "cawscontaier-open"
+                    }
+                  >
+                    {mycaws.length > 0 &&
+                      this.props.coinbase !== null &&
+                      mycaws
+                        .slice(
+                          0,
+                          this.state.viewall === false &&
+                            window.innerWidth > 756
+                            ? 2
+                            : this.state.viewall === false &&
+                              window.innerWidth <= 756 &&
+                              window.innerWidth > 500
+                            ? 1
+                            : this.state.viewall === false &&
+                              window.innerWidth <= 500
+                            ? 1
+                            : mycaws.length
+                        )
+                        .map((item, id) => {
+                          return (
+                            <NftCawCard
+                              key={id}
+                              nft={item}
+                              action={() => {
+                                window.location.assign("/earn/nft-staking");
+                              }}
+                              modalId="#newNftStake"
+                              coinbase={this.props.coinbase}
+                            />
+                          );
+                        })}
+                  </div>
+                  <button
+                    className="outline-btn"
+                    disabled={mycaws.length > 4 ? false : true}
+                    style={{
+                      height: "fit-content",
+                      // display: mycaws.length > 4 ? "block" : "none",
+                      display: "block",
+                      opacity: mycaws.length > 4 ? "1" : "0",
+                      pointerEvents: mycaws.length > 4 ? "auto" : "none",
+                    }}
+                    onClick={() => {
+                      this.setState({ viewall: !this.state.viewall });
+                    }}
+                  >
+                    {this.state.viewall === false ? " View all" : "View less"}
+                  </button>
+                </div>
               </div>
-            
             </div>
-          </>
-        )}
-        <div
-          className="row"
-          // style={{ marginTop: mycaws.length === 0 || lands.length === 0 ? "6rem" : "" }}
-        >
-          <div className="col-12 col-lg-6">
-            <div className="mycawsCollection position-relative mb-5">
-              <div className="nft-ethereum-tag p-2 d-flex align-items-center gap-2">
-                <img src={require("./assets/wethIcon.svg").default} alt="" />
-                <span className="nft-ethereum-span">Ethereum</span>
-              </div>
-              <div className="d-flex flex-column gap-2 justify-content-between align-items-start">
-                <div className="col-xxl-2 col-lg-2 col-12 col-md-2">
-                  <h6 className="mycawscollection-title">CAWS NFTs</h6>
+            <div className="col-12 col-lg-6">
+              <div className="mycawsCollection position-relative mb-5">
+                <div className="nft-ethereum-tag p-2 d-flex align-items-center gap-2">
+                  <img
+                    src={"https://cdn.worldofdypians.com/wod/eth.svg"}
+                    alt=""
+                  />
+                  <span className="nft-ethereum-span">Ethereum</span>
                 </div>
-                <div
-                  className={
-                    this.state.viewall === false
-                      ? "cawscontaier"
-                      : "cawscontaier-open"
-                  }
-                >
-                  {mycaws.length > 0 &&
-                    this.props.coinbase !== null &&
-                    mycaws
-                      .slice(
-                        0,
-                        this.state.viewall === false && window.innerWidth > 756
-                          ? 2
-                          : this.state.viewall === false &&
-                            window.innerWidth <= 756 &&
-                            window.innerWidth > 500
-                          ? 1
-                          : this.state.viewall === false &&
-                            window.innerWidth <= 500
-                          ? 1
-                          : mycaws.length
-                      )
-                      .map((item, id) => {
-                        return (
-                          <NftCawCard
-                            key={id}
-                            nft={item}
-                            action={() => {
-                              window.location.assign("/earn");
-                            }}
-                            modalId="#newNftStake"
-                            coinbase={this.props.coinbase}
-                          />
-                        );
-                      })}
+                <div className="d-flex flex-column gap-2 justify-content-between align-items-start">
+                  <div className="col-xxl-2 col-lg-2 col-12 col-md-2">
+                    <h6 className="mycawscollection-title">WoD NFTs</h6>
+                  </div>
+                  <div
+                    className={
+                      this.state.viewall === false
+                        ? "cawscontaier"
+                        : "cawscontaier-open"
+                    }
+                  >
+                    {lands.length > 0 &&
+                      this.props.coinbase !== null &&
+                      lands
+                        .slice(
+                          0,
+                          this.state.viewall === false &&
+                            window.innerWidth > 756
+                            ? 2
+                            : this.state.viewall === false &&
+                              window.innerWidth <= 756 &&
+                              window.innerWidth > 500
+                            ? 1
+                            : this.state.viewall === false &&
+                              window.innerWidth <= 500
+                            ? 1
+                            : lands.length
+                        )
+                        .map((item, id) => {
+                          return (
+                            <NftCawCard
+                              key={id}
+                              nft={item}
+                              action={() => {
+                                window.location.assign("/earn/nft-staking");
+                              }}
+                              modalId="#newNftStake"
+                              coinbase={this.props.coinbase}
+                            />
+                          );
+                        })}
+                  </div>
+                  <button
+                    className="outline-btn"
+                    disabled={lands.length > 2 ? false : true}
+                    style={{
+                      height: "fit-content",
+                      // display: lands.length > 2 ? "block" : "none",
+                      display: "block",
+                      opacity: lands.length > 2 ? "1" : "0",
+                      pointerEvents: lands.length > 2 ? "auto" : "none",
+                    }}
+                    onClick={() => {
+                      this.setState({ viewall: !this.state.viewall });
+                    }}
+                  >
+                    {this.state.viewall === false ? " View all" : "View less"}
+                  </button>
                 </div>
-                <button
-                  className="outline-btn"
-                  style={{
-                    height: "fit-content",
-                    display: mycaws.length > 4 ? "block" : "none",
-                  }}
-                  onClick={() => {
-                    this.setState({ viewall: !this.state.viewall });
-                  }}
-                >
-                  {this.state.viewall === false ? " View all" : "View less"}
-                </button>
               </div>
             </div>
           </div>
-          <div className="col-12 col-lg-6">
-            <div className="mycawsCollection position-relative mb-5">
-              <div className="nft-ethereum-tag p-2 d-flex align-items-center gap-2">
-                <img src={require("./assets/wethIcon.svg").default} alt="" />
-                <span className="nft-ethereum-span">Ethereum</span>
-              </div>
-              <div className="d-flex flex-column gap-2 justify-content-between align-items-start">
-                <div className="col-xxl-2 col-lg-2 col-12 col-md-2">
-                  <h6 className="mycawscollection-title">WoD NFTs</h6>
-                </div>
-                <div
-                  className={
-                    this.state.viewall === false
-                      ? "cawscontaier"
-                      : "cawscontaier-open"
-                  }
-                >
-                  {lands.length > 0 &&
-                    this.props.coinbase !== null &&
-                    lands
-                      .slice(
-                        0,
-                        this.state.viewall === false && window.innerWidth > 756
-                          ? 2
-                          : this.state.viewall === false &&
-                            window.innerWidth <= 756 &&
-                            window.innerWidth > 500
-                          ? 1
-                          : this.state.viewall === false &&
-                            window.innerWidth <= 500
-                          ? 1
-                          : lands.length
-                      )
-                      .map((item, id) => {
-                        return (
-                          <NftCawCard
-                            key={id}
-                            nft={item}
-                            action={() => {
-                              window.location.assign("/earn");
-                            }}
-                            modalId="#newNftStake"
-                            coinbase={this.props.coinbase}
-                          />
-                        );
-                      })}
-                </div>
-                <button
-                  className="outline-btn"
-                  style={{
-                    height: "fit-content",
-                    display: lands.length > 2 ? "block" : "none",
-                  }}
-                  onClick={() => {
-                    this.setState({ viewall: !this.state.viewall });
-                  }}
-                >
-                  {this.state.viewall === false ? " View all" : "View less"}
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
 
-        <TierLevels display={"none"} infoDisplay={"flex"} />
-        {/* <h4 className="d-block mb-5 mt-5" id="my-fav">
+          {/* <TierLevels display={"none"} infoDisplay={"flex"} /> */}
+          {/* <h4 className="d-block mb-5 mt-5" id="my-fav">
           My favourite pairs
         </h4>
         <div className="row p-0 m-0 favorites-grid">
@@ -2492,20 +3152,40 @@ export default class Subscription extends React.Component {
             );
           })}
         </div> */}
-      </div>
-    ) : (
-      <div
-        className="d-flex align-items-center justify-content-center"
-        style={{ minHeight: "65vh" }}
-      >
-        <div class="spinner-border text-info" role="status">
-          <span class="visually-hidden">Loading...</span>
         </div>
-      </div>
+        {this.state.showPremiumPopup === true && (
+          <Plans
+            networkId={this.props.networkId}
+            handleSwitchNetwork={this.props.handleSwitchNetwork}
+            coinbase={this.props.coinbase}
+            isPremium={this.props.isPremium}
+            isConnected={this.props.isConnected}
+            onSubscribe={this.props.onSubscribe}
+            onClose={() => {
+              this.setState({ showPremiumPopup: false });
+            }}
+            handleSwitchChainBinanceWallet={
+              this.props.handleSwitchChainBinanceWallet
+            }
+            binanceW3WProvider={this.props.binanceW3WProvider}
+          />
+        )}
+      </>
     );
+    //  : (
+    //   <div
+    //     className="d-flex align-items-center justify-content-center"
+    //     style={{ minHeight: "65vh" }}
+    //   >
+    //     <div class="spinner-border text-info" role="status">
+    //       <span class="visually-hidden">Loading...</span>
+    //     </div>
+    //   </div>
+    // );
   };
 
   render() {
+
     return (
       <div className="locker container-lg">
         <div>

@@ -1,10 +1,5 @@
 import React, { useEffect, useState } from "react";
-import metamaskVideo from "../../assets/earnAssets/metamaskVideo.png";
-import stakeVideo from "./comingsoon.svg";
 import axios from "axios";
-import arrowActive from "./assets/arrowActive.svg";
-import arrowPassive from "./assets/arrowPassive.svg";
-
 import Collapse from "react-bootstrap/Collapse";
 
 const BridgeFAQ = ({faqIndex}) => {
@@ -68,10 +63,11 @@ const BridgeFAQ = ({faqIndex}) => {
                   <img
                     src={
                       open === -1
-                        ? arrowPassive
-                        : open === index
-                        ? arrowActive
-                        : arrowPassive
+                      ? 'https://cdn.worldofdypians.com/tools/arrowPassive.svg'
+                      : open === index
+                      ? 'https://cdn.worldofdypians.com/tools/arrowActive.svg'
+                      : 'https://cdn.worldofdypians.com/tools/arrowPassive.svg'
+
                     }
                     alt=""
                   />

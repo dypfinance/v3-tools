@@ -1,26 +1,17 @@
 import React, { useState, useEffect } from "react";
 import Web3 from "web3";
 import axios from "axios";
-import moment from "moment";
 import getFormattedNumber from "../../functions/get-formatted-number";
-import { formattedNum } from "../../functions/formatUSD";
-
 import Address from "./address";
 import WalletModal from "../WalletModal";
 import "./top-pools.css";
-import ellipse from "./assets/ellipse.svg";
-import arrowup from "./assets/arrow-up.svg";
-import moreinfo from "./assets/more-info.svg";
-import wallet from "./assets/wallet.svg";
 import Tooltip from "@material-ui/core/Tooltip";
 
-import { shortAddress } from "../../functions/shortAddress";
-import xMark from "../calculator/assets/xMark.svg";
-import weth from "./assets/weth.svg";
 import NftStakeCheckListModal from "../caws/NftMinting/components/NftMinting/NftStakeChecklistModal/NftStakeChecklistModal";
 import { handleSwitchNetworkhook } from "../../functions/hooks";
 import useWindowSize from "../../functions/useWindowSize";
 import OutsideClickHandler from "react-outside-click-handler";
+import { ethers } from "ethers";
 
 const CawsDetails = ({
   coinbase,
@@ -30,7 +21,9 @@ const CawsDetails = ({
   chainId,
   handleConnection,
   renderedPage,
-  expired
+  expired,
+  binanceW3WProvider,
+  handleSwitchChainBinanceWallet,
 }) => {
   const [myNFTs, setMyNFTs] = useState([]);
   const [amountToStake, setamountToStake] = useState("");
@@ -90,7 +83,10 @@ const CawsDetails = ({
 
   const getStakesIds = async () => {
     const address = coinbase;
-    let staking_contract = await window.getContractNFT("NFTSTAKING");
+    let staking_contract = new window.infuraWeb3.eth.Contract(
+      window.NFTSTAKING_ABI,
+      window.config.nftstaking_address
+    );
     let stakenft = [];
     let myStakes = await staking_contract.methods
       .depositsOf(address)
@@ -119,9 +115,12 @@ const CawsDetails = ({
     let myStakes = await getStakesIds();
     let calculateRewards = [];
     let result = 0;
-    let staking_contract = await window.getContractNFT("NFTSTAKING");
+    let staking_contract = new window.infuraWeb3.eth.Contract(
+      window.NFTSTAKING_ABI,
+      window.config.nftstaking_address
+    );
     if (address !== null) {
-      if (myStakes.length > 0) {
+      if (myStakes && myStakes.length > 0) {
         calculateRewards = await staking_contract.methods
           .calculateRewards(address, myStakes)
           .call()
@@ -143,19 +142,35 @@ const CawsDetails = ({
 
   const claimRewards = async () => {
     let myStakes = await getStakesIds();
-    let staking_contract = await window.getContractNFT("NFTSTAKING");
-    // setclaimAllStatus("Claiming all rewards, please wait...");
-    await staking_contract.methods
-      .claimRewards(myStakes)
-      .send()
-      .then(() => {
+
+    if (window.WALLET_TYPE !== "binance") {
+      let staking_contract = await window.getContractNFT("NFTSTAKING");
+      await staking_contract.methods
+        .claimRewards(myStakes)
+        .send()
+        .then(() => {
+          setEthRewards(0);
+        })
+        .catch((err) => {
+          window.alertify.error(err?.message);
+        });
+    } else if (window.WALLET_TYPE == "binance") {
+      let staking_contract = new ethers.Contract(
+        window.config.nftstaking_address,
+        window.NFTSTAKING_ABI,
+        binanceW3WProvider.getSigner()
+      );
+
+      const txResponse = await staking_contract
+        .claimRewards(myStakes)
+        .catch((err) => {
+          window.alertify.error(err?.message);
+        });
+      const txReceipt = await txResponse.wait();
+      if (txReceipt) {
         setEthRewards(0);
-        // setclaimAllStatus("Claimed All Rewards!");
-      })
-      .catch((err) => {
-        // window.alertify.error(err?.message);
-        // setclaimAllStatus("An error occurred, please try again");
-      });
+      }
+    }
   };
 
   const convertEthToUsd = async () => {
@@ -175,7 +190,10 @@ const CawsDetails = ({
   const calculateCountdown = async () => {
     const address = coinbase;
 
-    let staking_contract = await window.getContractNFT("NFTSTAKING");
+    let staking_contract = new window.infuraWeb3.eth.Contract(
+      window.NFTSTAKING_ABI,
+      window.config.nftstaking_address
+    );
     if (address !== null) {
       let finalDay = await staking_contract.methods
         .stakingTime(address)
@@ -205,30 +223,63 @@ const CawsDetails = ({
 
   const handleUnstakeAll = async () => {
     let myStakes = await getStakesIds();
-    let stake_contract = await window.getContractNFT("NFTSTAKING");
-    // setunstakeAllStatus("Unstaking all please wait...");
+    if (window.WALLET_TYPE !== "binance") {
+      let stake_contract = await window.getContractNFT("NFTSTAKING");
 
-    await stake_contract.methods
-    .emergencyWithdraw(myStakes)
-      .send()
-      .then(() => {
-        // setunstakeAllStatus("Successfully unstaked all!");
-      })
-      .catch((err) => {
-        window.alertify.error(err?.message);
-        // setunstakeAllStatus("An error occurred, please try again");
-        setShowUnstakeModal(false);
-      });
+      await stake_contract.methods
+        .emergencyWithdraw(myStakes)
+        .send()
+        .then(() => {
+          window.alertify.message("Successfully unstaked all!");
+          setTimeout(() => {
+            setShowUnstakeModal(false);
+          }, 2000);
+        })
+        .catch((err) => {
+          window.alertify.error(err?.message);
+          setShowUnstakeModal(false);
+        });
+    } else if (window.WALLET_TYPE === "binance") {
+      let stake_contract = new ethers.Contract(
+        window.config.nftstaking_address,
+        window.NFTSTAKING_ABI,
+        binanceW3WProvider.getSigner()
+      );
+
+      const txResponse = await stake_contract
+        .emergencyWithdraw(myStakes)
+        .catch((err) => {
+          window.alertify.error(err?.message);
+          setShowUnstakeModal(false);
+        });
+      const txReceipt = await txResponse.wait();
+      if (txReceipt) {
+        window.alertify.message("Successfully unstaked all!");
+        setTimeout(() => {
+          setShowUnstakeModal(false);
+        }, 2000);
+      }
+    }
   };
 
   const handleEthPool = async () => {
-    await handleSwitchNetworkhook("0x1")
-      .then(() => {
-        handleSwitchNetwork("1");
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+    if (window.ethereum) {
+      if (window.WALLET_TYPE !== "binance") {
+        await handleSwitchNetworkhook("0x1")
+          .then(() => {
+            handleSwitchNetwork(1);
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      } else if (window.WALLET_TYPE === "binance") {
+        handleSwitchChainBinanceWallet(1);
+      }
+    } else if (window.WALLET_TYPE === "binance") {
+      handleSwitchChainBinanceWallet(1);
+    } else {
+      window.alertify.error("No web3 detected. Please install Metamask!");
+    }
   };
 
   const totalStakedNft = async () => {
@@ -250,54 +301,43 @@ const CawsDetails = ({
     setCawspopup(true);
   };
 
-
   useEffect(() => {
     totalStakedNft().then();
   }, []);
 
   useEffect(() => {
-    if (isConnected) {
+    if (isConnected && chainId === "1") {
       myNft().then();
       myStakes().then();
       checkApproval().then();
       handleClaimAll();
       calculateCountdown().then();
     }
-  }, [isConnected]);
+  }, [isConnected, chainId]);
 
   const getApprovedNfts = (data) => {
     setApprovedNfts(data);
     return data;
   };
 
-
   useEffect(() => {
     if (isConnected) {
       setUSDPrice().then();
     }
-  }, [isConnected,EthRewards]);
+  }, [isConnected, EthRewards]);
 
   return (
     <div className="container-lg p-0">
       <div
-        className={`allwrappercaws ${windowSize.width > 786 && "my-4"}`}
+        className={`allwrappercaws allwrapper-active mb-2 `}
         style={{
-          border: listType !== "table" && "none",
           borderRadius: listType !== "table" && "0px",
         }}
       >
         <div className="leftside2 w-100">
           <div className="activewrapper position-relative flex-row-reverse flex-lg-row align-items-end align-items-lg-center">
             <div className="d-flex flex-column flex-lg-row align-items-end align-items-lg-center justify-content-between gap-3 gap-lg-5">
-              <h6 className="activetxt caws-active-txt">
-                <img
-                  src={ellipse}
-                  alt=""
-                  className="position-relative"
-                  style={{ top: "-1px" }}
-                />
-                Active Pool
-              </h6>
+              <h6 className="expiredtxt caws-active-txt">Expired Pool</h6>
               {/* <div className="d-flex align-items-center justify-content-between gap-2">
                     <h6 className="earnrewards-text">Earn rewards in:</h6>
                     <h6 className="earnrewards-token d-flex align-items-center gap-1">
@@ -319,7 +359,10 @@ const CawsDetails = ({
                       </div>
                     }
                   >
-                    <img src={moreinfo} alt="" />
+                    <img
+                      src={"https://cdn.worldofdypians.com/tools/more-info.svg"}
+                      alt=""
+                    />
                   </Tooltip>
                 </h6>
               </div>
@@ -337,7 +380,10 @@ const CawsDetails = ({
                       </div>
                     }
                   >
-                    <img src={moreinfo} alt="" />
+                    <img
+                      src={"https://cdn.worldofdypians.com/tools/more-info.svg"}
+                      alt=""
+                    />
                   </Tooltip>
                 </h6>
               </div>
@@ -356,47 +402,75 @@ const CawsDetails = ({
                 <h6 className="bottomitems">Get CAWS</h6>
               </div>
               {cawspopup === true && (
-                <div className='position-absolute'>
-                <OutsideClickHandler
-                  onOutsideClick={() => {
-                    setCawspopup(false);
-                  }}
-                >
-                  <div
-                    className="tooltip d-flex justify-content-center"
-                    style={{ opacity: 1, width: 100 }}
+                <div className="position-absolute">
+                  <OutsideClickHandler
+                    onOutsideClick={() => {
+                      setCawspopup(false);
+                    }}
                   >
-                    <div className="d-flex flex-column gap-2 align-items-center">
-                      <a
-                        href="https://nft.coinbase.com/collection/catsandwatches"
-                        target="_blank"
-                        rel="noreferrer"
-                        onClick={() => {
-                          setCawspopup(false);
-                        }}
-                      >
-                        <h6 className="bottomitems">
-                          <img src={arrowup} alt="" />
-                          Coinbase
-                        </h6>
-                      </a>
+                    <div
+                      className="tooltip d-flex justify-content-center"
+                      style={{ opacity: 1, width: 145 }}
+                    >
+                      <div className="d-flex flex-column gap-2 align-items-start">
+                        <a
+                          href="https://www.worldofdypians.com/shop/caws"
+                          target="_blank"
+                          rel="noreferrer"
+                          onClick={() => {
+                            setCawspopup(false);
+                          }}
+                        >
+                          <h6 className="bottomitems">
+                            <img
+                              src={
+                                "https://cdn.worldofdypians.com/tools/arrow-up.svg"
+                              }
+                              alt=""
+                            />
+                            WOD Shop
+                          </h6>
+                        </a>
+                        <a
+                          href="https://nft.coinbase.com/collection/catsandwatches"
+                          target="_blank"
+                          rel="noreferrer"
+                          onClick={() => {
+                            setCawspopup(false);
+                          }}
+                        >
+                          <h6 className="bottomitems">
+                            <img
+                              src={
+                                "https://cdn.worldofdypians.com/tools/arrow-up.svg"
+                              }
+                              alt=""
+                            />
+                            Coinbase
+                          </h6>
+                        </a>
 
-                      <a
-                        href="https://opensea.io/collection/catsandwatchessocietycaws"
-                        target="_blank"
-                        rel="noreferrer"
-                        onClick={() => {
-                          setCawspopup(false);
-                        }}
-                      >
-                        <h6 className="bottomitems">
-                          <img src={arrowup} alt="" />
-                          OpenSea
-                        </h6>
-                      </a>
+                        <a
+                          href="https://opensea.io/collection/catsandwatchessocietycaws"
+                          target="_blank"
+                          rel="noreferrer"
+                          onClick={() => {
+                            setCawspopup(false);
+                          }}
+                        >
+                          <h6 className="bottomitems">
+                            <img
+                              src={
+                                "https://cdn.worldofdypians.com/tools/arrow-up.svg"
+                              }
+                              alt=""
+                            />
+                            OpenSea
+                          </h6>
+                        </a>
+                      </div>
                     </div>
-                  </div>
-                </OutsideClickHandler>
+                  </OutsideClickHandler>
                 </div>
               )}
             </div>
@@ -417,10 +491,16 @@ const CawsDetails = ({
                   <button
                     className="connectbtn btn"
                     onClick={() => {
-                      setShowModal(true);
+                      handleConnection();
                     }}
                   >
-                    <img src={wallet} alt="" /> Connect wallet
+                    <img
+                      src={
+                        "https://cdn.worldofdypians.com/tools/walletIcon.svg"
+                      }
+                      alt=""
+                    />{" "}
+                    Connect wallet
                   </button>
                 ) : chainId === "1" ? (
                   <div className="addressbtn btn">
@@ -441,7 +521,9 @@ const CawsDetails = ({
             <div
               className={`otherside-border col-12 col-md-6 ${
                 renderedPage === "dashboard" ? "col-lg-3" : "col-lg-4"
-              } ${chainId !== "1" && "blurrypool"} ${expired === true && "blurrypool"}`}
+              } ${chainId !== "1" && "blurrypool"} ${
+                expired === true && "blurrypool"
+              }`}
             >
               <div className="d-flex justify-content-between align-items-center gap-2">
                 <div className="d-flex align-items-center gap-3">
@@ -460,7 +542,10 @@ const CawsDetails = ({
                     </div>
                   }
                 >
-                  <img src={moreinfo} alt="" />
+                  <img
+                    src={"https://cdn.worldofdypians.com/tools/more-info.svg"}
+                    alt=""
+                  />
                 </Tooltip>
               </div>
               <div className="d-flex flex-column gap-2 justify-content-between">
@@ -470,7 +555,8 @@ const CawsDetails = ({
                     <input
                       type={"number"}
                       disabled={
-                        (myNFTs.length === 0 && mystakes.length === 0) || isConnected === false
+                        (myNFTs.length === 0 && mystakes.length === 0) ||
+                        isConnected === false
                           ? true
                           : false
                       }
@@ -509,7 +595,9 @@ const CawsDetails = ({
             <div
               className={`otherside-border col-12 col-md-6 ${
                 renderedPage === "dashboard" ? "col-lg-5" : "col-lg-4"
-              }  ${chainId !== "1" && "blurrypool"}`}
+              }  ${chainId !== "1" && "blurrypool"} ${
+                expired === true && "blurrypool"
+              }`}
             >
               <div className="d-flex justify-content-between gap-2 flex-column flex-lg-row">
                 <h6 className="withdraw-txt d-flex gap-2 align-items-center">
@@ -534,7 +622,10 @@ const CawsDetails = ({
                       </div>
                     }
                   >
-                    <img src={moreinfo} alt="" />
+                    <img
+                      src={"https://cdn.worldofdypians.com/tools/more-info.svg"}
+                      alt=""
+                    />
                   </Tooltip>
                 </h6>
               </div>
@@ -542,7 +633,14 @@ const CawsDetails = ({
                 <div className="d-flex align-items-center justify-content-between gap-2"></div>
                 <div className="form-row d-flex gap-2 align-items-end justify-content-between">
                   <h6 className="rewardstxtCaws d-flex align-items-center gap-2">
-                    <img src={weth} alt="" /> {getFormattedNumber(EthRewards, 6) } WETH ($
+                    <img
+                      src={
+                        "https://cdn.worldofdypians.com/tools/ethStakeActive.svg"
+                      }
+                      alt=""
+                      style={{ height: 25, width: 25 }}
+                    />{" "}
+                    {getFormattedNumber(EthRewards, 6)} WETH ($
                     {getFormattedNumber(ethToUSD, 6)})
                   </h6>
                   <button
@@ -551,7 +649,7 @@ const CawsDetails = ({
                     } d-flex justify-content-center align-items-center`}
                     style={{ height: "fit-content" }}
                     onClick={claimRewards}
-                    disabled={EthRewards === 0 ? true : false}
+                    disabled={true}
                   >
                     <>Claim</>
                   </button>
@@ -576,7 +674,10 @@ const CawsDetails = ({
                     </div>
                   }
                 >
-                  <img src={moreinfo} alt="" />
+                  <img
+                    src={"https://cdn.worldofdypians.com/tools/more-info.svg"}
+                    alt=""
+                  />
                 </Tooltip>
               </h6>
 
@@ -601,19 +702,21 @@ const CawsDetails = ({
             setamountToStake("");
           }}
           getApprovedNfts={getApprovedNfts}
-
           // nftItem={showStaked ? mystakes : showToStake ? myNFTs : showStaked}
-          nftItem={(hide === "" || hide === "tostake" || hide === "mystakes2") ? mystakes : myNFTs}
+          nftItem={
+            hide === "" || hide === "tostake" || hide === "mystakes2"
+              ? mystakes
+              : myNFTs
+          }
           onshowStaked={() => {
             setshowStaked(true);
             setshowToStake(false);
-            setHide('mystakes2')
+            setHide("mystakes2");
           }}
           onshowToStake={() => {
             setshowStaked(false);
             setshowToStake(true);
-            setHide('tostake2')
-
+            setHide("tostake2");
           }}
           onClaimAll={() => {
             claimRewards();
@@ -625,16 +728,8 @@ const CawsDetails = ({
           countDownLeft={countDownLeft}
           open={openStakeChecklist ? true : false}
           hideItem={hide}
-        />
-      )}
-
-      {showModal === true && (
-        <WalletModal
-          show={showModal}
-          handleClose={() => {
-            setShowModal(false);
-          }}
-          handleConnection={()=>{handleConnection(); setShowModal(false)}}
+          showbutton={true}
+          binanceW3WProvider={binanceW3WProvider}
         />
       )}
     </div>

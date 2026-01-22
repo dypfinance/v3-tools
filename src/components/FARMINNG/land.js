@@ -1,26 +1,17 @@
 import React, { useState, useEffect } from "react";
-import Web3 from "web3";
 import axios from "axios";
-import moment from "moment";
 import getFormattedNumber from "../../functions/get-formatted-number";
-import { formattedNum } from "../../functions/formatUSD";
 
 import Address from "./address";
 import WalletModal from "../WalletModal";
 import "./top-pools.css";
-import ellipse from "./assets/ellipse.svg";
-import arrowup from "./assets/arrow-up.svg";
-import moreinfo from "./assets/more-info.svg";
-import wallet from "./assets/wallet.svg";
 import Tooltip from "@material-ui/core/Tooltip";
 import OutsideClickHandler from "react-outside-click-handler";
 
-import { shortAddress } from "../../functions/shortAddress";
-import xMark from "../calculator/assets/xMark.svg";
-import weth from "./assets/weth.svg";
-import LandNftStakeCheckListModal from '../LandNFTModal/LandNFTModal'
+import LandNftStakeCheckListModal from "../LandNFTModal/LandNFTModal";
 import { handleSwitchNetworkhook } from "../../functions/hooks";
 import useWindowSize from "../../functions/useWindowSize";
+import { ethers } from "ethers";
 
 const LandDetails = ({
   coinbase,
@@ -31,7 +22,10 @@ const LandDetails = ({
   handleConnection,
   renderedPage,
   apr,
-  totalNftsLocked
+  totalNftsLocked,
+  expired,
+  binanceW3WProvider,
+  handleSwitchChainBinanceWallet,
 }) => {
   const [myNFTs, setMyNFTs] = useState([]);
   const [amountToStake, setamountToStake] = useState("");
@@ -46,7 +40,7 @@ const LandDetails = ({
   const [ethToUSD, setethToUSD] = useState(0);
   const [openStakeChecklist, setOpenStakeChecklist] = useState(false);
   const [showUnstakeModal, setShowUnstakeModal] = useState(false);
-  const [showModal, setShowModal] = useState(false);
+
   const [countDownLeft, setCountDownLeft] = useState(59000);
   const [totalStakes, settotalStakes] = useState(0);
   const [approvedNfts, setApprovedNfts] = useState([]);
@@ -55,30 +49,26 @@ const LandDetails = ({
   const [hide, setHide] = useState("");
   const windowSize = useWindowSize();
 
-
   const checkApproval = async () => {
     const address = coinbase;
     const stake25 = await window.config.landnftstake_address;
     if (address) {
-     
-        const result = await window.landnft
-          .checkapproveStake(address, stake25)
-          .then((data) => {
-            return data;
-          });
+      const result = await window.landnft
+        .checkapproveStake(address, stake25)
+        .then((data) => {
+          return data;
+        });
 
-        if (result === true) {
-          setshowApprove(false);
-          setStatus("");
-          setColor("#939393");
-        }  else if (result === false) {
-          setStatus(" *Please approve before deposit");
-          setshowApprove(true);
-        }
-      
+      if (result === true) {
+        setshowApprove(false);
+        setStatus("");
+        setColor("#939393");
+      } else if (result === false) {
+        setStatus(" *Please approve before deposit");
+        setshowApprove(true);
+      }
     }
   };
-
 
   const myNft = async () => {
     let myNft = await window.myNftLandListContract(coinbase);
@@ -89,10 +79,13 @@ const LandDetails = ({
     setMyNFTs(nfts);
   };
 
-
   const getStakesIds = async () => {
     const address = coinbase;
-    let staking_contract = await window.getContractLandNFT("LANDNFTSTAKING");
+    let staking_contract = new window.infuraWeb3.eth.Contract(
+      window.LANDSTAKING_ABI,
+      window.config.landnftstake_address
+    );
+
     let stakenft = [];
     let myStakes = await staking_contract.methods
       .depositsOf(address)
@@ -114,14 +107,16 @@ const LandDetails = ({
     setMystakes(stakes);
   };
 
-
   const handleClaimAll = async () => {
     const address = coinbase;
 
     let myStakes = await getStakesIds();
     let calculateRewards = [];
     let result = 0;
-    let staking_contract = await window.getContractLandNFT("LANDNFTSTAKING");
+    let staking_contract = new window.infuraWeb3.eth.Contract(
+      window.LANDSTAKING_ABI,
+      window.config.landnftstake_address
+    );
     if (myStakes.length > 0) {
       calculateRewards = await staking_contract.methods
         .calculateRewards(address, myStakes)
@@ -140,22 +135,37 @@ const LandDetails = ({
 
     setEthRewards(result);
   };
+
   const claimRewards = async () => {
     let myStakes = await getStakesIds();
-    let staking_contract = await window.getContractLandNFT("LANDNFTSTAKING");
+    if (window.WALLET_TYPE !== "binance") {
+      let staking_contract = await window.getContractLandNFT("LANDNFTSTAKING");
+      await staking_contract.methods
+        .claimRewards(myStakes)
+        .send()
+        .then(() => {
+          setEthRewards(0);
+        })
+        .catch((err) => {
+          window.alertify.error(err?.message);
+        });
+    } else if (window.WALLET_TYPE === "binance") {
+      let staking_contract = new ethers.Contract(
+        window.config.landnftstake_address,
+        window.LANDSTAKING_ABI,
+        binanceW3WProvider.getSigner()
+      );
 
-    // setclaimAllStatus("Claiming all rewards, please wait...");
-    await staking_contract.methods
-      .claimRewards(myStakes)
-      .send()
-      .then(() => {
+      const txResponse = await staking_contract
+        .claimRewards(myStakes)
+        .catch((err) => {
+          window.alertify.error(err?.message);
+        });
+      const txReceipt = await txResponse.wait();
+      if (txReceipt) {
         setEthRewards(0);
-        // setclaimAllStatus("Claimed All Rewards!");
-      })
-      .catch((err) => {
-        // window.alertify.error(err?.message);
-        // setclaimAllStatus("An error occurred, please try again");
-      });
+      }
+    }
   };
   const convertEthToUsd = async () => {
     const res = axios
@@ -171,42 +181,67 @@ const LandDetails = ({
     setethToUSD(Number(ethprice) * Number(EthRewards));
   };
 
- 
-
   const handleUnstakeAll = async () => {
     let myStakes = await getStakesIds();
-    let stake_contract = await window.getContractLandNFT("LANDNFTSTAKING");
-    // setunstakeAllStatus("Unstaking all please wait...");
+    if (window.WALLET_TYPE !== "binance") {
+      let stake_contract = await window.getContractLandNFT("LANDNFTSTAKING");
+      await stake_contract.methods
+        .withdraw(myStakes)
+        .send()
+        .then(() => {
+          window.alertify.message("Successfully unstaked all!");
+        })
+        .catch((err) => {
+          window.alertify.error(err?.message);
+          setShowUnstakeModal(false);
+        });
+    } else if (window.WALLET_TYPE === "binance") {
+      let stake_contract = new ethers.Contract(
+        window.config.landnftstake_address,
+        window.LANDSTAKING_ABI,
+        binanceW3WProvider.getSigner()
+      );
 
-    await stake_contract.methods
-      .withdraw(myStakes)
-      .send()
-      .then(() => {
-        // setunstakeAllStatus("Successfully unstaked all!");
-      })
-      .catch((err) => {
-        window.alertify.error(err?.message);
-        // setunstakeAllStatus("An error occurred, please try again");
-        setShowUnstakeModal(false);
-      });
+      const txResponse = await stake_contract
+        .withdraw(myStakes)
+        .catch((err) => {
+          window.alertify.error(err?.message);
+          setShowUnstakeModal(false);
+        });
+      const txReceipt = await txResponse.wait();
+      if (txReceipt) {
+        window.alertify.message("Successfully unstaked all!");
+        setTimeout(() => {
+          setShowUnstakeModal(false);
+        }, 2000);
+      }
+    }
   };
 
   const handleEthPool = async () => {
-    await handleSwitchNetworkhook("0x1")
-      .then(() => {
-        handleSwitchNetwork("1");
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+    if (window.ethereum) {
+      if (window.WALLET_TYPE !== "binance") {
+        await handleSwitchNetworkhook("0x1")
+          .then(() => {
+            handleSwitchNetwork(1);
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      } else if (window.WALLET_TYPE === "binance") {
+        handleSwitchChainBinanceWallet(1);
+      }
+    } else if (window.WALLET_TYPE === "binance") {
+      handleSwitchChainBinanceWallet(1);
+    } else {
+      window.alertify.error("No web3 detected. Please install Metamask!");
+    }
   };
 
   const getApprovedNfts = (data) => {
     setApprovedNfts(data);
     return data;
   };
-
-
 
   const totalStakedNft = async () => {
     let staking_contract = await new window.infuraWeb3.eth.Contract(
@@ -232,7 +267,7 @@ const LandDetails = ({
   }, []);
 
   useEffect(() => {
-    if (isConnected) {
+    if (isConnected && chainId === "1") {
       myNft().then();
       myStakes().then();
       checkApproval().then();
@@ -240,34 +275,24 @@ const LandDetails = ({
     }
   }, [isConnected]);
 
-
   useEffect(() => {
     if (isConnected) {
       setUSDPrice().then();
     }
-  }, [isConnected,EthRewards]);
+  }, [isConnected, EthRewards]);
 
   return (
     <div className="container-lg p-0">
       <div
-        className={`allwrappercaws ${windowSize.width > 786 && "my-4"}`}
+        className={`allwrappercaws allwrapper-active mb-2 `}
         style={{
-          border: listType !== "table" && "none",
           borderRadius: listType !== "table" && "0px",
         }}
       >
         <div className="leftside2 w-100">
           <div className="activewrapper position-relative flex-row-reverse flex-lg-row align-items-end align-items-lg-center">
             <div className="d-flex flex-column flex-lg-row align-items-end align-items-lg-center justify-content-between gap-3 gap-lg-5">
-              <h6 className="activetxt caws-active-txt">
-                <img
-                  src={ellipse}
-                  alt=""
-                  className="position-relative"
-                  style={{ top: "-1px" }}
-                />
-                Active Pool
-              </h6>
+              <h6 className="expiredtxt caws-active-txt">Expired Pool</h6>
               {/* <div className="d-flex align-items-center justify-content-between gap-2">
                     <h6 className="earnrewards-text">Earn rewards in:</h6>
                     <h6 className="earnrewards-token d-flex align-items-center gap-1">
@@ -289,7 +314,10 @@ const LandDetails = ({
                       </div>
                     }
                   >
-                    <img src={moreinfo} alt="" />
+                    <img
+                      src={"https://cdn.worldofdypians.com/tools/more-info.svg"}
+                      alt=""
+                    />
                   </Tooltip>
                 </h6>
               </div>
@@ -307,19 +335,21 @@ const LandDetails = ({
                       </div>
                     }
                   >
-                    <img src={moreinfo} alt="" />
+                    <img
+                      src={"https://cdn.worldofdypians.com/tools/more-info.svg"}
+                      alt=""
+                    />
                   </Tooltip>
                 </h6>
               </div>
               <div className="d-flex align-items-center justify-content-between gap-2">
                 <h6 className="earnrewards-text">Total NFTs staked</h6>
                 <h6 className="earnrewards-token d-flex align-items-center gap-1">
-                  {totalNftsLocked}/1000
+                  {totalStakes}/1000
                 </h6>
               </div>
             </div>
             <div className="d-flex align-items-center justify-content-between gap-3 position-relative">
-            
               <div
                 className="d-flex align-items-center justify-content-between gap-3 cursor pointer"
                 onClick={showLandPopup}
@@ -327,47 +357,75 @@ const LandDetails = ({
                 <h6 className="bottomitems"> Get Land NFT</h6>
               </div>
               {landpopup === true && (
-                <div className='position-absolute'>
-                <OutsideClickHandler
-                  onOutsideClick={() => {
-                    setLandpopup(false);
-                  }}
-                >
-                  <div
-                    className="tooltip d-flex justify-content-center"
-                    style={{ opacity: 1, width: 100 }}
+                <div className="position-absolute">
+                  <OutsideClickHandler
+                    onOutsideClick={() => {
+                      setLandpopup(false);
+                    }}
                   >
-                    <div className="d-flex flex-column gap-2 align-items-center">
-                      <a
-                        href="https://nft.coinbase.com/collection/worldofdypians"
-                        target="_blank"
-                        rel="noreferrer"
-                        onClick={() => {
-                          setLandpopup(false);
-                        }}
-                      >
-                        <h6 className="bottomitems">
-                          <img src={arrowup} alt="" />
-                          Coinbase
-                        </h6>
-                      </a>
+                    <div
+                      className="tooltip d-flex justify-content-center"
+                      style={{ opacity: 1, width: 145 }}
+                    >
+                      <div className="d-flex flex-column gap-2 align-items-start">
+                        <a
+                          href="https://www.worldofdypians.com/shop/land"
+                          target="_blank"
+                          rel="noreferrer"
+                          onClick={() => {
+                            setLandpopup(false);
+                          }}
+                        >
+                          <h6 className="bottomitems">
+                            <img
+                              src={
+                                "https://cdn.worldofdypians.com/tools/arrow-up.svg"
+                              }
+                              alt=""
+                            />
+                            WOD Shop
+                          </h6>
+                        </a>
+                        <a
+                          href="https://nft.coinbase.com/collection/worldofdypians"
+                          target="_blank"
+                          rel="noreferrer"
+                          onClick={() => {
+                            setLandpopup(false);
+                          }}
+                        >
+                          <h6 className="bottomitems">
+                            <img
+                              src={
+                                "https://cdn.worldofdypians.com/tools/arrow-up.svg"
+                              }
+                              alt=""
+                            />
+                            Coinbase
+                          </h6>
+                        </a>
 
-                      <a
-                        href="https://opensea.io/collection/worldofdypians"
-                        target="_blank"
-                        rel="noreferrer"
-                        onClick={() => {
-                          setLandpopup(false);
-                        }}
-                      >
-                        <h6 className="bottomitems">
-                          <img src={arrowup} alt="" />
-                          OpenSea
-                        </h6>
-                      </a>
+                        <a
+                          href="https://opensea.io/collection/worldofdypians"
+                          target="_blank"
+                          rel="noreferrer"
+                          onClick={() => {
+                            setLandpopup(false);
+                          }}
+                        >
+                          <h6 className="bottomitems">
+                            <img
+                              src={
+                                "https://cdn.worldofdypians.com/tools/arrow-up.svg"
+                              }
+                              alt=""
+                            />
+                            OpenSea
+                          </h6>
+                        </a>
+                      </div>
                     </div>
-                  </div>
-                </OutsideClickHandler>
+                  </OutsideClickHandler>
                 </div>
               )}
             </div>
@@ -388,10 +446,16 @@ const LandDetails = ({
                   <button
                     className="connectbtn btn"
                     onClick={() => {
-                      setShowModal(true);
+                      handleConnection();
                     }}
                   >
-                    <img src={wallet} alt="" /> Connect wallet
+                    <img
+                      src={
+                        "https://cdn.worldofdypians.com/tools/walletIcon.svg"
+                      }
+                      alt=""
+                    />{" "}
+                    Connect wallet
                   </button>
                 ) : chainId === "1" ? (
                   <div className="addressbtn btn">
@@ -412,7 +476,9 @@ const LandDetails = ({
             <div
               className={`otherside-border col-12 col-md-6 ${
                 renderedPage === "dashboard" ? "col-lg-3" : "col-lg-4"
-              } ${chainId !== "1" && "blurrypool"}`}
+              }  ${chainId !== "1" && "blurrypool"} ${
+                expired === true && "blurrypool"
+              } `}
             >
               <div className="d-flex justify-content-between align-items-center gap-2">
                 <div className="d-flex align-items-center gap-3">
@@ -420,18 +486,25 @@ const LandDetails = ({
 
                   <h6 className="mybalance-text">
                     Avaliable NFTs:{" "}
-                    <b>{isConnected === false ? 0 : myNFTs.length} Genesis NFTs</b>
+                    <b>
+                      {isConnected === false ? 0 : myNFTs.length} Genesis NFTs
+                    </b>
                   </h6>
                 </div>
                 <Tooltip
                   placement="top"
                   title={
                     <div className="tooltip-text">
-                      {"Deposit your Genesis Land NFTs to the staking smart contract."}
+                      {
+                        "Deposit your Genesis Land NFTs to the staking smart contract."
+                      }
                     </div>
                   }
                 >
-                  <img src={moreinfo} alt="" />
+                  <img
+                    src={"https://cdn.worldofdypians.com/tools/more-info.svg"}
+                    alt=""
+                  />
                 </Tooltip>
               </div>
               <div className="d-flex flex-column gap-2 justify-content-between">
@@ -441,7 +514,8 @@ const LandDetails = ({
                     <input
                       type={"number"}
                       disabled={
-                        (myNFTs.length === 0 && mystakes.length === 0) || isConnected === false
+                        (myNFTs.length === 0 && mystakes.length === 0) ||
+                        isConnected === false
                           ? true
                           : false
                       }
@@ -480,7 +554,7 @@ const LandDetails = ({
             <div
               className={`otherside-border col-12 col-md-6 ${
                 renderedPage === "dashboard" ? "col-lg-5" : "col-lg-4"
-              }  ${chainId !== "1" && "blurrypool"}`}
+              }    ${chainId !== "1" && "blurrypool"} `}
             >
               <div className="d-flex justify-content-between gap-2 flex-column flex-lg-row">
                 <h6 className="withdraw-txt d-flex gap-2 align-items-center">
@@ -505,7 +579,10 @@ const LandDetails = ({
                       </div>
                     }
                   >
-                    <img src={moreinfo} alt="" />
+                    <img
+                      src={"https://cdn.worldofdypians.com/tools/more-info.svg"}
+                      alt=""
+                    />
                   </Tooltip>
                 </h6>
               </div>
@@ -513,7 +590,14 @@ const LandDetails = ({
                 <div className="d-flex align-items-center justify-content-between gap-2"></div>
                 <div className="form-row d-flex gap-2 align-items-end justify-content-between">
                   <h6 className="rewardstxtCaws d-flex align-items-center gap-2">
-                    <img src={weth} alt="" /> {getFormattedNumber(EthRewards, 6) } WETH ($
+                    <img
+                      src={
+                        "https://cdn.worldofdypians.com/tools/ethStakeActive.svg"
+                      }
+                      alt=""
+                      style={{ height: 25, width: 25 }}
+                    />
+                    {getFormattedNumber(EthRewards, 6)} WETH ($
                     {getFormattedNumber(ethToUSD, 6)})
                   </h6>
                   <button
@@ -547,7 +631,10 @@ const LandDetails = ({
                     </div>
                   }
                 >
-                  <img src={moreinfo} alt="" />
+                  <img
+                    src={"https://cdn.worldofdypians.com/tools/more-info.svg"}
+                    alt=""
+                  />
                 </Tooltip>
               </h6>
 
@@ -572,17 +659,20 @@ const LandDetails = ({
             setamountToStake("");
           }}
           getApprovedNfts={getApprovedNfts}
-          nftItem={(hide === "" || hide === "tostake" || hide === "mystakes2") ? mystakes : myNFTs}
+          nftItem={
+            hide === "" || hide === "tostake" || hide === "mystakes2"
+              ? mystakes
+              : myNFTs
+          }
           onshowStaked={() => {
             setshowStaked(true);
             setshowToStake(false);
-            setHide('mystakes2')
+            setHide("mystakes2");
           }}
           onshowToStake={() => {
             setshowStaked(false);
             setshowToStake(true);
-            setHide('tostake2')
-
+            setHide("tostake2");
           }}
           onClaimAll={() => {
             claimRewards();
@@ -594,16 +684,7 @@ const LandDetails = ({
           countDownLeft={countDownLeft}
           open={openStakeChecklist ? true : false}
           hideItem={hide}
-        />
-      )}
-
-      {showModal === true && (
-        <WalletModal
-          show={showModal}
-          handleClose={() => {
-            setShowModal(false);
-          }}
-          handleConnection={()=>{handleConnection(); setShowModal(false)}}
+          binanceW3WProvider={binanceW3WProvider}
         />
       )}
     </div>

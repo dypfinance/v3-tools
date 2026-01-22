@@ -1,13 +1,4 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import VotePassive from "./assets/votepassive.svg";
-import Upvote from "./assets/upvote.svg";
-import Downvote from "./assets/downvote.svg";
-import Clock from "./assets/clock.svg";
-import ToolTip from "./ToolTip";
-import OutsideClickHandler from "react-outside-click-handler";
-import featuredNewsShadow from "./assets/featuredNewsShadow.png";
-import calendar from "../newsCard/assets/calendar.svg";
+import React, { useState, useEffect } from "react"; 
 
 const MainNews = ({
   link,
@@ -16,7 +7,6 @@ const MainNews = ({
   month,
   day,
   year,
-  theme,
   onShowModalClick,
   newsId,
   upvotes,
@@ -27,7 +17,12 @@ const MainNews = ({
   isPremium,
   onVotesFetch,
   coinbase,
-  bal1, bal2, bal3
+  bal1,
+  bal2,
+  bal3,
+  bal4,
+  bal5,
+  bal6,
 }) => {
   const [likeIndicator, setLikeIndicator] = useState(false);
   const [dislikeIndicator, setDislikeIndicator] = useState(false);
@@ -40,23 +35,69 @@ const MainNews = ({
 
   const logout = localStorage.getItem("logout");
 
-  
   useEffect(() => {
-    if (bal1 === 0 && bal2 === 0 && bal3 === 0 && isPremium === true) {
+    if (
+      bal1 === "0" &&
+      bal2 === "0" &&
+      bal3 === "0" &&
+      bal4 === "0" &&
+      bal5 === "0" &&
+      bal6 === "0" &&
+      isPremium === true
+    ) {
       setCanVote(true);
-    } else if (bal1 !== 0 && bal2 !== 0  && bal3 !== 0 && isPremium === true) {
+    } else if (
+      bal1 !== "0" &&
+      bal2 !== "0" &&
+      bal3 !== "0" &&
+      bal4 !== "0" &&
+      bal5 !== "0" &&
+      bal6 !== "0" &&
+      isPremium === true
+    ) {
       setCanVote(true);
-    } else if ((bal1 !== 0 || bal2 !== 0 || bal3 !== 0) && isPremium === false) {
+    } else if (
+      (bal1 !== "0" ||
+        bal2 !== "0" ||
+        bal3 !== "0" ||
+        bal4 !== "0" ||
+        bal5 !== "0" ||
+        bal6 !== "0") &&
+      isPremium === false
+    ) {
       setCanVote(true);
-    } else if (bal1 === 0 && bal2 === 0 && bal3 === 0 && isPremium === false) {
+    }else if (
+      (bal1 !== "0" ||
+        bal2 !== "0" ||
+        bal3 !== "0" ||
+        bal4 !== "0" ||
+        bal5 !== "0" ||
+        bal6 !== "0") &&
+      isPremium === true
+    ) {
+      setCanVote(true);
+    } else if (
+      bal1 === "0" &&
+      bal2 === "0" &&
+      bal3 !== "0" &&
+      isPremium === false
+    ) {
       setCanVote(false);
     } else if (logout === "true") {
       setCanVote(false);
     }
-  }, [alreadyVoted, bal1, bal2, bal3, isPremium, logout, coinbase]);
-
-  
-
+  }, [
+    alreadyVoted,
+    bal1,
+    bal2,
+    bal3,
+    bal4,
+    bal5,
+    bal6,
+    isPremium,
+    logout,
+    coinbase,
+  ]);
 
   var options = { year: "numeric", month: "short", day: "numeric" };
 
@@ -68,13 +109,13 @@ const MainNews = ({
         {/* <a target="_blank" href={link}> */}
         <div className="main-image position-relative">
           <div className="d-flex align-items-center gap-2 main-date-item">
-            <img src={calendar} alt="calendar" />
+            <img src={'https://cdn.worldofdypians.com/tools/calendar.svg'} alt="calendar" />
             <span className="news-date-text">
               {formattedDate.toLocaleDateString("en-US", options)}
             </span>
           </div>
           <img
-            src={featuredNewsShadow}
+            src={'https://cdn.worldofdypians.com/tools/featuredNewsShadow.png'}
             alt=""
             className={`featured-shadow w-100 ${
               bannerShadow && "featured-shadow-hover"
