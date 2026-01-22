@@ -3,6 +3,7 @@ import "./leaderboard.scss";
 import Switch from "@mui/material/Switch";
 import getFormattedNumber from "../../functions/get-formatted-number";
 import { Tooltip } from "@material-ui/core";
+import { CircleAlert } from "lucide-react";
 
 const Leaderboard = ({
   userId,
@@ -42,10 +43,9 @@ const Leaderboard = ({
   fetchCawsAdvLeaderboard,
   fetchPreviousCawsAdvWinners,
 }) => {
-
-   const leaderboardCaws = leaderboardCaws2d.sort(
-      (a, b) => b.score - a.score || a.timestamp - b.timestamp
-    );
+  const leaderboardCaws = leaderboardCaws2d.sort(
+    (a, b) => b.score - a.score || a.timestamp - b.timestamp,
+  );
   const weeklyPrizes = ["25", "15", "10", "8", "0", "0", "0", "0", "0", "0"];
   const monthlyPrizes = [
     "250",
@@ -310,7 +310,15 @@ const Leaderboard = ({
               alt=""
             />
           </div>
-          <div className="d-flex align-items-center gap-1 mt-5">
+          <span
+            className="stone-crack-timer align-items-center font-sm d-flex gap-2 mt-5"
+            style={{ fontSize: 11 }}
+          >
+            <CircleAlert className="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5" />{" "}
+            Pending rewards will be distributed in the new token, plus a 10%
+            bonus for all players.
+          </span>
+          <div className="d-flex align-items-center gap-1 mt-2">
             <div
               className={`optionsWrapper col-12 ${
                 type === "stoneCrack" &&
@@ -370,10 +378,10 @@ const Leaderboard = ({
                       optionText === "weekly" && type === "stoneCrack"
                         ? "otheroptionsActive-stone"
                         : optionText === "weekly" && type === "kittyDash"
-                        ? "otheroptionsActive-kitty"
-                        : optionText === "weekly" && type === "cawsAdventure"
-                        ? "otheroptionsActive-caws"
-                        : ""
+                          ? "otheroptionsActive-kitty"
+                          : optionText === "weekly" && type === "cawsAdventure"
+                            ? "otheroptionsActive-caws"
+                            : ""
                     } durationText`}
                     style={{ width: type !== "stoneCrack" ? "100%" : "50%" }}
                     onClick={() => {
@@ -391,10 +399,10 @@ const Leaderboard = ({
                       optionText === "monthly" && type === "stoneCrack"
                         ? "otheroptionsActive-stone"
                         : optionText === "monthly" && type === "kittyDash"
-                        ? "otheroptionsActive-kitty"
-                        : optionText === "monthly" && type === "cawsAdventure"
-                        ? "otheroptionsActive-caws"
-                        : ""
+                          ? "otheroptionsActive-kitty"
+                          : optionText === "monthly" && type === "cawsAdventure"
+                            ? "otheroptionsActive-caws"
+                            : ""
                     } durationText col-3`}
                     style={{
                       width:
@@ -414,6 +422,7 @@ const Leaderboard = ({
               </div>
             </div>
           </div>
+
           <div className="d-flex flex-column gap-2 tablewrapper">
             <div className="inner-table-wrapper p-2 w-100 position-relative d-flex flex-column align-items-end">
               {type === "stoneCrack" && (
@@ -501,7 +510,7 @@ const Leaderboard = ({
                             >
                               {item.name}
                             </th>
-                          )
+                          ),
                         )}
                       </>
                     ) : type === "kittyDash" ? (
@@ -563,7 +572,7 @@ const Leaderboard = ({
                             $
                             {getFormattedNumber(
                               stoneCrackRewards[index].reward,
-                              0
+                              0,
                             )}
                           </td>
                         </tr>
@@ -600,7 +609,7 @@ const Leaderboard = ({
                               $0
                             </td>
                           </tr>
-                        )
+                        ),
                       )}
                       {activePlayerWeekly === false &&
                         prevStatus === false &&
@@ -611,7 +620,7 @@ const Leaderboard = ({
                               weeklyUser?.statValue > 0
                                 ? getFormattedNumber(
                                     Number(weeklyUser.position) + 1,
-                                    0
+                                    0,
                                   )
                                 : "---"}
                             </td>
@@ -669,7 +678,7 @@ const Leaderboard = ({
                             $
                             {getFormattedNumber(
                               stoneCrackRewardsMonthly[index].rewards,
-                              0
+                              0,
                             )}
                           </td>
                         </tr>
@@ -699,7 +708,7 @@ const Leaderboard = ({
                               $0
                             </td>
                           </tr>
-                        )
+                        ),
                       )}
                       {activePlayerMonthly === false &&
                         prevStatus === false &&
@@ -710,7 +719,7 @@ const Leaderboard = ({
                               monthlyUser?.statValue > 0
                                 ? getFormattedNumber(
                                     Number(monthlyUser.position) + 1,
-                                    0
+                                    0,
                                   )
                                 : "---"}
                             </td>
@@ -768,7 +777,7 @@ const Leaderboard = ({
                             $
                             {getFormattedNumber(
                               stoneCrackRewards[index].reward,
-                              0
+                              0,
                             )}
                           </td>
                         </tr>
@@ -805,7 +814,7 @@ const Leaderboard = ({
                               $0
                             </td>
                           </tr>
-                        )
+                        ),
                       )}
                       {activePlayerWeeklyOpbnb === false &&
                         prevStatus === false &&
@@ -816,7 +825,7 @@ const Leaderboard = ({
                               weeklyUserOpbnb?.statValue > 0
                                 ? getFormattedNumber(
                                     Number(weeklyUserOpbnb.position) + 1,
-                                    0
+                                    0,
                                   )
                                 : "---"}
                             </td>
@@ -831,7 +840,7 @@ const Leaderboard = ({
                             >
                               {getFormattedNumber(
                                 weeklyUserOpbnb?.statValue,
-                                0
+                                0,
                               )}
                             </td>
                             <td
@@ -877,7 +886,7 @@ const Leaderboard = ({
                             $
                             {getFormattedNumber(
                               stoneCrackRewardsMonthly[index].rewards,
-                              0
+                              0,
                             )}
                           </td>
                         </tr>
@@ -908,7 +917,7 @@ const Leaderboard = ({
                               $0
                             </td>
                           </tr>
-                        )
+                        ),
                       )}
                       {activePlayerMonthlyOpbnb === false &&
                         prevStatus === false &&
@@ -919,7 +928,7 @@ const Leaderboard = ({
                               monthlyUserOpbnb?.statValue > 0
                                 ? getFormattedNumber(
                                     Number(monthlyUserOpbnb.position) + 1,
-                                    0
+                                    0,
                                   )
                                 : "---"}
                             </td>
@@ -934,7 +943,7 @@ const Leaderboard = ({
                             >
                               {getFormattedNumber(
                                 monthlyUserOpbnb?.statValue,
-                                0
+                                0,
                               )}
                             </td>
                             <td
@@ -1002,7 +1011,7 @@ const Leaderboard = ({
                               ${getFormattedNumber(0, 0)}
                             </td>
                           </tr>
-                        )
+                        ),
                       )}
                       {activePlayerKitty === false &&
                         prevStatus === false &&
@@ -1070,7 +1079,7 @@ const Leaderboard = ({
                           >
                             {formatTimeByLevelAndSecond(
                               item?.timestamp,
-                              item?.level
+                              item?.level,
                             )}
                           </td>
                           <td
@@ -1207,7 +1216,7 @@ const Leaderboard = ({
                         >
                           {formatTimeByLevelAndSecond(
                             caws2dUser.timestamp,
-                            caws2dUser.level
+                            caws2dUser.level,
                           )}
                         </td>
                         <td
