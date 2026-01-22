@@ -61,6 +61,7 @@ import { useWeb3React } from "@web3-react/core";
 import { isMobile } from "react-device-detect";
 import WhitelistPopup from "./components/whitelistPopup/WhitelistPopup.js";
 import NewMigration from "./components/migration-portal/NewMigration.js";
+import MigrationPopup from "./components/MigrationPopup/MigrationPopup";
 const LockerWrapper = (props) => {
   const { pair_id } = useParams();
 
@@ -1358,10 +1359,10 @@ function App() {
     var testArray =
       leaderboard2.length > 0
         ? leaderboard2.filter(
-            (item) =>
-              item.address.toLowerCase() ===
-              data?.getPlayer?.wallet?.publicAddress?.toLowerCase(),
-          )
+          (item) =>
+            item.address.toLowerCase() ===
+            data?.getPlayer?.wallet?.publicAddress?.toLowerCase(),
+        )
         : [];
 
     fillRecordsCaws2d(leaderboard2);
@@ -2012,7 +2013,7 @@ function App() {
     } else if (
       (logoutstorage === "false" ||
         window.coinbase_address ===
-          "0x0000000000000000000000000000000000000000" ||
+        "0x0000000000000000000000000000000000000000" ||
         window.coin98) &&
       window.WALLET_TYPE !== "binance"
     ) {
@@ -2172,8 +2173,8 @@ function App() {
       <div>
         {(window.location?.pathname === "/genesis" &&
           window.innerWidth < 786) ||
-        (window.location?.pathname === "/caws-staking" &&
-          window.innerWidth < 786) ? null : (
+          (window.location?.pathname === "/caws-staking" &&
+            window.innerWidth < 786) ? null : (
           <Header
             coinbase={coinbase}
             toggleMobileSidebar={toggleMobileSidebar}
@@ -2216,13 +2217,12 @@ function App() {
               />
             </div>
             <div
-              className={`${
-                windowSize.width < 991
+              className={`${windowSize.width < 991
                   ? "col-12 px-1"
                   : windowSize.width < 1490
                     ? "col-11"
                     : "col-10"
-              }`}
+                }`}
             >
               <div className="right-content pr-0 my-4 my-lg-5">
                 <Routes>
@@ -2793,7 +2793,7 @@ setkittyDashRecords */}
                         theme={theme}
                         coinbase={coinbase}
                         networkId={networkId}
-                        // {...props}
+                      // {...props}
                       />
                     }
                   />
@@ -2805,7 +2805,7 @@ setkittyDashRecords */}
                       <Admin
                         handleConnection={handleConnection}
                         isConnected={isConnected}
-                        // {...props}
+                      // {...props}
                       />
                     }
                   />
@@ -2845,17 +2845,17 @@ setkittyDashRecords */}
             <div className="col-1"></div>
           </div>
           {window.location?.pathname === "/genesis" ||
-          window.location?.pathname === "/caws-staking" ? null : (
+            window.location?.pathname === "/caws-staking" ? null : (
             <MobileMenu />
           )}
         </div>
       </div>
       {(window.location?.pathname === "/genesis" && window.innerWidth < 786) ||
-      (window.location?.pathname === "/caws-staking" &&
-        window.innerWidth < 786) ? null : (
+        (window.location?.pathname === "/caws-staking" &&
+          window.innerWidth < 786) ? null : (
         <Footer />
       )}
-
+      <MigrationPopup />
       {(showMobilePopup === true || downloadClick === true) && (
         <Modal
           open={showMobilePopup || downloadClick}
