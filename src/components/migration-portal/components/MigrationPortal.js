@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ArrowDown, AlertCircle, Clock, HelpCircle } from "lucide-react";
+import { ArrowDown, AlertCircle, Clock, HelpCircle, Info } from "lucide-react";
 import Tooltip from "@material-ui/core/Tooltip";
 import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
@@ -8,6 +8,7 @@ import getFormattedNumber from "../../../functions/get-formatted-number";
 import Web3 from "web3";
 import { handleSwitchNetworkhook } from "../../../functions/hooks";
 import DisclaimerModal from "./DisclaimerModal";
+import { NavLink } from "react-router-dom";
 
 const TOKEN_RATES = {
   DYP: 0.004,
@@ -518,9 +519,44 @@ export function MigrationPortal({
 
               {/* Chain Selection */}
               <div className="mb-lg-6 mb-2 col-lg-3 col-12 px-0">
+                <div className="d-flex align-items-start gap-2 justify-content-between">
                 <label className="text-gray-300 text-sm mb-3 block">
                   Select Chain
                 </label>
+                <Tooltip
+                  placement="top"
+                  interactive
+                  title={
+                    <div className="tooltip-text">
+                      <div className="space-y-2 px-2">
+                        <p className="font-semibold text-start">
+                          The migration for DYP tokens is supported only on
+                          Ethereum Chain and for iDYP tokens is supported only
+                          on BNB Chain.
+                        </p>
+                        <p className="text-xs text-start">
+                          If you have tokens on other chains, bridge your tokens
+                          and migrate after.
+                        </p>
+                        <NavLink to="/bridge" rel="noreferrer" className={'py-2'}>
+                          <h6 className="bottomitems">
+                            <img
+                              src={
+                                "https://cdn.worldofdypians.com/tools/arrow-up.svg"
+                              }
+                              alt=""
+                            />
+                            Go to Bridge
+                          </h6>
+                        </NavLink>
+                      </div>
+                    </div>
+                  }
+                >
+                  <Info className="w-5 h-5 text-gray-400 hover:text-white transition-colors" />
+                </Tooltip>
+                </div>
+
                 <DropdownButton
                   id="dropdown-basic-button-migration"
                   className="w-100 d-flex align-items-center justify-content-center h-12"
