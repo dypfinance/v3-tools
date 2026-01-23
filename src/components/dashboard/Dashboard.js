@@ -39,6 +39,7 @@ import TrendingNews from "../newsCard/TrendingNews";
 import WhitelistPopup from "../whitelistPopup/WhitelistPopup";
 import LoyaltyCard from "../launchpad-card/LoyaltyCard";
 import Calculator from "../calculator/Calculator";
+import MigrationPopup from "../MigrationPopup/MigrationPopup";
 
 const renderer = ({ days, hours, minutes }) => {
   return (
@@ -2889,6 +2890,7 @@ const Dashboard = ({
           </Box>
         </Modal>
       )}
+      <MigrationPopup />
 
       {/* {whitelistPopup === true && (
         <WhitelistPopup

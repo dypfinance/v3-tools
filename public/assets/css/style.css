@@ -3693,7 +3693,7 @@ body.theme-dark input[type="number"],
 body.theme-dark select.form-control {
   background: var(--grey);
   color: var(--white);
-  border: none;
+  /* border: none; */
 }
 
 .body.theme-dark .form-control ::placeholder {

@@ -48,7 +48,7 @@ const LP_ID_LIST = Object.keys(LP_IDs)
 const TOKENS_DISBURSED_PER_YEAR_BY_LP_ID = {};
 LP_ID_LIST.forEach(
   (lp_id, i) =>
-    (TOKENS_DISBURSED_PER_YEAR_BY_LP_ID[lp_id] = TOKENS_DISBURSED_PER_YEAR[i])
+    (TOKENS_DISBURSED_PER_YEAR_BY_LP_ID[lp_id] = TOKENS_DISBURSED_PER_YEAR[i]),
 );
 const VAULT_ADDRESSES_LIST = LP_ID_LIST.map((id) => id.split("-")[1]);
 
@@ -65,7 +65,7 @@ function getVaultContract(address) {
 function getPrices(coingecko_ids = "ethereum", vs_currencies = "usd") {
   return new Promise((resolve, reject) => {
     window.$.get(
-      `https://pro-api.coingecko.com/api/v3/simple/price?ids=${coingecko_ids}&vs_currencies=${vs_currencies}&x_cg_pro_api_key=CG-4cvtCNDCA4oLfmxagFJ84qev`
+      `https://pro-api.coingecko.com/api/v3/simple/price?ids=${coingecko_ids}&vs_currencies=${vs_currencies}&x_cg_pro_api_key=CG-4cvtCNDCA4oLfmxagFJ84qev`,
     )
       .then((result) => {
         resolve(result);
@@ -121,7 +121,7 @@ class STAKING {
         let gas = window.config.default_gas_amount;
         try {
           let estimatedGas = await contract.methods[fn_name](
-            ...args
+            ...args,
           ).estimateGas({ gas });
           if (estimatedGas) {
             gas = Math.min(estimatedGas, gas);
@@ -160,13 +160,13 @@ class STAKING {
         .send.request({
           gas: window.config.default_gas_amount,
           from: await getCoinbase(),
-        })
+        }),
     );
     batch.add(
       staking_contract.methods.deposit(amount).send.request({
         gas: window.config.default_gas_amount,
         from: await getCoinbase(),
-      })
+      }),
     );
     return batch.execute();
   }
@@ -229,14 +229,14 @@ class STAKINGAVAX {
           gas: window.config.default_gas_amount,
           from: await getCoinbase(),
           gasPrice: window.config.default_gasprice_gwei * 1e9,
-        })
+        }),
     );
     batch.add(
       staking_contract.methods.deposit(amount).send.request({
         gas: window.config.default_gas_amount,
         from: await getCoinbase(),
         gasPrice: window.config.default_gasprice_gwei * 1e9,
-      })
+      }),
     );
     return batch.execute();
   }
@@ -308,14 +308,14 @@ class STAKINGACTIVEBSC {
           gas: window.config.default_gas_amount,
           from: await getCoinbase(),
           gasPrice: window.config.default_gasprice_gwei * 1e9,
-        })
+        }),
     );
     batch.add(
       staking_contract.methods.deposit(amount).send.request({
         gas: window.config.default_gas_amount,
         from: await getCoinbase(),
         gasPrice: window.config.default_gasprice_gwei * 1e9,
-      })
+      }),
     );
     return batch.execute();
   }
@@ -382,14 +382,14 @@ class STAKINGACTIVEAVAX {
           gas: window.config.default_gas_amount,
           from: await getCoinbase(),
           gasPrice: window.config.default_gasprice_gwei * 1e9,
-        })
+        }),
     );
     batch.add(
       staking_contract.methods.deposit(amount).send.request({
         gas: window.config.default_gas_amount,
         from: await getCoinbase(),
         gasPrice: window.config.default_gasprice_gwei * 1e9,
-      })
+      }),
     );
     return batch.execute();
   }
@@ -454,14 +454,14 @@ class STAKINGBSC {
           gas: window.config.default_gas_amount,
           from: await getCoinbase(),
           gasPrice: window.config.default_gasprice_gwei * 1e9,
-        })
+        }),
     );
     batch.add(
       staking_contract.methods.deposit(amount).send.request({
         gas: window.config.default_gas_amount,
         from: await getCoinbase(),
         gasPrice: window.config.default_gasprice_gwei * 1e9,
-      })
+      }),
     );
     return batch.execute();
   }
@@ -484,7 +484,7 @@ class TOKEN {
     try {
       let estimatedGas = await contract.methods["transfer"](
         to,
-        amount
+        amount,
       ).estimateGas({ gas });
       if (estimatedGas) {
         gas = Math.min(estimatedGas, gas);
@@ -511,7 +511,7 @@ class TOKEN {
     try {
       let estimatedGas = await contract.methods["approve"](
         spender,
-        amount
+        amount,
       ).estimateGas({ gas });
       if (estimatedGas) {
         gas = Math.min(estimatedGas, gas);
@@ -582,7 +582,7 @@ class TOKENBSC {
     try {
       let estimatedGas = await contract.methods["transfer"](
         to,
-        amount
+        amount,
       ).estimateGas({ gas });
       if (estimatedGas) {
         gas = Math.min(estimatedGas, gas);
@@ -607,7 +607,7 @@ class TOKENBSC {
     try {
       let estimatedGas = await contract.methods["approve"](
         spender,
-        amount
+        amount,
       ).estimateGas({ gas });
       if (estimatedGas) {
         gas = Math.min(estimatedGas, gas);
@@ -675,7 +675,7 @@ class CONSTANT_STAKING_NEW {
             gasPrice: window.config.default_gasprice_gwei * 1e9,
           });
         };
-      }
+      },
     );
   }
 
@@ -690,14 +690,14 @@ class CONSTANT_STAKING_NEW {
           gas: window.config.default_gas_amount,
           from: await getCoinbase(),
           gasPrice: window.config.default_gasprice_gwei * 1e9,
-        })
+        }),
     );
     batch.add(
       staking_contract.methods.deposit(amount, referrer).send.request({
         gas: window.config.default_gas_amount,
         from: await getCoinbase(),
         gasPrice: window.config.default_gasprice_gwei * 1e9,
-      })
+      }),
     );
     return batch.execute();
   }
@@ -706,7 +706,7 @@ class CONSTANT_STAKING_NEW {
 class CONSTANT_STAKING_DYPIUS {
   constructor(
     ticker = "CONSTANT_STAKING_DYPIUS",
-    token = "REWARD_TOKEN_DYPIUS_ETH"
+    token = "REWARD_TOKEN_DYPIUS_ETH",
   ) {
     this.ticker = ticker;
     this.token = token;
@@ -737,7 +737,7 @@ class CONSTANT_STAKING_DYPIUS {
         window.web3 = new Web3(window.ethereum);
         let contract = new window.web3.eth.Contract(
           window.CONSTANT_STAKING_DYPIUS_ABI,
-          address
+          address,
         );
         // getContract({ key: this.ticker });
         return await contract.methods[fn_name](...args).call();
@@ -750,7 +750,7 @@ class CONSTANT_STAKING_DYPIUS {
           // let contract = await getContract({ key: this.ticker });
           let contract = new window.web3.eth.Contract(
             window.CONSTANT_STAKING_DYPIUS_ABI,
-            address
+            address,
           );
 
           let value = 0;
@@ -761,7 +761,7 @@ class CONSTANT_STAKING_DYPIUS {
 
           try {
             let estimatedGas = await contract.methods[fn_name](
-              ...args
+              ...args,
             ).estimateGas({ from: await getCoinbase(), gas });
             if (estimatedGas) {
               gas = Math.min(estimatedGas, gas);
@@ -779,7 +779,7 @@ class CONSTANT_STAKING_DYPIUS {
             gasPrice: window.config.default_gasprice_gwei * 1e9,
           });
         };
-      }
+      },
     );
   }
 
@@ -794,14 +794,14 @@ class CONSTANT_STAKING_DYPIUS {
           gas: window.config.default_gas_amount,
           from: await getCoinbase(),
           gasPrice: window.config.default_gasprice_gwei * 1e9,
-        })
+        }),
     );
     batch.add(
       staking_contract.methods.deposit(amount, referrer).send.request({
         gas: window.config.default_gas_amount,
         from: await getCoinbase(),
         gasPrice: window.config.default_gasprice_gwei * 1e9,
-      })
+      }),
     );
     return batch.execute();
   }
@@ -810,7 +810,7 @@ class CONSTANT_STAKING_DYPIUS {
 class CONSTANT_STAKING_DEFI {
   constructor(
     ticker = "CONSTANT_STAKING_DEFI",
-    token = "REWARD_TOKEN_DYPIUS_ETH"
+    token = "REWARD_TOKEN_DYPIUS_ETH",
   ) {
     this.ticker = ticker;
     this.token = token;
@@ -842,7 +842,7 @@ class CONSTANT_STAKING_DEFI {
         window.web3 = new Web3(window.ethereum);
         let contract = new window.web3.eth.Contract(
           window.CONSTANT_STAKING_DEFI_ABI,
-          address
+          address,
         );
         // getContract({ key: this.ticker });
         return await contract.methods[fn_name](...args).call();
@@ -855,7 +855,7 @@ class CONSTANT_STAKING_DEFI {
           // let contract = await getContract({ key: this.ticker });
           let contract = new window.web3.eth.Contract(
             window.CONSTANT_STAKING_DEFI_ABI,
-            address
+            address,
           );
 
           let value = 0;
@@ -866,7 +866,7 @@ class CONSTANT_STAKING_DEFI {
 
           try {
             let estimatedGas = await contract.methods[fn_name](
-              ...args
+              ...args,
             ).estimateGas({ from: await getCoinbase(), gas });
             if (estimatedGas) {
               gas = Math.min(estimatedGas, gas);
@@ -883,7 +883,7 @@ class CONSTANT_STAKING_DEFI {
             gasPrice: window.config.default_gasprice_gwei * 1e9,
           });
         };
-      }
+      },
     );
   }
 
@@ -898,14 +898,14 @@ class CONSTANT_STAKING_DEFI {
           gas: window.config.default_gas_amount,
           from: await getCoinbase(),
           gasPrice: window.config.default_gasprice_gwei * 1e9,
-        })
+        }),
     );
     batch.add(
       staking_contract.methods.deposit(amount, referrer).send.request({
         gas: window.config.default_gas_amount,
         from: await getCoinbase(),
         gasPrice: window.config.default_gasprice_gwei * 1e9,
-      })
+      }),
     );
     return batch.execute();
   }
@@ -956,7 +956,7 @@ class CONSTANT_STAKING_OLD {
         let gas = window.config.default_gas_amount;
         try {
           let estimatedGas = await contract.methods[fn_name](
-            ...args
+            ...args,
           ).estimateGas({ gas });
           if (estimatedGas) {
             gas = Math.min(estimatedGas, gas);
@@ -985,13 +985,13 @@ class CONSTANT_STAKING_OLD {
         .send.request({
           gas: window.config.default_gas_amount,
           from: await getCoinbase(),
-        })
+        }),
     );
     batch.add(
       staking_contract.methods.deposit(amount, referrer).send.request({
         gas: window.config.default_gas_amount,
         from: await getCoinbase(),
-      })
+      }),
     );
     return batch.execute();
   }
@@ -1000,7 +1000,7 @@ class CONSTANT_STAKING_OLD {
 class CONSTANT_STAKINGBSCOTHER_NEW {
   constructor(
     ticker = "CONSTANT_STAKINGBSCOTHER_NEW",
-    token = "REWARD_TOKENBSC"
+    token = "REWARD_TOKENBSC",
   ) {
     this.ticker = ticker;
     this.token = token;
@@ -1058,7 +1058,7 @@ class CONSTANT_STAKINGBSCOTHER_NEW {
             gasPrice: window.config.default_gasprice_gwei * 1e9,
           });
         };
-      }
+      },
     );
   }
 
@@ -1073,14 +1073,14 @@ class CONSTANT_STAKINGBSCOTHER_NEW {
           gas: window.config.default_gas_amount,
           from: await getCoinbase(),
           gasPrice: window.config.default_gasprice_gwei * 1e9,
-        })
+        }),
     );
     batch.add(
       staking_contract.methods.deposit(amount, referrer).send.request({
         gas: window.config.default_gas_amount,
         from: await getCoinbase(),
         gasPrice: window.config.default_gasprice_gwei * 1e9,
-      })
+      }),
     );
     return batch.execute();
   }
@@ -1130,7 +1130,7 @@ class CONSTANT_STAKING {
           let gas = window.config.default_gas_amount;
           try {
             let estimatedGas = await contract.methods[fn_name](
-              ...args
+              ...args,
             ).estimateGas({ gas });
             if (estimatedGas) {
               gas = Math.min(estimatedGas, gas);
@@ -1146,7 +1146,7 @@ class CONSTANT_STAKING {
           });
           // return (await contract.methods[fn_name](...args).send({ value, gas, from: await getCoinbase(), maxFeePerGas: latestGasPrice, maxPriorityFeePerGas: maxPriorityFeePerGas }))
         };
-      }
+      },
     );
   }
 
@@ -1160,13 +1160,13 @@ class CONSTANT_STAKING {
         .send.request({
           gas: window.config.default_gas_amount,
           from: await getCoinbase(),
-        })
+        }),
     );
     batch.add(
       staking_contract.methods.deposit(amount, referrer).send.request({
         gas: window.config.default_gas_amount,
         from: await getCoinbase(),
-      })
+      }),
     );
     return batch.execute();
   }
@@ -1214,7 +1214,7 @@ class CONSTANT_STAKINGAVAX {
           let gas = window.config.default_gas_amount;
           try {
             let estimatedGas = await contract.methods[fn_name](
-              ...args
+              ...args,
             ).estimateGas({ gas });
             if (estimatedGas) {
               gas = Math.min(estimatedGas, gas);
@@ -1230,7 +1230,7 @@ class CONSTANT_STAKINGAVAX {
             gasPrice: window.config.default_gasprice_gwei * 1e9,
           });
         };
-      }
+      },
     );
   }
 
@@ -1245,14 +1245,14 @@ class CONSTANT_STAKINGAVAX {
           gas: window.config.default_gas_amount,
           from: await getCoinbase(),
           gasPrice: window.config.default_gasprice_gwei * 1e9,
-        })
+        }),
     );
     batch.add(
       staking_contract.methods.deposit(amount, referrer).send.request({
         gas: window.config.default_gas_amount,
         from: await getCoinbase(),
         gasPrice: window.config.default_gasprice_gwei * 1e9,
-      })
+      }),
     );
     return batch.execute();
   }
@@ -1306,7 +1306,7 @@ class CONSTANT_STAKINGBSC_NEW {
             gasPrice: window.config.default_gasprice_gwei * 1e9,
           });
         };
-      }
+      },
     );
   }
 
@@ -1321,14 +1321,14 @@ class CONSTANT_STAKINGBSC_NEW {
           gas: window.config.default_gas_amount,
           from: await getCoinbase(),
           gasPrice: window.config.default_gasprice_gwei * 1e9,
-        })
+        }),
     );
     batch.add(
       staking_contract.methods.deposit(amount, referrer).send.request({
         gas: window.config.default_gas_amount,
         from: await getCoinbase(),
         gasPrice: window.config.default_gasprice_gwei * 1e9,
-      })
+      }),
     );
     return batch.execute();
   }
@@ -1337,7 +1337,7 @@ class CONSTANT_STAKINGBSC_NEW {
 class CONSTANT_STAKINGOTHERDAIBSC_NEW {
   constructor(
     ticker = "CONSTANT_STAKING_OTHERDAIBSC",
-    token = "REWARD_TOKENBSC"
+    token = "REWARD_TOKENBSC",
   ) {
     this.ticker = ticker;
     this.token = token;
@@ -1418,14 +1418,14 @@ class CONSTANT_STAKINGOTHERDAIBSC_NEW {
           gas: window.config.default_gas_amount,
           from: await getCoinbase(),
           gasPrice: window.config.default_gasprice_gwei * 1e9,
-        })
+        }),
     );
     batch.add(
       staking_contract.methods.deposit(amount, referrer).send.request({
         gas: window.config.default_gas_amount,
         from: await getCoinbase(),
         gasPrice: window.config.default_gasprice_gwei * 1e9,
-      })
+      }),
     );
     return batch.execute();
   }
@@ -1478,7 +1478,7 @@ class CONSTANT_STAKING_NEWAVAX {
             gasPrice: window.config.default_gasprice_gwei * 1e9,
           });
         };
-      }
+      },
     );
   }
 
@@ -1493,14 +1493,14 @@ class CONSTANT_STAKING_NEWAVAX {
           gas: window.config.default_gas_amount,
           from: await getCoinbase(),
           gasPrice: window.config.default_gasprice_gwei * 1e9,
-        })
+        }),
     );
     batch.add(
       staking_contract.methods.deposit(amount, referrer).send.request({
         gas: window.config.default_gas_amount,
         from: await getCoinbase(),
         gasPrice: window.config.default_gasprice_gwei * 1e9,
-      })
+      }),
     );
     return batch.execute();
   }
@@ -1702,7 +1702,7 @@ class VAULT {
             from: await getCoinbase(),
           });
         };
-      }
+      },
     );
   }
 
@@ -1715,7 +1715,7 @@ class VAULT {
 
   getTvlUsdAndApyPercent = async (
     UNDERLYING_DECIMALS = 18,
-    PLATFORM_TOKEN_DECIMALS = 18
+    PLATFORM_TOKEN_DECIMALS = 18,
   ) => {
     let ethBalance = await window.web3.eth.getBalance(this._address);
     let underlyingBalance1 = await this.totalDepositedTokens();
@@ -1758,7 +1758,7 @@ class VAULT {
     let contractStartTime = await this.contractStartTime();
     let now = Math.floor(Date.now() / 1e3);
     let daysSinceDeployment = Math.floor(
-      Math.max(1, (now - contractStartTime) / 60 / 60 / 24 || 1)
+      Math.max(1, (now - contractStartTime) / 60 / 60 / 24 || 1),
     );
     let totalEthDisbursed = await this.totalEthDisbursed();
     let totalTokensDisbursed = await this.totalTokensDisbursed();
@@ -1860,7 +1860,7 @@ class VAULT_NEW {
             from: await getCoinbase(),
           });
         };
-      }
+      },
     );
   }
 
@@ -1876,7 +1876,7 @@ class VAULT_NEW {
     UNDERLYING_DECIMALS = 18,
     PLATFORM_TOKEN_DECIMALS = 18,
     token_contr,
-    token_contridyp
+    token_contridyp,
   ) => {
     let ethBalance = await window.infuraWeb3.eth.getBalance(this._address);
     let underlyingBalance1 = await this.totalDepositedTokens();
@@ -1925,7 +1925,7 @@ class VAULT_NEW {
       let contractStartTime = await this.contractStartTime();
       let now = Math.floor(Date.now() / 1e3);
       let daysSinceDeployment = Math.floor(
-        Math.max(1, (now - contractStartTime) / 60 / 60 / 24 || 1)
+        Math.max(1, (now - contractStartTime) / 60 / 60 / 24 || 1),
       );
       let totalEthDisbursed = await this.totalEthDisbursed();
       let totalTokensDisbursed = await this.totalTokensDisbursed();
@@ -2713,6 +2713,10 @@ window.config = {
   token_old_avax_address: "0x961c8c0b1aad0c0b10a51fef6a867e3091bcef17", //avax
 
   claim_newdyp_eth_address: "0xc40be3a801a39bdc151bf6b3468b4035f8a4d440", //migrate old dyp eth -> new dyp eth
+  migrationeth_address: "0x7617cFE206529A33d884FE9d6bE51068d4F390af", //migrate old dyp and idyp phase2
+  migrationbnb_address: "0xB057481458f996888eB15430D8aca87D7A5d6147", //migrate old dyp and idyp phase2
+  token_dyp_migration_eth_address: "0x39b46B212bDF15b42B166779b9d1787A68b9D0c3",
+
   bridge_bsc_new_address: "0x39b46b212bdf15b42b166779b9d1787a68b9d0c3",
   bridge_migration_eth_bsc_new_address:
     "0x9eafb124162c17196a0e9de1bdb70384936f0dd5",
@@ -2885,23 +2889,23 @@ window.FARMING_NEWBSC_4_ABI = window.FARMING_NEWBSC_ABI;
 window.FARMING_NEWBSC_5_ABI = window.FARMING_NEWBSC_ABI;
 
 window.constant_stakingnewbsc_new5 = new CONSTANT_STAKINGBSC_NEW(
-  "CONSTANT_STAKINGNEWBSC_NEW5"
+  "CONSTANT_STAKINGNEWBSC_NEW5",
 );
 
 window.constant_stakingnewbsc_new6 = new CONSTANT_STAKINGBSC_NEW(
-  "CONSTANT_STAKINGNEWBSC_NEW6"
+  "CONSTANT_STAKINGNEWBSC_NEW6",
 );
 
 window.constant_stakingnewbsc_new7 = new CONSTANT_STAKINGBSC_NEW(
-  "CONSTANT_STAKINGNEWBSC_NEW7"
+  "CONSTANT_STAKINGNEWBSC_NEW7",
 );
 
 window.constant_stakingnewbsc_new8 = new CONSTANT_STAKINGBSC_NEW(
-  "CONSTANT_STAKINGNEWBSC_NEW8"
+  "CONSTANT_STAKINGNEWBSC_NEW8",
 );
 
 window.constant_stakingnewbsc_new9 = new CONSTANT_STAKINGBSC_NEW(
-  "CONSTANT_STAKINGNEWBSC_NEW9"
+  "CONSTANT_STAKINGNEWBSC_NEW9",
 );
 
 window.CONSTANT_STAKINGNEWBSC_NEW5_ABI = window.CONSTANT_STAKINGBSC_NEW_ABI;
@@ -2913,47 +2917,47 @@ window.CONSTANT_STAKINGNEWBSC_NEW9_ABI = window.CONSTANT_STAKINGBSC_NEW_ABI;
 //staking bsc
 
 window.constant_stakingbsc_new10 = new CONSTANT_STAKINGBSC_NEW(
-  "CONSTANT_STAKINGBSC_NEW10"
+  "CONSTANT_STAKINGBSC_NEW10",
 );
 window.constant_stakingbsc_new11 = new CONSTANT_STAKINGBSC_NEW(
-  "CONSTANT_STAKINGBSC_NEW11"
+  "CONSTANT_STAKINGBSC_NEW11",
 );
 
 window.constant_stakingbsc_new111 = new CONSTANT_STAKINGBSC_NEW(
-  "CONSTANT_STAKINGBSC_NEW111"
+  "CONSTANT_STAKINGBSC_NEW111",
 );
 
 window.constant_stakingbsc_new12 = new CONSTANT_STAKINGBSC_NEW(
-  "CONSTANT_STAKINGBSC_NEW12"
+  "CONSTANT_STAKINGBSC_NEW12",
 );
 window.constant_stakingbsc_new13 = new CONSTANT_STAKINGBSC_NEW(
-  "CONSTANT_STAKINGBSC_NEW13"
+  "CONSTANT_STAKINGBSC_NEW13",
 );
 
 window.constant_stakingbsc_new14 = new CONSTANT_STAKINGBSC_NEW(
-  "CONSTANT_STAKINGBSC_NEW14"
+  "CONSTANT_STAKINGBSC_NEW14",
 );
 
 window.constant_staking_dypius_bsc1 = new CONSTANT_STAKING_DYPIUS(
-  "CONSTANT_STAKING_DYPIUS_BSC1"
+  "CONSTANT_STAKING_DYPIUS_BSC1",
 );
 
 window.constant_staking_dypius_bscother1 = new CONSTANT_STAKING_DEFI(
-  "CONSTANT_STAKING_DYPIUS_BSCOTHER1"
+  "CONSTANT_STAKING_DYPIUS_BSCOTHER1",
 );
 
 window.constant_staking_dypius_ethother1 = new CONSTANT_STAKING_DEFI(
-  "CONSTANT_STAKING_DYPIUS_ETHOTHER1"
+  "CONSTANT_STAKING_DYPIUS_ETHOTHER1",
 );
 
 window.constant_staking_dypius_avaxother1 = new CONSTANT_STAKING_DEFI(
-  "CONSTANT_STAKING_DYPIUS_AVAXOTHER1"
+  "CONSTANT_STAKING_DYPIUS_AVAXOTHER1",
 );
 
 /*Staking bsc other*/
 
 window.constant_stakingbscother_new1 = new CONSTANT_STAKINGBSCOTHER_NEW(
-  "CONSTANT_STAKINGBSCOTHER_NEW1"
+  "CONSTANT_STAKINGBSCOTHER_NEW1",
 );
 window.CONSTANT_STAKINGBSCOTHER_NEW1_ABI =
   window.CONSTANT_STAKINGBSCOTHER_NEW_ABI;
@@ -3009,7 +3013,7 @@ window.constant_staking_30 = new CONSTANT_STAKING_OLD("CONSTANT_STAKINGOLD_30");
 window.constant_staking_60 = new CONSTANT_STAKING_OLD("CONSTANT_STAKINGOLD_60");
 window.constant_staking_90 = new CONSTANT_STAKING_OLD("CONSTANT_STAKINGOLD_90");
 window.constant_staking_120 = new CONSTANT_STAKING_OLD(
-  "CONSTANT_STAKINGOLD_120"
+  "CONSTANT_STAKINGOLD_120",
 );
 
 /*buyback*/
@@ -3028,11 +3032,11 @@ window.REWARD_TOKEN_DYPSBSC_ABI = window.TOKENBSC_ABI;
 
 //constant staking for Buyback New
 window.constant_stakingbsc_new3 = new CONSTANT_STAKING_NEW(
-  "CONSTANT_STAKINGNEWBSC_NEW3"
+  "CONSTANT_STAKINGNEWBSC_NEW3",
 );
 
 window.constant_stakingbsc_new4 = new CONSTANT_STAKING_NEW(
-  "CONSTANT_STAKINGNEWBSC_NEW4"
+  "CONSTANT_STAKINGNEWBSC_NEW4",
 );
 
 window.CONSTANT_STAKINGNEWBSC_NEW3_ABI = window.CONSTANT_STAKINGNEW_ABI;
@@ -3041,24 +3045,24 @@ window.CONSTANT_STAKINGNEWBSC_NEW4_ABI = window.CONSTANT_STAKINGNEW_ABI;
 // window.token_dyps = new TOKEN(window.config.reward_token_dyps_address)
 //constant staking NEW CONTRACTS
 window.constant_staking_newavax1 = new CONSTANT_STAKING_NEWAVAX(
-  "CONSTANT_STAKINGNEW_NEWAVAX1"
+  "CONSTANT_STAKINGNEW_NEWAVAX1",
 );
 window.constant_staking_newavax2 = new CONSTANT_STAKING_NEWAVAX(
-  "CONSTANT_STAKINGNEW_NEWAVAX2"
+  "CONSTANT_STAKINGNEW_NEWAVAX2",
 );
 window.constant_stakingdaieth = new CONSTANT_STAKING_NEW(
-  "CONSTANT_STAKINGDAIETH"
+  "CONSTANT_STAKINGDAIETH",
 );
 
 window.constant_stakingdaiavax = new CONSTANT_STAKING_NEWAVAX(
-  "CONSTANT_STAKINGDAIAVAX"
+  "CONSTANT_STAKINGDAIAVAX",
 );
 
 window.CONSTANT_STAKINGDAIAVAX_ABI = window.CONSTANT_STAKING_IDYP_ABI;
 window.CONSTANT_STAKINGDAIETH_ABI = window.CONSTANT_STAKINGDAI_ABI;
 
 window.constant_stakingdaibsc = new CONSTANT_STAKINGBSC_NEW(
-  "CONSTANT_STAKINGDAIBSC"
+  "CONSTANT_STAKINGDAIBSC",
 );
 
 window.CONSTANT_STAKINGDAIBSC_ABI = window.CONSTANT_STAKING_DAI_ABI;
@@ -3066,7 +3070,7 @@ window.CONSTANT_STAKINGDAIBSC_ABI = window.CONSTANT_STAKING_DAI_ABI;
 /* Constant Staking Other DAI */
 
 window.constant_stakingotherdaibsc = new CONSTANT_STAKINGOTHERDAIBSC_NEW(
-  "CONSTANT_STAKINGOTHERDAIBSC"
+  "CONSTANT_STAKINGOTHERDAIBSC",
 );
 
 window.CONSTANT_STAKINGOTHERDAIBSC_ABI =
@@ -3074,28 +3078,28 @@ window.CONSTANT_STAKINGOTHERDAIBSC_ABI =
 
 /* Constant Staking iDYP */
 window.constant_stakingidyp_1 = new CONSTANT_STAKINGBSC_NEW(
-  "CONSTANT_STAKINGIDYP_1"
+  "CONSTANT_STAKINGIDYP_1",
 );
 window.constant_stakingidyp_2 = new CONSTANT_STAKINGBSC_NEW(
-  "CONSTANT_STAKINGIDYP_2"
+  "CONSTANT_STAKINGIDYP_2",
 );
 window.constant_stakingidyp_5 = new CONSTANT_STAKINGBSC_NEW(
-  "CONSTANT_STAKINGIDYP_5"
+  "CONSTANT_STAKINGIDYP_5",
 );
 window.constant_stakingidyp_6 = new CONSTANT_STAKINGBSC_NEW(
-  "CONSTANT_STAKINGIDYP_6"
+  "CONSTANT_STAKINGIDYP_6",
 );
 
 window.constant_stakingidyp_7 = new CONSTANT_STAKINGBSC_NEW(
-  "CONSTANT_STAKINGIDYP_7"
+  "CONSTANT_STAKINGIDYP_7",
 );
 
 window.constant_stakingidyp_8 = new CONSTANT_STAKINGBSC_NEW(
-  "CONSTANT_STAKINGIDYP_8"
+  "CONSTANT_STAKINGIDYP_8",
 );
 
 window.constant_stakingidyp_9 = new CONSTANT_STAKINGBSC_NEW(
-  "CONSTANT_STAKINGIDYP_9"
+  "CONSTANT_STAKINGIDYP_9",
 );
 
 window.CONSTANT_STAKINGIDYP_1_ABI = window.CONSTANT_STAKING_IDYP_ABI;
@@ -3107,72 +3111,72 @@ window.CONSTANT_STAKINGIDYP_8_ABI = window.CONSTANT_STAKING_IDYP_ABI;
 window.CONSTANT_STAKINGIDYP_9_ABI = window.CONSTANT_STAKING_IDYP_ABI;
 
 window.constant_staking_new1 = new CONSTANT_STAKING_NEW(
-  "CONSTANT_STAKINGNEW_NEW1"
+  "CONSTANT_STAKINGNEW_NEW1",
 );
 window.constant_staking_new2 = new CONSTANT_STAKING_NEW(
-  "CONSTANT_STAKINGNEW_NEW2"
+  "CONSTANT_STAKINGNEW_NEW2",
 );
 
 window.constant_staking_dypius_eth1 = new CONSTANT_STAKING_DYPIUS(
-  "CONSTANT_STAKING_DYPIUS_ETH1"
+  "CONSTANT_STAKING_DYPIUS_ETH1",
 );
 
 window.constant_staking_dypius_base1 = new CONSTANT_STAKING_DYPIUS(
-  "CONSTANT_STAKING_DYPIUS_BASE1"
+  "CONSTANT_STAKING_DYPIUS_BASE1",
 );
 
 window.constant_staking_dypius_phase2_eth1 = new CONSTANT_STAKING_DYPIUS(
-  "CONSTANT_STAKING_DYPIUS_PHASE2_ETH1"
+  "CONSTANT_STAKING_DYPIUS_PHASE2_ETH1",
 );
 
 window.constant_staking_dypius_phase2_eth2 = new CONSTANT_STAKING_DYPIUS(
-  "CONSTANT_STAKING_DYPIUS_PHASE2_ETH2"
+  "CONSTANT_STAKING_DYPIUS_PHASE2_ETH2",
 );
 
 window.constant_staking_dypius_phase2_eth3 = new CONSTANT_STAKING_DYPIUS(
-  "CONSTANT_STAKING_DYPIUS_PHASE2_ETH3"
+  "CONSTANT_STAKING_DYPIUS_PHASE2_ETH3",
 );
 
 window.constant_staking_dypius_phase2_eth4 = new CONSTANT_STAKING_DYPIUS(
-  "CONSTANT_STAKING_DYPIUS_PHASE2_ETH4"
+  "CONSTANT_STAKING_DYPIUS_PHASE2_ETH4",
 );
 
 window.constant_staking_dypius_phase2_eth5 = new CONSTANT_STAKING_DYPIUS(
-  "CONSTANT_STAKING_DYPIUS_PHASE2_ETH5"
+  "CONSTANT_STAKING_DYPIUS_PHASE2_ETH5",
 );
 
 window.constant_staking_dypius_phase2_eth6 = new CONSTANT_STAKING_DYPIUS(
-  "CONSTANT_STAKING_DYPIUS_PHASE2_ETH6"
+  "CONSTANT_STAKING_DYPIUS_PHASE2_ETH6",
 );
 
 window.constant_staking_dypius_phase2_eth7 = new CONSTANT_STAKING_DYPIUS(
-  "CONSTANT_STAKING_DYPIUS_PHASE2_ETH7"
+  "CONSTANT_STAKING_DYPIUS_PHASE2_ETH7",
 );
 
 window.constant_staking_newi3 = new CONSTANT_STAKING_OLD(
-  "CONSTANT_STAKING_NEWI3"
+  "CONSTANT_STAKING_NEWI3",
 );
 window.constant_staking_newdai = new CONSTANT_STAKING_NEW(
-  "CONSTANT_STAKINGNEW_NEWDAI"
+  "CONSTANT_STAKINGNEW_NEWDAI",
 );
 
 window.constant_staking_new10 = new CONSTANT_STAKING_NEWAVAX(
-  "CONSTANT_STAKINGIDYPAVAX_3"
+  "CONSTANT_STAKINGIDYPAVAX_3",
 );
 window.constant_staking_new11 = new CONSTANT_STAKING_NEWAVAX(
-  "CONSTANT_STAKINGIDYPAVAX_4"
+  "CONSTANT_STAKINGIDYPAVAX_4",
 );
 
 window.constant_staking_new12 = new CONSTANT_STAKING_NEWAVAX(
-  "CONSTANT_STAKINGIDYPAVAX_40"
+  "CONSTANT_STAKINGIDYPAVAX_40",
 );
 
 window.constant_staking_new13 = new CONSTANT_STAKING_NEWAVAX(
-  "CONSTANT_STAKINGIDYPAVAX_50"
+  "CONSTANT_STAKINGIDYPAVAX_50",
 );
 
 window.constant_staking_dypius_avax1 = new CONSTANT_STAKING_DYPIUS(
-  "CONSTANT_STAKING_DYPIUS_AVAX1"
+  "CONSTANT_STAKING_DYPIUS_AVAX1",
 );
 
 window.CONSTANT_STAKINGIDYPAVAX_3_ABI = window.CONSTANT_STAKING_IDYP_ABI;
@@ -3230,24 +3234,24 @@ window.buyback_staking1_1 = new BUYBACK_STAKING("BUYBACK_STAKING1_1");
 window.buyback_staking1_2 = new BUYBACK_STAKING("BUYBACK_STAKING1_2");
 
 window.buyback_stakingavax1_1 = new BUYBACK_STAKINGAVAX(
-  "BUYBACK_STAKINGAVAX1_1"
+  "BUYBACK_STAKINGAVAX1_1",
 );
 window.buyback_stakingavax1_2 = new BUYBACK_STAKINGAVAX(
-  "BUYBACK_STAKINGAVAX1_2"
+  "BUYBACK_STAKINGAVAX1_2",
 );
 
 window.constant_staking_new3 = new CONSTANT_STAKING_NEW(
-  "CONSTANT_STAKINGNEW_NEW3"
+  "CONSTANT_STAKINGNEW_NEW3",
 );
 window.constant_staking_new4 = new CONSTANT_STAKING_NEW(
-  "CONSTANT_STAKINGNEW_NEW4"
+  "CONSTANT_STAKINGNEW_NEW4",
 );
 
 window.constant_staking_newavax3 = new CONSTANT_STAKING_NEWAVAX(
-  "CONSTANT_STAKINGNEW_NEWAVAX3"
+  "CONSTANT_STAKINGNEW_NEWAVAX3",
 );
 window.constant_staking_newavax4 = new CONSTANT_STAKING_NEWAVAX(
-  "CONSTANT_STAKINGNEW_NEWAVAX4"
+  "CONSTANT_STAKINGNEW_NEWAVAX4",
 );
 
 window.CONSTANT_STAKINGNEW_NEWAVAX3_ABI = window.CONSTANT_STAKINGAVAX_ABI;
@@ -3261,55 +3265,55 @@ window.token_newbsc = new TOKENAVAX("TOKEN_NEWBSC");
 window.farming_new_1 = new STAKING("FARMING_NEW_1");
 
 window.constant_staking_new5 = new CONSTANT_STAKING_NEW(
-  "CONSTANT_STAKINGNEW_NEW5"
+  "CONSTANT_STAKINGNEW_NEW5",
 );
 
 window.farming_new_2 = new STAKING("FARMING_NEW_2");
 window.constant_staking_new6 = new CONSTANT_STAKING_NEW(
-  "CONSTANT_STAKINGNEW_NEW6"
+  "CONSTANT_STAKINGNEW_NEW6",
 );
 
 window.constant_staking_newavax5 = new CONSTANT_STAKING_NEW(
-  "CONSTANT_STAKINGNEW_NEWAVAX5"
+  "CONSTANT_STAKINGNEW_NEWAVAX5",
 );
 
 window.constant_staking_newbscactive1 = new CONSTANT_STAKING_NEW(
-  "CONSTANT_STAKINGNEW_NEWBSCACTIVE1"
+  "CONSTANT_STAKINGNEW_NEWBSCACTIVE1",
 );
 
 window.constant_staking_newavaxactive1 = new CONSTANT_STAKING_NEW(
-  "CONSTANT_STAKINGNEW_NEWAVAXACTIVE1"
+  "CONSTANT_STAKINGNEW_NEWAVAXACTIVE1",
 );
 
 window.constant_staking_newavax6 = new CONSTANT_STAKING_NEW(
-  "CONSTANT_STAKINGNEW_NEWAVAX6"
+  "CONSTANT_STAKINGNEW_NEWAVAX6",
 );
 
 window.constant_staking_newavax7 = new CONSTANT_STAKING_NEW(
-  "CONSTANT_STAKINGNEW_NEWAVAX7"
+  "CONSTANT_STAKINGNEW_NEWAVAX7",
 );
 
 window.constant_staking_newavax8 = new CONSTANT_STAKING_NEW(
-  "CONSTANT_STAKINGNEW_NEWAVAX8"
+  "CONSTANT_STAKINGNEW_NEWAVAX8",
 );
 
 window.constant_staking_newavax9 = new CONSTANT_STAKING_NEW(
-  "CONSTANT_STAKINGNEW_NEWAVAX9"
+  "CONSTANT_STAKINGNEW_NEWAVAX9",
 );
 
 window.farming_new_3 = new STAKING("FARMING_NEW_3");
 window.constant_staking_new7 = new CONSTANT_STAKING_NEW(
-  "CONSTANT_STAKINGNEW_NEW7"
+  "CONSTANT_STAKINGNEW_NEW7",
 );
 
 window.farming_new_4 = new STAKING("FARMING_NEW_4");
 window.constant_staking_new8 = new CONSTANT_STAKING_NEW(
-  "CONSTANT_STAKINGNEW_NEW8"
+  "CONSTANT_STAKINGNEW_NEW8",
 );
 
 window.farming_new_5 = new STAKING("FARMING_NEW_5");
 window.constant_staking_new9 = new CONSTANT_STAKING_NEW(
-  "CONSTANT_STAKINGNEW_NEW9"
+  "CONSTANT_STAKINGNEW_NEW9",
 );
 
 /* VST */
@@ -3318,49 +3322,49 @@ window.constant_staking_300 = new CONSTANT_STAKING("CONSTANT_STAKING_300");
 
 /* Constant staking iDYP */
 window.constant_staking_idyp_1 = new CONSTANT_STAKING_OLD(
-  "CONSTANT_STAKINGOLD_130"
+  "CONSTANT_STAKINGOLD_130",
 );
 window.constant_staking_idyp_2 = new CONSTANT_STAKING_OLD(
-  "CONSTANT_STAKINGOLD_140"
+  "CONSTANT_STAKINGOLD_140",
 );
 window.constant_staking_idyp_3 = new CONSTANT_STAKING_OLD(
-  "CONSTANT_STAKINGOLD_150"
+  "CONSTANT_STAKINGOLD_150",
 );
 window.constant_staking_idyp_4 = new CONSTANT_STAKING_OLD(
-  "CONSTANT_STAKINGOLD_160"
+  "CONSTANT_STAKINGOLD_160",
 );
 
 window.constant_staking_idyp_5 = new CONSTANT_STAKING_OLD(
-  "CONSTANT_STAKINGOLD_170"
+  "CONSTANT_STAKINGOLD_170",
 );
 
 /* Constant Staking iDYP AVAX */
 window.constant_staking_idypavax_1 = new CONSTANT_STAKING_NEWAVAX(
-  "CONSTANT_STAKINGIDYPAVAX_1"
+  "CONSTANT_STAKINGIDYPAVAX_1",
 );
 window.constant_staking_idypavax_2 = new CONSTANT_STAKING_NEWAVAX(
-  "CONSTANT_STAKINGIDYPAVAX_2"
+  "CONSTANT_STAKINGIDYPAVAX_2",
 );
 window.constant_staking_idypavax_5 = new CONSTANT_STAKING_NEWAVAX(
-  "CONSTANT_STAKINGIDYPAVAX_5"
+  "CONSTANT_STAKINGIDYPAVAX_5",
 );
 
 window.constant_staking_idypavax_6 = new CONSTANT_STAKING_NEWAVAX(
-  "CONSTANT_STAKINGIDYPAVAX_6"
+  "CONSTANT_STAKINGIDYPAVAX_6",
 );
 
 window.constant_staking_idypavax_7 = new CONSTANT_STAKING_NEWAVAX(
-  "CONSTANT_STAKINGIDYPAVAX_7"
+  "CONSTANT_STAKINGIDYPAVAX_7",
 );
 
 const checkapproveStakePool = async (useraddr, tokenaddr, stakingaddr) => {
   window.web3 = new Web3(window.ethereum);
   let token_contract = new window.web3.eth.Contract(
     window.TOKEN_ABI,
-    tokenaddr
-  );
+    tokenaddr,
+  )
 
-  return await token_contract.methods.allowance(useraddr, stakingaddr).call();
+  return await token_contract.methods.allowance(useraddr, stakingaddr).call().catch((e)=>{console.error(e); return 0});
 };
 
 window.checkapproveStakePool = checkapproveStakePool;
@@ -3418,7 +3422,7 @@ class NEW_GOVERNANCE {
         let gas = window.config.default_gas_amount;
         try {
           let estimatedGas = await contract.methods[fn_name](
-            ...args
+            ...args,
           ).estimateGas({ gas });
           if (estimatedGas) {
             gas = Math.min(estimatedGas, gas);
@@ -3451,7 +3455,7 @@ class NEW_GOVERNANCE {
           gas: window.config.default_gas_amount,
           from: await getCoinbase(),
           gasPrice: window.config.default_gasprice_gwei * 1e9,
-        })
+        }),
     );
     batch.add(
       governance_contract.methods
@@ -3460,7 +3464,7 @@ class NEW_GOVERNANCE {
           gas: window.config.default_gas_amount,
           from: await getCoinbase(),
           gasPrice: window.config.default_gasprice_gwei * 1e9,
-        })
+        }),
     );
     return batch.execute();
   }
@@ -3522,7 +3526,7 @@ class NEW_GOVERNANCEAVAX {
         let gas = window.config.default_gas_amount;
         try {
           let estimatedGas = await contract.methods[fn_name](
-            ...args
+            ...args,
           ).estimateGas({ gas });
           if (estimatedGas) {
             gas = Math.min(estimatedGas, gas);
@@ -3555,7 +3559,7 @@ class NEW_GOVERNANCEAVAX {
           gas: window.config.default_gas_amount,
           from: await getCoinbase(),
           gasPrice: window.config.default_gasprice_gwei * 1e9,
-        })
+        }),
     );
     batch.add(
       governance_contract.methods
@@ -3564,7 +3568,7 @@ class NEW_GOVERNANCEAVAX {
           gas: window.config.default_gas_amount,
           from: await getCoinbase(),
           gasPrice: window.config.default_gasprice_gwei * 1e9,
-        })
+        }),
     );
     return batch.execute();
   }
@@ -3572,7 +3576,7 @@ class NEW_GOVERNANCEAVAX {
 
 window.new_governanceavax = new NEW_GOVERNANCEAVAX();
 window.new_governanceavaxdypv2 = new NEW_GOVERNANCEAVAX(
-  "NEW_GOVERNANCEAVAXDYPV2"
+  "NEW_GOVERNANCEAVAXDYPV2",
 );
 
 class NEW_GOVERNANCEBSC {
@@ -3626,7 +3630,7 @@ class NEW_GOVERNANCEBSC {
         let gas = window.config.default_gas_amount;
         try {
           let estimatedGas = await contract.methods[fn_name](
-            ...args
+            ...args,
           ).estimateGas({ gas });
           if (estimatedGas) {
             gas = Math.min(estimatedGas, gas);
@@ -3659,7 +3663,7 @@ class NEW_GOVERNANCEBSC {
           gas: window.config.default_gas_amount,
           from: await getCoinbase(),
           gasPrice: window.config.default_gasprice_gwei * 1e9,
-        })
+        }),
     );
     batch.add(
       governance_contract.methods
@@ -3668,7 +3672,7 @@ class NEW_GOVERNANCEBSC {
           gas: window.config.default_gas_amount,
           from: await getCoinbase(),
           gasPrice: window.config.default_gasprice_gwei * 1e9,
-        })
+        }),
     );
     return batch.execute();
   }
@@ -3785,11 +3789,11 @@ async function getContractNFT(key) {
       key === "NFTSTAKING"
         ? "0xEe425BbbEC5e9Bf4a59a1c19eFff522AD8b7A47A"
         : key === "NFTSTAKING50"
-        ? "0xEe425BbbEC5e9Bf4a59a1c19eFff522AD8b7A47A"
-        : address,
+          ? "0xEe425BbbEC5e9Bf4a59a1c19eFff522AD8b7A47A"
+          : address,
       {
         from: await getCoinbase(),
-      }
+      },
     );
   }
 
@@ -3900,17 +3904,17 @@ async function getContractLandNFT(key) {
       key === "LANDNFTSTAKE"
         ? window.LANDMINTING_ABI
         : key === "LANDNFTSTAKING"
-        ? window.LANDSTAKING_ABI
-        : ABI,
+          ? window.LANDSTAKING_ABI
+          : ABI,
 
       key === "LANDNFTSTAKE"
         ? "0xcd60d912655281908ee557ce1add61e983385a03"
         : key === "LANDNFTSTAKING"
-        ? "0x6821710b0d6e9e10acfd8433ad023f874ed782f1"
-        : address,
+          ? "0x6821710b0d6e9e10acfd8433ad023f874ed782f1"
+          : address,
       {
         from: await getCoinbase(),
-      }
+      },
     );
   }
 
@@ -4024,7 +4028,7 @@ async function getContractCawsPremiumNFT(key) {
     address,
     {
       from: await getCoinbase(),
-    }
+    },
   );
 
   return window.cached_contracts[key];
@@ -4083,7 +4087,7 @@ async function getContractLandPremiumNFT(key) {
     address,
     {
       from: await getCoinbase(),
-    }
+    },
   );
 
   return window.cached_contracts[key];
@@ -4143,7 +4147,7 @@ async function getContractWodCawsNFT(key) {
       address,
       {
         from: await getCoinbase(),
-      }
+      },
     );
   }
 
@@ -4282,96 +4286,96 @@ window.token_dyp_bsc = new TOKEN("TOKEN_DYP_BSC");
 
 window.bridge_eth = new BRIDGE(
   window.config.bridge_eth_address,
-  window.config.token_dyp_eth_address
+  window.config.token_dyp_eth_address,
 );
 window.bridge_bsc = new BRIDGE(
   window.config.bridge_bsc_address,
-  window.config.token_dyp_bsc_address
+  window.config.token_dyp_bsc_address,
 );
 
 //bridge eth-bsc
 window.bridge_bsceth = new BRIDGE(
   window.config.bridge_bsceth_address,
-  window.config.token_dyp_bsceth_address
+  window.config.token_dyp_bsceth_address,
 );
 window.bridge_bscbsc = new BRIDGE(
   window.config.bridge_bscbsc_address,
-  window.config.token_dyp_bscbsc_address
+  window.config.token_dyp_bscbsc_address,
 );
 
 //bridge bsc-avax
 window.bridge_bscavaxbsc = new BRIDGE(
   window.config.bridge_bscavaxbsc_address,
-  window.config.token_dyp_bscavaxbsc_address
+  window.config.token_dyp_bscavaxbsc_address,
 );
 window.bridge_bscavax = new BRIDGE(
   window.config.bridge_bscavax_address,
-  window.config.token_dyp_bscavax_address
+  window.config.token_dyp_bscavax_address,
 );
 
 //new dyp token migration bsc-->eth
 window.newbridge_bsc = new BRIDGE(
   window.config.bridge_bsc_new_address,
-  window.config.token_old_bsc_address
+  window.config.token_old_bsc_address,
 );
 
 window.newbridge_avax = new BRIDGE(
   window.config.bridge_avax_old_address,
-  window.config.token_old_avax_address
+  window.config.token_old_avax_address,
 );
 
 window.newbridge_eth_bsc = new NEW_BRIDGE(
   window.config.bridge_migration_eth_bsc_new_address,
-  window.config.token_new_dypius_address
+  window.config.token_new_dypius_address,
 );
 
 window.newbridge_eth_avax = new NEW_BRIDGE(
   window.config.bridge_migration_eth_avax_new_address,
-  window.config.token_new_dypius_address
+  window.config.token_new_dypius_address,
 );
 
 //new dyp token bridge bsc<-->eth
 window.new_bridge_bsc = new NEW_BRIDGE(
   window.config.new_bridge_bsc_address,
-  window.config.token_dyp_new_bsc_address
+  window.config.token_dyp_new_bsc_address,
 );
 
 window.new_bridge_eth = new NEW_BRIDGE(
   window.config.new_bridge_eth_address,
-  window.config.token_dyp_new_address
+  window.config.token_dyp_new_address,
 );
 
 //new dypius token bridge bsc<-->eth
 window.new_dypius_bridge_bsc = new NEW_BRIDGE2(
   window.config.new_bridge_bsc_eth_address,
-  window.config.token_dypius_new_bsc_address
+  window.config.token_dypius_new_bsc_address,
 );
 
 window.new_dypius_bridge_ethbsc = new NEW_BRIDGE2(
   window.config.new_bridge_eth_bsc_address,
-  window.config.token_dypius_new_address
+  window.config.token_dypius_new_address,
 );
 
 //new dypius token bridge eth<-->avax
 window.new_dypius_bridge_avax = new NEW_BRIDGE2(
   window.config.new_bridge_avax_eth_address,
-  window.config.token_dypius_new_avax_address
+  window.config.token_dypius_new_avax_address,
 );
 
 window.new_dypius_bridge_ethavax = new NEW_BRIDGE2(
   window.config.new_bridge_eth_avax_address,
-  window.config.token_dypius_new_address
+  window.config.token_dypius_new_address,
 );
 
 //new dypius token bridge eth<-->opbnb
 window.new_dypius_bridge_opbnb = new NEW_BRIDGE2(
   window.config.new_bridge_opbnb_eth_address,
-  window.config.token_dypius_new_opbnb_address
+  window.config.token_dypius_new_opbnb_address,
 );
 
 window.new_dypius_bridge_ethopbnb = new NEW_BRIDGE2(
   window.config.new_bridge_eth_opbnb_address,
-  window.config.token_dypius_new_address
+  window.config.token_dypius_new_address,
 );
 
 window.token_old_eth = new TOKEN("TOKEN_OLD_ETH");
@@ -4391,11 +4395,11 @@ window.token_idyp_bsc = new TOKEN("TOKEN_IDYP_BSC");
 
 window.bridge_idypeth = new BRIDGE(
   window.config.bridge_idypeth_address,
-  window.config.token_idyp_eth_address
+  window.config.token_idyp_eth_address,
 );
 window.bridge_idypbsc = new BRIDGE(
   window.config.bridge_idypbsc_address,
-  window.config.token_idyp_bsc_address
+  window.config.token_idyp_bsc_address,
 );
 
 //bridge eth-bsc idyp
@@ -4404,11 +4408,11 @@ window.token_idyp_bscbsc = new TOKEN("TOKEN_IDYP_BSCBSC");
 
 window.bridge_idypbsceth = new BRIDGE(
   window.config.bridge_idypbsceth_address,
-  window.config.token_idyp_bsceth_address
+  window.config.token_idyp_bsceth_address,
 );
 window.bridge_idypbscbsc = new BRIDGE(
   window.config.bridge_idypbscbsc_address,
-  window.config.token_idyp_bscbsc_address
+  window.config.token_idyp_bscbsc_address,
 );
 
 window.buyback_stakingbsc1_1 = new BUYBACK_STAKINGBSC("BUYBACK_STAKINGBSC1_1");
@@ -4422,7 +4426,7 @@ async function getTokenHolderBalanceAll(holder, token_address, network) {
     let tokenContract = new window.infuraWeb3.eth.Contract(
       window.TOKEN_ABI,
       token_address,
-      { from: undefined }
+      { from: undefined },
     );
 
     return await tokenContract.methods
@@ -4435,7 +4439,7 @@ async function getTokenHolderBalanceAll(holder, token_address, network) {
     let tokenContract = new window.avaxWeb3.eth.Contract(
       window.TOKEN_ABI,
       token_address,
-      { from: undefined }
+      { from: undefined },
     );
     return await tokenContract.methods
       .balanceOf(holder)
@@ -4446,7 +4450,7 @@ async function getTokenHolderBalanceAll(holder, token_address, network) {
   } else if (network == 3) {
     let tokenContract = new window.bscWeb3.eth.Contract(
       window.TOKEN_ABI,
-      token_address
+      token_address,
     );
 
     return await tokenContract.methods
@@ -4467,7 +4471,7 @@ async function latestMint() {
   return await window.$.get("https://mint.dyp.finance/api/v1/latest/mint").then(
     (result) => {
       return parseInt(result.total);
-    }
+    },
   );
 }
 
@@ -4482,13 +4486,13 @@ async function getNft(id) {
   return await window.$.get(`https://mint.dyp.finance/metadata/${id}`).then(
     (result) => {
       return result;
-    }
+    },
   );
 }
 
 async function getLandNft(id) {
   return await window.$.get(
-    `https://mint.worldofdypians.com/metadata/${id}`
+    `https://mint.worldofdypians.com/metadata/${id}`,
   ).then((result) => {
     return result;
   });
@@ -4500,7 +4504,7 @@ async function myNftLandListContract(address) {
     window.config.landnft_address,
     {
       from: await getCoinbase(),
-    }
+    },
   );
   let getBalanceOf = await nft_contract.methods.balanceOf(address).call();
 
@@ -4508,7 +4512,7 @@ async function myNftLandListContract(address) {
 
   for (let i = 0; i < getBalanceOf; i++)
     nftList.push(
-      await nft_contract.methods.tokenOfOwnerByIndex(address, i).call()
+      await nft_contract.methods.tokenOfOwnerByIndex(address, i).call(),
     );
 
   return nftList;
@@ -4520,7 +4524,7 @@ async function myNftListContract(address) {
     window.config.nft_address,
     {
       from: await getCoinbase(),
-    }
+    },
   );
 
   let getBalanceOf = await nft_contract.methods.balanceOf(address).call();
@@ -4529,7 +4533,7 @@ async function myNftListContract(address) {
 
   for (let i = 0; i < getBalanceOf; i++)
     nftList.push(
-      await nft_contract.methods.tokenOfOwnerByIndex(address, i).call()
+      await nft_contract.methods.tokenOfOwnerByIndex(address, i).call(),
     );
 
   return nftList;
@@ -4537,7 +4541,7 @@ async function myNftListContract(address) {
 
 async function myNftList(address) {
   return await window.$.get(
-    `https://mint.dyp.finance/api/v1/my/${address}`
+    `https://mint.dyp.finance/api/v1/my/${address}`,
   ).then((result) => {
     return result;
   });
@@ -4632,6 +4636,215 @@ window.tokenCG = {
 //window.UNISWAP_PAIR_ABI = [{"inputs":[],"payable":false,"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"owner","type":"address"},{"indexed":true,"internalType":"address","name":"spender","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Approval","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"sender","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount0","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"amount1","type":"uint256"},{"indexed":true,"internalType":"address","name":"to","type":"address"}],"name":"Burn","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"sender","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount0","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"amount1","type":"uint256"}],"name":"Mint","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"sender","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount0In","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"amount1In","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"amount0Out","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"amount1Out","type":"uint256"},{"indexed":true,"internalType":"address","name":"to","type":"address"}],"name":"Swap","type":"event"},{"anonymous":false,"inputs":[{"indexed":false,"internalType":"uint112","name":"reserve0","type":"uint112"},{"indexed":false,"internalType":"uint112","name":"reserve1","type":"uint112"}],"name":"Sync","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"from","type":"address"},{"indexed":true,"internalType":"address","name":"to","type":"address"},{"indexed":false,"internalType":"uint256","name":"value","type":"uint256"}],"name":"Transfer","type":"event"},{"constant":true,"inputs":[],"name":"DOMAIN_SEPARATOR","outputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"MINIMUM_LIQUIDITY","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"PERMIT_TYPEHASH","outputs":[{"internalType":"bytes32","name":"","type":"bytes32"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"internalType":"address","name":"","type":"address"},{"internalType":"address","name":"","type":"address"}],"name":"allowance","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"value","type":"uint256"}],"name":"approve","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"balanceOf","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"to","type":"address"}],"name":"burn","outputs":[{"internalType":"uint256","name":"amount0","type":"uint256"},{"internalType":"uint256","name":"amount1","type":"uint256"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"internalType":"uint8","name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"factory","outputs":[{"internalType":"address","name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"getReserves","outputs":[{"internalType":"uint112","name":"_reserve0","type":"uint112"},{"internalType":"uint112","name":"_reserve1","type":"uint112"},{"internalType":"uint32","name":"_blockTimestampLast","type":"uint32"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"_token0","type":"address"},{"internalType":"address","name":"_token1","type":"address"}],"name":"initialize","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"kLast","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"to","type":"address"}],"name":"mint","outputs":[{"internalType":"uint256","name":"liquidity","type":"uint256"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"name","outputs":[{"internalType":"string","name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"nonces","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"owner","type":"address"},{"internalType":"address","name":"spender","type":"address"},{"internalType":"uint256","name":"value","type":"uint256"},{"internalType":"uint256","name":"deadline","type":"uint256"},{"internalType":"uint8","name":"v","type":"uint8"},{"internalType":"bytes32","name":"r","type":"bytes32"},{"internalType":"bytes32","name":"s","type":"bytes32"}],"name":"permit","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"price0CumulativeLast","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"price1CumulativeLast","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"to","type":"address"}],"name":"skim","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"internalType":"uint256","name":"amount0Out","type":"uint256"},{"internalType":"uint256","name":"amount1Out","type":"uint256"},{"internalType":"address","name":"to","type":"address"},{"internalType":"bytes","name":"data","type":"bytes"}],"name":"swap","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"internalType":"string","name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[],"name":"sync","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"token0","outputs":[{"internalType":"address","name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"token1","outputs":[{"internalType":"address","name":"","type":"address"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"value","type":"uint256"}],"name":"transfer","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"internalType":"address","name":"from","type":"address"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"value","type":"uint256"}],"name":"transferFrom","outputs":[{"internalType":"bool","name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"}]
 //window.LOCKER_ABI = [{"inputs":[],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"uint256","name":"id","type":"uint256"},{"indexed":true,"internalType":"address","name":"token","type":"address"},{"indexed":true,"internalType":"address","name":"recipient","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"unlockTimestamp","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"platformTokensLocked","type":"uint256"},{"indexed":false,"internalType":"bool","name":"claimed","type":"bool"}],"name":"Locked","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"previousOwner","type":"address"},{"indexed":true,"internalType":"address","name":"newOwner","type":"address"}],"name":"OwnershipTransferred","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"uint256","name":"id","type":"uint256"},{"indexed":true,"internalType":"address","name":"token","type":"address"},{"indexed":true,"internalType":"address","name":"recipient","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"unlockTimestamp","type":"uint256"},{"indexed":false,"internalType":"uint256","name":"platformTokensLocked","type":"uint256"},{"indexed":false,"internalType":"bool","name":"claimed","type":"bool"}],"name":"Unlocked","type":"event"},{"inputs":[],"name":"MAX_LOCK_DURATION","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"MINIMUM_BASETOKEN_PERCENT_ETH_X_100","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"ONE_HUNDRED_X_100","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"PLATFORM_TOKEN","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"SLIPPAGE_TOLERANCE_X_100","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"baseToken","type":"address"}],"name":"addBaseToken","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"claimEther","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"token","type":"address"}],"name":"claimExtraTokens","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"lockId","type":"uint256"}],"name":"claimUnlocked","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"pair","type":"address"},{"internalType":"address","name":"baseToken","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"uint256","name":"unlockTimestamp","type":"uint256"}],"name":"createLock","outputs":[],"stateMutability":"payable","type":"function"},{"inputs":[{"internalType":"uint256","name":"startIndex","type":"uint256"},{"internalType":"uint256","name":"endIndex","type":"uint256"}],"name":"getActiveLockIds","outputs":[{"internalType":"uint256[]","name":"result","type":"uint256[]"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"recipient","type":"address"},{"internalType":"uint256","name":"startIndex","type":"uint256"},{"internalType":"uint256","name":"endIndex","type":"uint256"}],"name":"getActiveLockIdsByRecipient","outputs":[{"internalType":"uint256[]","name":"result","type":"uint256[]"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"token","type":"address"},{"internalType":"uint256","name":"startIndex","type":"uint256"},{"internalType":"uint256","name":"endIndex","type":"uint256"}],"name":"getActiveLockIdsByToken","outputs":[{"internalType":"uint256[]","name":"result","type":"uint256[]"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getActiveLockIdsLength","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"recipient","type":"address"}],"name":"getActiveLockIdsLengthByRecipient","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"token","type":"address"}],"name":"getActiveLockIdsLengthByToken","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"startIndex","type":"uint256"},{"internalType":"uint256","name":"endIndex","type":"uint256"}],"name":"getBaseTokens","outputs":[{"internalType":"address[]","name":"result","type":"address[]"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getBaseTokensLength","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"startIndex","type":"uint256"},{"internalType":"uint256","name":"endIndex","type":"uint256"}],"name":"getInactiveLockIds","outputs":[{"internalType":"uint256[]","name":"result","type":"uint256[]"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"recipient","type":"address"},{"internalType":"uint256","name":"startIndex","type":"uint256"},{"internalType":"uint256","name":"endIndex","type":"uint256"}],"name":"getInactiveLockIdsByRecipient","outputs":[{"internalType":"uint256[]","name":"result","type":"uint256[]"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"token","type":"address"},{"internalType":"uint256","name":"startIndex","type":"uint256"},{"internalType":"uint256","name":"endIndex","type":"uint256"}],"name":"getInactiveLockIdsByToken","outputs":[{"internalType":"uint256[]","name":"result","type":"uint256[]"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getInactiveLockIdsLength","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"recipient","type":"address"}],"name":"getInactiveLockIdsLengthByRecipient","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"token","type":"address"}],"name":"getInactiveLockIdsLengthByToken","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"id","type":"uint256"}],"name":"getLockById","outputs":[{"internalType":"address","name":"token","type":"address"},{"internalType":"uint256","name":"unlockTimestamp","type":"uint256"},{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"address","name":"recipient","type":"address"},{"internalType":"bool","name":"claimed","type":"bool"},{"internalType":"uint256","name":"platformTokensLocked","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"startIndex","type":"uint256"},{"internalType":"uint256","name":"endIndex","type":"uint256"}],"name":"getLockedTokens","outputs":[{"internalType":"address[]","name":"tokens","type":"address[]"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"getLockedTokensLength","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256[]","name":"ids","type":"uint256[]"}],"name":"getLocksByIds","outputs":[{"internalType":"uint256[]","name":"_ids","type":"uint256[]"},{"internalType":"address[]","name":"tokens","type":"address[]"},{"internalType":"uint256[]","name":"unlockTimestamps","type":"uint256[]"},{"internalType":"uint256[]","name":"amounts","type":"uint256[]"},{"internalType":"address[]","name":"recipients","type":"address[]"},{"internalType":"bool[]","name":"claimeds","type":"bool[]"},{"internalType":"uint256[]","name":"platformTokensLockeds","type":"uint256[]"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"pair","type":"address"},{"internalType":"address","name":"baseToken","type":"address"},{"internalType":"uint256","name":"amount","type":"uint256"}],"name":"getMinLockCreationFeeInWei","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address[]","name":"tokens","type":"address[]"}],"name":"getTokensBalances","outputs":[{"internalType":"uint256[]","name":"balances","type":"uint256[]"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"locks","outputs":[{"internalType":"address","name":"token","type":"address"},{"internalType":"uint256","name":"unlockTimestamp","type":"uint256"},{"internalType":"uint256","name":"amount","type":"uint256"},{"internalType":"address","name":"recipient","type":"address"},{"internalType":"bool","name":"claimed","type":"bool"},{"internalType":"uint256","name":"platformTokensLocked","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"locksLength","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"owner","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"baseToken","type":"address"}],"name":"removeBaseToken","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"renounceOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"tokenBalances","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"newOwner","type":"address"}],"name":"transferOwnership","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"uniswapRouterV2","outputs":[{"internalType":"contract IUniswapV2Router02","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"stateMutability":"payable","type":"receive"}]
 
+window.MIGRATIONBNB_ABI = [
+  { inputs: [], stateMutability: "nonpayable", type: "constructor" },
+  {
+    anonymous: false,
+    inputs: [
+      { indexed: true, internalType: "address", name: "user", type: "address" },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "token",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
+      },
+      {
+        indexed: true,
+        internalType: "uint256",
+        name: "chainId",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "timestamp",
+        type: "uint256",
+      },
+    ],
+    name: "Deposited",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "token",
+        type: "address",
+      },
+      { indexed: true, internalType: "address", name: "to", type: "address" },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "amount",
+        type: "uint256",
+      },
+    ],
+    name: "OwnerERC20Transfer",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "previousOwner",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "newOwner",
+        type: "address",
+      },
+    ],
+    name: "OwnershipTransferred",
+    type: "event",
+  },
+  { stateMutability: "payable", type: "fallback" },
+  {
+    inputs: [],
+    name: "ALLOWED_TOKEN",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "token", type: "address" },
+      { internalType: "uint256", name: "amount", type: "uint256" },
+      { internalType: "uint256", name: "chainId", type: "uint256" },
+    ],
+    name: "deposit",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "user", type: "address" }],
+    name: "depositsCount",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "user", type: "address" },
+      { internalType: "uint256", name: "index", type: "uint256" },
+    ],
+    name: "getDeposit",
+    outputs: [
+      { internalType: "address", name: "token", type: "address" },
+      { internalType: "uint256", name: "amount", type: "uint256" },
+      { internalType: "uint256", name: "chainId", type: "uint256" },
+      { internalType: "uint256", name: "timestamp", type: "uint256" },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "user", type: "address" },
+      { internalType: "uint256", name: "start", type: "uint256" },
+      { internalType: "uint256", name: "limit", type: "uint256" },
+    ],
+    name: "getDeposits",
+    outputs: [
+      {
+        components: [
+          { internalType: "address", name: "token", type: "address" },
+          { internalType: "uint256", name: "amount", type: "uint256" },
+          { internalType: "uint256", name: "chainId", type: "uint256" },
+          { internalType: "uint256", name: "timestamp", type: "uint256" },
+        ],
+        internalType: "struct MigrationVault.Deposit[]",
+        name: "",
+        type: "tuple[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "owner",
+    outputs: [{ internalType: "address", name: "", type: "address" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "token", type: "address" },
+      { internalType: "address", name: "to", type: "address" },
+      { internalType: "uint256", name: "amount", type: "uint256" },
+    ],
+    name: "ownerTransferERC20",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "", type: "address" }],
+    name: "totalDeposited",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "", type: "address" },
+      { internalType: "uint256", name: "", type: "uint256" },
+    ],
+    name: "totalDepositedByChain",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "", type: "address" },
+      { internalType: "address", name: "", type: "address" },
+    ],
+    name: "totalDepositedByToken",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      { internalType: "address", name: "", type: "address" },
+      { internalType: "address", name: "", type: "address" },
+      { internalType: "uint256", name: "", type: "uint256" },
+    ],
+    name: "totalDepositedByTokenAndChain",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "newOwner", type: "address" }],
+    name: "transferOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [{ internalType: "address", name: "token", type: "address" }],
+    name: "vaultBalance",
+    outputs: [{ internalType: "uint256", name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  { stateMutability: "payable", type: "receive" },
+];
 window.BASIC_BUNDLE_ABI = [
   { inputs: [], stateMutability: "nonpayable", type: "constructor" },
   {
@@ -18779,7 +18992,6 @@ window.SUBSCRIPTION_NEWBNB_ABI = [
     type: "function",
   },
 ];
-
 
 window.SUBSCRIPTION_NEWBNBNFT_ABI = [
   {
@@ -39725,43 +39937,43 @@ window.token_dai = new TOKEN("TOKEN_DAI");
 
 window.vault_weth = new VAULT_NEW(
   window.config.vault_weth_address,
-  window.config.token_weth_address
+  window.config.token_weth_address,
 );
 window.vault_wethnew = new VAULT_NEW(
   window.config.vault_wethnew_address,
-  window.config.token_weth_address
+  window.config.token_weth_address,
 );
 window.vault_wbtc = new VAULT_NEW(
   window.config.vault_wbtc_address,
-  window.config.token_wbtc_address
+  window.config.token_wbtc_address,
 );
 window.vault_wbtcnew = new VAULT_NEW(
   window.config.vault_wbtcnew_address,
-  window.config.token_wbtc_address
+  window.config.token_wbtc_address,
 );
 window.vault_usdt = new VAULT_NEW(
   window.config.vault_usdt_address,
-  window.config.token_usdt_address
+  window.config.token_usdt_address,
 );
 window.vault_usdtnew = new VAULT_NEW(
   window.config.vault_usdtnew_address,
-  window.config.token_usdt_address
+  window.config.token_usdt_address,
 );
 window.vault_usdc = new VAULT_NEW(
   window.config.vault_usdc_address,
-  window.config.token_usdc_address
+  window.config.token_usdc_address,
 );
 window.vault_usdcnew = new VAULT_NEW(
   window.config.vault_usdcnew_address,
-  window.config.token_usdc_address
+  window.config.token_usdc_address,
 );
 window.vault_dai = new VAULT_NEW(
   window.config.vault_dai_address,
-  window.config.token_dai_address
+  window.config.token_dai_address,
 );
 window.vault_dainew = new VAULT_NEW(
   window.config.vault_dainew_address,
-  window.config.token_dai_address
+  window.config.token_dai_address,
 );
 
 window.farming_new_1 = new STAKING("FARMING_NEW_1");
@@ -39958,14 +40170,14 @@ function wait(ms) {
     setTimeout(() => {
       r(true);
       console.log("Wait over!");
-    }, ms)
+    }, ms),
   );
 }
 
 function getPrice(coingecko_id = "ethereum", vs_currency = "usd") {
   return new Promise((resolve, reject) => {
     window.$.get(
-      `https://pro-api.coingecko.com/api/v3/simple/price?ids=${coingecko_id}&vs_currencies=${vs_currency}&x_cg_pro_api_key=CG-4cvtCNDCA4oLfmxagFJ84qev`
+      `https://pro-api.coingecko.com/api/v3/simple/price?ids=${coingecko_id}&vs_currencies=${vs_currency}&x_cg_pro_api_key=CG-4cvtCNDCA4oLfmxagFJ84qev`,
     )
       .then((result) => {
         resolve(result[coingecko_id][vs_currency]);
@@ -40261,7 +40473,7 @@ async function get_apy_and_tvl(usd_values) {
 
   let number_of_holders = await get_number_of_stakers(addrs);
   addrs.forEach(
-    (addr, i) => (number_of_holders_by_address[addr] = number_of_holders[i])
+    (addr, i) => (number_of_holders_by_address[addr] = number_of_holders[i]),
   );
 
   lp_ids.forEach((lp_id) => {
@@ -40419,262 +40631,476 @@ Object.keys(window.config)
       k.startsWith("buyback_stakingbsc1_1") ||
       k.startsWith("buyback_stakingbsc1_2") ||
       k.startsWith("constant_staking_newi3") ||
-      (k.startsWith("constant_stakingold_") && k.endsWith("_address"))
+      (k.startsWith("constant_stakingold_") && k.endsWith("_address")),
   )
   .forEach((k) => {
     window[k.replace("_address", "_ABI").toUpperCase()] = k.startsWith("token_")
       ? window.TOKEN_ABI
       : k.startsWith("reward_token_idyp")
-      ? window.TOKEN_ABI
-      : k.startsWith("reward_token_dypius_eth")
-      ? window.TOKEN_ABI
-      : k.startsWith("reward_token_dypius_base")
-      ? window.TOKEN_ABI
-      : k.startsWith("reward_token_dypiusv2_base")
-      ? window.TOKEN_ABI
-      : k.startsWith("reward_token_dypius_bsc")
-      ? window.TOKEN_ABI
-      : k.startsWith("reward_token_wbnb")
-      ? window.TOKEN_ABI
-      : k.startsWith("reward_token_wavax")
-      ? window.TOKEN_ABI
-      : k.startsWith("token_dyp_new")
-      ? window.TOKEN_ABI
-      : k.startsWith("token_dypius_new")
-      ? window.TOKEN_ABI
-      : k.startsWith("token_dypius_new_avax")
-      ? window.TOKEN_ABI
-      : k.startsWith("token_dypius_new_bsc")
-      ? window.TOKEN_ABI
-      : k.startsWith("token_dypius_new_opbnb")
-      ? window.TOKEN_ABI
-      : k.startsWith("token_dyp_new_bsc")
-      ? window.TOKENBSC_ABI
-      : k.startsWith("buyback_stakingbsc1_1")
-      ? window.BUYBACK_STAKINGBSC1_1_ABI
-      : k.startsWith("buyback_stakingbsc1_2")
-      ? window.BUYBACK_STAKINGBSC1_2_ABI
-      : k.startsWith("constant_staking_newi3")
-      ? window.CONSTANT_STAKING_OLD_ABI
-      : k.startsWith("stakingavax_")
-      ? window.STAKINGAVAX_ABI
-      : k.startsWith("reward_token_dyps")
-      ? window.TOKEN_ABI
-      : k.startsWith("token_dyp_eth")
-      ? window.TOKEN_ABI
-      : k.startsWith("token_idyp_eth")
-      ? window.TOKEN_ABI
-      : k.startsWith("token_dyp_bsc")
-      ? window.TOKEN_ABI
-      : k.startsWith("token_dyp_bscavaxbsc")
-      ? window.TOKEN_ABI
-      : k.startsWith("token_old_eth")
-      ? window.TOKEN_ABI
-      : k.startsWith("token_old_bsc")
-      ? window.TOKEN_ABI
-      : k.startsWith("token_old_avax")
-      ? window.TOKEN_ABI
-      : k.startsWith("token_dyp_bscavax")
-      ? window.TOKEN_ABI
-      : k.startsWith("token_idyp_bsc")
-      ? window.TOKEN_ABI
-      : k.startsWith("token_dyp_bscbsc")
-      ? window.TOKEN_ABI
-      : k.startsWith("token_idyp_bscbsc")
-      ? window.TOKEN_ABI
-      : k.startsWith("token_dyp_bsceth")
-      ? window.TOKEN_ABI
-      : k.startsWith("token_idyp_bsceth")
-      ? window.TOKEN_ABI
-      : k.startsWith("reward_token_dypsavax")
-      ? window.TOKENAVAX_ABI
-      : k.startsWith("reward_token_dypsbsc")
-      ? window.TOKENBSC_ABI
-      : k.startsWith("farmweth")
-      ? window.TOKEN_ABI
-      : k.includes("weth") && !k.includes("wethavax") && !k.includes("wethbsc")
-      ? window.VAULT_ABI
-      : k.includes("wethavax")
-      ? window.TOKENAVAX_ABI
-      : k.includes("wethbsc")
-      ? window.TOKENBSC_ABI
-      : k.includes("reward_token_daiavax")
-      ? window.TOKENAVAX_ABI
-      : k.includes("reward_token_daieth")
-      ? window.TOKEN_ABI
-      : k.includes("reward_token_daibsc")
-      ? window.TOKENBSC_ABI
-      : k.includes("reward_tokenavax")
-      ? window.TOKENAVAX_ABI
-      : k.includes("reward_tokenwbnb")
-      ? window.TOKENBSC_ABI
-      : k.includes("farming_newavax_1")
-      ? window.FARMING_NEW_ABI
-      : k.includes("farming_newavax_2")
-      ? window.FARMING_NEW_ABI
-      : k.includes("farming_newavax_3")
-      ? window.FARMING_NEW_ABI
-      : k.includes("farming_newavax_4")
-      ? window.FARMING_NEW_ABI
-      : k.includes("farming_newavax_5")
-      ? window.FARMING_NEW_ABI
-      : k.includes("farming_newbsc_1")
-      ? window.FARMING_NEWBSC_ABI
-      : k.includes("farming_activebsc_1")
-      ? window.FARMING_ACTIVEBSC_ABI
-      : k.includes("farming_activeavax_1")
-      ? window.FARMING_ACTIVEAVAX_ABI
-      : k.includes("farming_newbsc_2")
-      ? window.FARMING_NEWBSC_ABI
-      : k.includes("farming_newbsc_3")
-      ? window.FARMING_NEWBSC_ABI
-      : k.includes("farming_newbsc_4")
-      ? window.FARMING_NEWBSC_ABI
-      : k.includes("farming_newbsc_5")
-      ? window.FARMING_NEWBSC_ABI
-      : k.startsWith("constant_staking_")
-      ? window.CONSTANT_STAKING_ABI
-      : k.startsWith("constant_stakingnew_")
-      ? window.CONSTANT_STAKINGNEW_ABI
-      : k.startsWith("buyback_staking1_1_")
-      ? window.BUYBACK_STAKING1_1_ABI
-      : k.startsWith("buyback_stakingavax1_1_")
-      ? window.BUYBACK_STAKINGAVAX1_1_ABI
-      : k.startsWith("buyback_stakingavax1_2_")
-      ? window.BUYBACK_STAKINGAVAX1_2_ABI
-      : k.startsWith("constant_stakingnew_newavax3")
-      ? window.CONSTANT_STAKINGAVAX_ABI
-      : k.startsWith("constant_stakingnew_newavax4")
-      ? window.CONSTANT_STAKINGAVAX_ABI
-      : k.startsWith("buyback_staking1_2_")
-      ? window.BUYBACK_STAKING1_2_ABI
-      : k.startsWith("constant_stakingidypavax_3")
-      ? window.CONSTANT_STAKING_IDYP_ABI
-      : k.startsWith("constant_stakingnew_new1")
-      ? window.CONSTANT_STAKINGNEW_ABI
-      : k.startsWith("constant_stakingidyp_6")
-      ? window.CONSTANT_STAKING_IDYP_ABI
-      : k.startsWith("constant_stakingidyp_7")
-      ? window.CONSTANT_STAKING_IDYP_ABI
-      : k.startsWith("constant_stakingidyp_8")
-      ? window.CONSTANT_STAKING_IDYP_ABI
-      : k.startsWith("constant_stakingidyp_9")
-      ? window.CONSTANT_STAKING_IDYP_ABI
-      : k.startsWith("constant_stakingidyp_5")
-      ? window.CONSTANT_STAKING_IDYP_ABI
-      : k.startsWith("constant_stakingidyp_2")
-      ? window.CONSTANT_STAKING_IDYP_ABI
-      : k.startsWith("constant_stakingidyp_1")
-      ? window.CONSTANT_STAKING_IDYP_ABI
-      : k.startsWith("constant_stakingnew_new2")
-      ? window.CONSTANT_STAKINGNEW_ABI
-      : k.startsWith("constant_staking_dypius_eth1")
-      ? window.CONSTANT_STAKING_DYPIUS_ABI
-      : k.startsWith("constant_staking_dypius_phase2_eth1")
-      ? window.CONSTANT_STAKING_DYPIUS_ABI
-      : k.startsWith("constant_staking_dypius_base1")
-      ? window.CONSTANT_STAKING_DYPIUS_ABI
-      : k.startsWith("constant_staking_dypius_phase2_eth2")
-      ? window.CONSTANT_STAKING_DYPIUS_ABI
-      : k.startsWith("constant_staking_dypius_phase2_eth3")
-      ? window.CONSTANT_STAKING_DYPIUS_ABI
-      : k.startsWith("constant_staking_dypius_phase2_eth4")
-      ? window.CONSTANT_STAKING_DYPIUS_ABI
-      : k.startsWith("constant_staking_dypius_phase2_eth5")
-      ? window.CONSTANT_STAKING_DYPIUS_ABI
-      : k.startsWith("constant_staking_dypius_phase2_eth6")
-      ? window.CONSTANT_STAKING_DYPIUS_ABI
-      : k.startsWith("constant_staking_dypius_phase2_eth7")
-      ? window.CONSTANT_STAKING_DYPIUS_ABI
-      : k.startsWith("constant_stakingidypavax_4")
-      ? window.CONSTANT_STAKING_IDYP_ABI
-      : k.startsWith("constant_stakingidypavax_40")
-      ? window.CONSTANT_STAKING_IDYP_ABI
-      : k.startsWith("constant_stakingidypavax_50")
-      ? window.CONSTANT_STAKING_IDYP_ABI
-      : k.startsWith("constant_staking_dypius_avax1")
-      ? window.CONSTANT_STAKING_DYPIUS_ABI
-      : k.startsWith("constant_stakingnew_newavax1")
-      ? window.CONSTANT_STAKINGNEW_ABI
-      : k.startsWith("constant_stakingnewbsc_new3")
-      ? window.CONSTANT_STAKINGNEW_ABI
-      : k.startsWith("constant_stakingnewbsc_new4")
-      ? window.CONSTANT_STAKINGNEW_ABI
-      : k.startsWith("constant_stakingnewbsc_new5")
-      ? window.CONSTANT_STAKINGBSC_NEW_ABI
-      : k.startsWith("constant_stakingnewbsc_new6")
-      ? window.CONSTANT_STAKINGBSC_NEW_ABI
-      : k.startsWith("constant_stakingnewbsc_new7")
-      ? window.CONSTANT_STAKINGBSC_NEW_ABI
-      : k.startsWith("constant_stakingnewbsc_new8")
-      ? window.CONSTANT_STAKINGBSC_NEW_ABI
-      : k.startsWith("constant_stakingnewbsc_new9")
-      ? window.CONSTANT_STAKINGBSC_NEW_ABI
-      : k.startsWith("constant_stakingbsc_new10")
-      ? window.CONSTANT_STAKING_OLD_ABI
-      : k.startsWith("constant_stakingbsc_new11")
-      ? window.CONSTANT_STAKING_OLD_ABI
-      : k.startsWith("constant_stakingbsc_new111")
-      ? window.CONSTANT_STAKING_OLD_ABI
-      : k.startsWith("constant_stakingbscother_new1")
-      ? window.CONSTANT_STAKINGBSCOTHER_NEW_ABI
-      : k.startsWith("constant_stakingold_130")
-      ? window.CONSTANT_STAKING_OLD_ABI
-      : k.startsWith("constant_stakingold_140")
-      ? window.CONSTANT_STAKING_OLD_ABI
-      : k.startsWith("constant_stakingbsc_new12")
-      ? window.CONSTANT_STAKINGBSC_NEW_ABI
-      : k.startsWith("constant_stakingbsc_new13")
-      ? window.CONSTANT_STAKINGBSC_NEW_ABI
-      : k.startsWith("constant_stakingbsc_new14")
-      ? window.CONSTANT_STAKING_OLD_ABI
-      : k.startsWith("constant_staking_dypius_bsc1")
-      ? window.CONSTANT_STAKING_DYPIUS_ABI
-      : k.startsWith("constant_staking_dypius_bscother1")
-      ? window.CONSTANT_STAKING_DEFI_ABI
-      : k.startsWith("constant_staking_dypius_ethother1")
-      ? window.CONSTANT_STAKING_DEFI_ABI
-      : k.startsWith("constant_staking_dypius_avaxother1")
-      ? window.CONSTANT_STAKING_DEFI_ABI
-      : k.startsWith("constant_stakingnew_newavax2")
-      ? window.CONSTANT_STAKINGNEW_ABI
-      : k.startsWith("constant_stakingdaieth")
-      ? window.CONSTANT_STAKINGDAI_ABI
-      : k.startsWith("constant_stakingdaiavax")
-      ? window.CONSTANT_STAKING_DAI_ABI
-      : k.startsWith("constant_stakingdaibsc")
-      ? window.CONSTANT_STAKING_DAI_ABI
-      : k.startsWith("constant_stakingotherdaibsc")
-      ? window.CONSTANT_STAKING_OTHERDAIBSC_ABI
-      : k.startsWith("constant_stakingidypavax_1")
-      ? window.CONSTANT_STAKING_IDYP_ABI
-      : k.startsWith("constant_stakingidypavax_2")
-      ? window.CONSTANT_STAKING_IDYP_ABI
-      : k.startsWith("constant_stakingidypavax_5")
-      ? window.CONSTANT_STAKING_IDYP_ABI
-      : k.startsWith("constant_stakingidypavax_7")
-      ? window.CONSTANT_STAKING_IDYP_ABI
-      : k.startsWith("constant_stakingidypavax_6")
-      ? window.CONSTANT_STAKING_IDYP_ABI
-      : k.startsWith("farming_new_")
-      ? window.FARMING_NEW_ABI
-      : k.startsWith("constant_stakingdai_")
-      ? window.CONSTANT_STAKING_DAI_ABI
-      : k.startsWith("constant_stakingold_")
-      ? window.CONSTANT_STAKING_OLD_ABI
-      : k.startsWith("new_governance")
-      ? window.NEW_GOVERNANCE_ABI
-      : k.startsWith("new_governanceavax")
-      ? window.NEW_GOVERNANCEAVAX_ABI
-      : k.startsWith("new_governancebsc")
-      ? window.NEW_GOVERNANCEBSC_ABI
-      : k.startsWith("new_governancedypv2")
-      ? window.NEW_GOVERNANCE_ABI
-      : k.startsWith("new_governanceavaxdypv2")
-      ? window.NEW_GOVERNANCEAVAX_ABI
-      : k.startsWith("new_governancebscdypv2")
-      ? window.NEW_GOVERNANCEBSC_ABI
-      : window.STAKING_ABI;
+        ? window.TOKEN_ABI
+        : k.startsWith("reward_token_dypius_eth")
+          ? window.TOKEN_ABI
+          : k.startsWith("reward_token_dypius_base")
+            ? window.TOKEN_ABI
+            : k.startsWith("reward_token_dypiusv2_base")
+              ? window.TOKEN_ABI
+              : k.startsWith("reward_token_dypius_bsc")
+                ? window.TOKEN_ABI
+                : k.startsWith("reward_token_wbnb")
+                  ? window.TOKEN_ABI
+                  : k.startsWith("reward_token_wavax")
+                    ? window.TOKEN_ABI
+                    : k.startsWith("token_dyp_new")
+                      ? window.TOKEN_ABI
+                      : k.startsWith("token_dypius_new")
+                        ? window.TOKEN_ABI
+                        : k.startsWith("token_dypius_new_avax")
+                          ? window.TOKEN_ABI
+                          : k.startsWith("token_dypius_new_bsc")
+                            ? window.TOKEN_ABI
+                            : k.startsWith("token_dypius_new_opbnb")
+                              ? window.TOKEN_ABI
+                              : k.startsWith("token_dyp_new_bsc")
+                                ? window.TOKENBSC_ABI
+                                : k.startsWith("buyback_stakingbsc1_1")
+                                  ? window.BUYBACK_STAKINGBSC1_1_ABI
+                                  : k.startsWith("buyback_stakingbsc1_2")
+                                    ? window.BUYBACK_STAKINGBSC1_2_ABI
+                                    : k.startsWith("constant_staking_newi3")
+                                      ? window.CONSTANT_STAKING_OLD_ABI
+                                      : k.startsWith("stakingavax_")
+                                        ? window.STAKINGAVAX_ABI
+                                        : k.startsWith("reward_token_dyps")
+                                          ? window.TOKEN_ABI
+                                          : k.startsWith("token_dyp_eth")
+                                            ? window.TOKEN_ABI
+                                            : k.startsWith("token_idyp_eth")
+                                              ? window.TOKEN_ABI
+                                              : k.startsWith("token_dyp_bsc")
+                                                ? window.TOKEN_ABI
+                                                : k.startsWith(
+                                                      "token_dyp_bscavaxbsc",
+                                                    )
+                                                  ? window.TOKEN_ABI
+                                                  : k.startsWith(
+                                                        "token_old_eth",
+                                                      )
+                                                    ? window.TOKEN_ABI
+                                                    : k.startsWith(
+                                                          "token_old_bsc",
+                                                        )
+                                                      ? window.TOKEN_ABI
+                                                      : k.startsWith(
+                                                            "token_old_avax",
+                                                          )
+                                                        ? window.TOKEN_ABI
+                                                        : k.startsWith(
+                                                              "token_dyp_bscavax",
+                                                            )
+                                                          ? window.TOKEN_ABI
+                                                          : k.startsWith(
+                                                                "token_idyp_bsc",
+                                                              )
+                                                            ? window.TOKEN_ABI
+                                                            : k.startsWith(
+                                                                  "token_dyp_bscbsc",
+                                                                )
+                                                              ? window.TOKEN_ABI
+                                                              : k.startsWith(
+                                                                    "token_idyp_bscbsc",
+                                                                  )
+                                                                ? window.TOKEN_ABI
+                                                                : k.startsWith(
+                                                                      "token_dyp_bsceth",
+                                                                    )
+                                                                  ? window.TOKEN_ABI
+                                                                  : k.startsWith(
+                                                                        "token_idyp_bsceth",
+                                                                      )
+                                                                    ? window.TOKEN_ABI
+                                                                    : k.startsWith(
+                                                                          "reward_token_dypsavax",
+                                                                        )
+                                                                      ? window.TOKENAVAX_ABI
+                                                                      : k.startsWith(
+                                                                            "reward_token_dypsbsc",
+                                                                          )
+                                                                        ? window.TOKENBSC_ABI
+                                                                        : k.startsWith(
+                                                                              "farmweth",
+                                                                            )
+                                                                          ? window.TOKEN_ABI
+                                                                          : k.includes(
+                                                                                "weth",
+                                                                              ) &&
+                                                                              !k.includes(
+                                                                                "wethavax",
+                                                                              ) &&
+                                                                              !k.includes(
+                                                                                "wethbsc",
+                                                                              )
+                                                                            ? window.VAULT_ABI
+                                                                            : k.includes(
+                                                                                  "wethavax",
+                                                                                )
+                                                                              ? window.TOKENAVAX_ABI
+                                                                              : k.includes(
+                                                                                    "wethbsc",
+                                                                                  )
+                                                                                ? window.TOKENBSC_ABI
+                                                                                : k.includes(
+                                                                                      "reward_token_daiavax",
+                                                                                    )
+                                                                                  ? window.TOKENAVAX_ABI
+                                                                                  : k.includes(
+                                                                                        "reward_token_daieth",
+                                                                                      )
+                                                                                    ? window.TOKEN_ABI
+                                                                                    : k.includes(
+                                                                                          "reward_token_daibsc",
+                                                                                        )
+                                                                                      ? window.TOKENBSC_ABI
+                                                                                      : k.includes(
+                                                                                            "reward_tokenavax",
+                                                                                          )
+                                                                                        ? window.TOKENAVAX_ABI
+                                                                                        : k.includes(
+                                                                                              "reward_tokenwbnb",
+                                                                                            )
+                                                                                          ? window.TOKENBSC_ABI
+                                                                                          : k.includes(
+                                                                                                "farming_newavax_1",
+                                                                                              )
+                                                                                            ? window.FARMING_NEW_ABI
+                                                                                            : k.includes(
+                                                                                                  "farming_newavax_2",
+                                                                                                )
+                                                                                              ? window.FARMING_NEW_ABI
+                                                                                              : k.includes(
+                                                                                                    "farming_newavax_3",
+                                                                                                  )
+                                                                                                ? window.FARMING_NEW_ABI
+                                                                                                : k.includes(
+                                                                                                      "farming_newavax_4",
+                                                                                                    )
+                                                                                                  ? window.FARMING_NEW_ABI
+                                                                                                  : k.includes(
+                                                                                                        "farming_newavax_5",
+                                                                                                      )
+                                                                                                    ? window.FARMING_NEW_ABI
+                                                                                                    : k.includes(
+                                                                                                          "farming_newbsc_1",
+                                                                                                        )
+                                                                                                      ? window.FARMING_NEWBSC_ABI
+                                                                                                      : k.includes(
+                                                                                                            "farming_activebsc_1",
+                                                                                                          )
+                                                                                                        ? window.FARMING_ACTIVEBSC_ABI
+                                                                                                        : k.includes(
+                                                                                                              "farming_activeavax_1",
+                                                                                                            )
+                                                                                                          ? window.FARMING_ACTIVEAVAX_ABI
+                                                                                                          : k.includes(
+                                                                                                                "farming_newbsc_2",
+                                                                                                              )
+                                                                                                            ? window.FARMING_NEWBSC_ABI
+                                                                                                            : k.includes(
+                                                                                                                  "farming_newbsc_3",
+                                                                                                                )
+                                                                                                              ? window.FARMING_NEWBSC_ABI
+                                                                                                              : k.includes(
+                                                                                                                    "farming_newbsc_4",
+                                                                                                                  )
+                                                                                                                ? window.FARMING_NEWBSC_ABI
+                                                                                                                : k.includes(
+                                                                                                                      "farming_newbsc_5",
+                                                                                                                    )
+                                                                                                                  ? window.FARMING_NEWBSC_ABI
+                                                                                                                  : k.startsWith(
+                                                                                                                        "constant_staking_",
+                                                                                                                      )
+                                                                                                                    ? window.CONSTANT_STAKING_ABI
+                                                                                                                    : k.startsWith(
+                                                                                                                          "constant_stakingnew_",
+                                                                                                                        )
+                                                                                                                      ? window.CONSTANT_STAKINGNEW_ABI
+                                                                                                                      : k.startsWith(
+                                                                                                                            "buyback_staking1_1_",
+                                                                                                                          )
+                                                                                                                        ? window.BUYBACK_STAKING1_1_ABI
+                                                                                                                        : k.startsWith(
+                                                                                                                              "buyback_stakingavax1_1_",
+                                                                                                                            )
+                                                                                                                          ? window.BUYBACK_STAKINGAVAX1_1_ABI
+                                                                                                                          : k.startsWith(
+                                                                                                                                "buyback_stakingavax1_2_",
+                                                                                                                              )
+                                                                                                                            ? window.BUYBACK_STAKINGAVAX1_2_ABI
+                                                                                                                            : k.startsWith(
+                                                                                                                                  "constant_stakingnew_newavax3",
+                                                                                                                                )
+                                                                                                                              ? window.CONSTANT_STAKINGAVAX_ABI
+                                                                                                                              : k.startsWith(
+                                                                                                                                    "constant_stakingnew_newavax4",
+                                                                                                                                  )
+                                                                                                                                ? window.CONSTANT_STAKINGAVAX_ABI
+                                                                                                                                : k.startsWith(
+                                                                                                                                      "buyback_staking1_2_",
+                                                                                                                                    )
+                                                                                                                                  ? window.BUYBACK_STAKING1_2_ABI
+                                                                                                                                  : k.startsWith(
+                                                                                                                                        "constant_stakingidypavax_3",
+                                                                                                                                      )
+                                                                                                                                    ? window.CONSTANT_STAKING_IDYP_ABI
+                                                                                                                                    : k.startsWith(
+                                                                                                                                          "constant_stakingnew_new1",
+                                                                                                                                        )
+                                                                                                                                      ? window.CONSTANT_STAKINGNEW_ABI
+                                                                                                                                      : k.startsWith(
+                                                                                                                                            "constant_stakingidyp_6",
+                                                                                                                                          )
+                                                                                                                                        ? window.CONSTANT_STAKING_IDYP_ABI
+                                                                                                                                        : k.startsWith(
+                                                                                                                                              "constant_stakingidyp_7",
+                                                                                                                                            )
+                                                                                                                                          ? window.CONSTANT_STAKING_IDYP_ABI
+                                                                                                                                          : k.startsWith(
+                                                                                                                                                "constant_stakingidyp_8",
+                                                                                                                                              )
+                                                                                                                                            ? window.CONSTANT_STAKING_IDYP_ABI
+                                                                                                                                            : k.startsWith(
+                                                                                                                                                  "constant_stakingidyp_9",
+                                                                                                                                                )
+                                                                                                                                              ? window.CONSTANT_STAKING_IDYP_ABI
+                                                                                                                                              : k.startsWith(
+                                                                                                                                                    "constant_stakingidyp_5",
+                                                                                                                                                  )
+                                                                                                                                                ? window.CONSTANT_STAKING_IDYP_ABI
+                                                                                                                                                : k.startsWith(
+                                                                                                                                                      "constant_stakingidyp_2",
+                                                                                                                                                    )
+                                                                                                                                                  ? window.CONSTANT_STAKING_IDYP_ABI
+                                                                                                                                                  : k.startsWith(
+                                                                                                                                                        "constant_stakingidyp_1",
+                                                                                                                                                      )
+                                                                                                                                                    ? window.CONSTANT_STAKING_IDYP_ABI
+                                                                                                                                                    : k.startsWith(
+                                                                                                                                                          "constant_stakingnew_new2",
+                                                                                                                                                        )
+                                                                                                                                                      ? window.CONSTANT_STAKINGNEW_ABI
+                                                                                                                                                      : k.startsWith(
+                                                                                                                                                            "constant_staking_dypius_eth1",
+                                                                                                                                                          )
+                                                                                                                                                        ? window.CONSTANT_STAKING_DYPIUS_ABI
+                                                                                                                                                        : k.startsWith(
+                                                                                                                                                              "constant_staking_dypius_phase2_eth1",
+                                                                                                                                                            )
+                                                                                                                                                          ? window.CONSTANT_STAKING_DYPIUS_ABI
+                                                                                                                                                          : k.startsWith(
+                                                                                                                                                                "constant_staking_dypius_base1",
+                                                                                                                                                              )
+                                                                                                                                                            ? window.CONSTANT_STAKING_DYPIUS_ABI
+                                                                                                                                                            : k.startsWith(
+                                                                                                                                                                  "constant_staking_dypius_phase2_eth2",
+                                                                                                                                                                )
+                                                                                                                                                              ? window.CONSTANT_STAKING_DYPIUS_ABI
+                                                                                                                                                              : k.startsWith(
+                                                                                                                                                                    "constant_staking_dypius_phase2_eth3",
+                                                                                                                                                                  )
+                                                                                                                                                                ? window.CONSTANT_STAKING_DYPIUS_ABI
+                                                                                                                                                                : k.startsWith(
+                                                                                                                                                                      "constant_staking_dypius_phase2_eth4",
+                                                                                                                                                                    )
+                                                                                                                                                                  ? window.CONSTANT_STAKING_DYPIUS_ABI
+                                                                                                                                                                  : k.startsWith(
+                                                                                                                                                                        "constant_staking_dypius_phase2_eth5",
+                                                                                                                                                                      )
+                                                                                                                                                                    ? window.CONSTANT_STAKING_DYPIUS_ABI
+                                                                                                                                                                    : k.startsWith(
+                                                                                                                                                                          "constant_staking_dypius_phase2_eth6",
+                                                                                                                                                                        )
+                                                                                                                                                                      ? window.CONSTANT_STAKING_DYPIUS_ABI
+                                                                                                                                                                      : k.startsWith(
+                                                                                                                                                                            "constant_staking_dypius_phase2_eth7",
+                                                                                                                                                                          )
+                                                                                                                                                                        ? window.CONSTANT_STAKING_DYPIUS_ABI
+                                                                                                                                                                        : k.startsWith(
+                                                                                                                                                                              "constant_stakingidypavax_4",
+                                                                                                                                                                            )
+                                                                                                                                                                          ? window.CONSTANT_STAKING_IDYP_ABI
+                                                                                                                                                                          : k.startsWith(
+                                                                                                                                                                                "constant_stakingidypavax_40",
+                                                                                                                                                                              )
+                                                                                                                                                                            ? window.CONSTANT_STAKING_IDYP_ABI
+                                                                                                                                                                            : k.startsWith(
+                                                                                                                                                                                  "constant_stakingidypavax_50",
+                                                                                                                                                                                )
+                                                                                                                                                                              ? window.CONSTANT_STAKING_IDYP_ABI
+                                                                                                                                                                              : k.startsWith(
+                                                                                                                                                                                    "constant_staking_dypius_avax1",
+                                                                                                                                                                                  )
+                                                                                                                                                                                ? window.CONSTANT_STAKING_DYPIUS_ABI
+                                                                                                                                                                                : k.startsWith(
+                                                                                                                                                                                      "constant_stakingnew_newavax1",
+                                                                                                                                                                                    )
+                                                                                                                                                                                  ? window.CONSTANT_STAKINGNEW_ABI
+                                                                                                                                                                                  : k.startsWith(
+                                                                                                                                                                                        "constant_stakingnewbsc_new3",
+                                                                                                                                                                                      )
+                                                                                                                                                                                    ? window.CONSTANT_STAKINGNEW_ABI
+                                                                                                                                                                                    : k.startsWith(
+                                                                                                                                                                                          "constant_stakingnewbsc_new4",
+                                                                                                                                                                                        )
+                                                                                                                                                                                      ? window.CONSTANT_STAKINGNEW_ABI
+                                                                                                                                                                                      : k.startsWith(
+                                                                                                                                                                                            "constant_stakingnewbsc_new5",
+                                                                                                                                                                                          )
+                                                                                                                                                                                        ? window.CONSTANT_STAKINGBSC_NEW_ABI
+                                                                                                                                                                                        : k.startsWith(
+                                                                                                                                                                                              "constant_stakingnewbsc_new6",
+                                                                                                                                                                                            )
+                                                                                                                                                                                          ? window.CONSTANT_STAKINGBSC_NEW_ABI
+                                                                                                                                                                                          : k.startsWith(
+                                                                                                                                                                                                "constant_stakingnewbsc_new7",
+                                                                                                                                                                                              )
+                                                                                                                                                                                            ? window.CONSTANT_STAKINGBSC_NEW_ABI
+                                                                                                                                                                                            : k.startsWith(
+                                                                                                                                                                                                  "constant_stakingnewbsc_new8",
+                                                                                                                                                                                                )
+                                                                                                                                                                                              ? window.CONSTANT_STAKINGBSC_NEW_ABI
+                                                                                                                                                                                              : k.startsWith(
+                                                                                                                                                                                                    "constant_stakingnewbsc_new9",
+                                                                                                                                                                                                  )
+                                                                                                                                                                                                ? window.CONSTANT_STAKINGBSC_NEW_ABI
+                                                                                                                                                                                                : k.startsWith(
+                                                                                                                                                                                                      "constant_stakingbsc_new10",
+                                                                                                                                                                                                    )
+                                                                                                                                                                                                  ? window.CONSTANT_STAKING_OLD_ABI
+                                                                                                                                                                                                  : k.startsWith(
+                                                                                                                                                                                                        "constant_stakingbsc_new11",
+                                                                                                                                                                                                      )
+                                                                                                                                                                                                    ? window.CONSTANT_STAKING_OLD_ABI
+                                                                                                                                                                                                    : k.startsWith(
+                                                                                                                                                                                                          "constant_stakingbsc_new111",
+                                                                                                                                                                                                        )
+                                                                                                                                                                                                      ? window.CONSTANT_STAKING_OLD_ABI
+                                                                                                                                                                                                      : k.startsWith(
+                                                                                                                                                                                                            "constant_stakingbscother_new1",
+                                                                                                                                                                                                          )
+                                                                                                                                                                                                        ? window.CONSTANT_STAKINGBSCOTHER_NEW_ABI
+                                                                                                                                                                                                        : k.startsWith(
+                                                                                                                                                                                                              "constant_stakingold_130",
+                                                                                                                                                                                                            )
+                                                                                                                                                                                                          ? window.CONSTANT_STAKING_OLD_ABI
+                                                                                                                                                                                                          : k.startsWith(
+                                                                                                                                                                                                                "constant_stakingold_140",
+                                                                                                                                                                                                              )
+                                                                                                                                                                                                            ? window.CONSTANT_STAKING_OLD_ABI
+                                                                                                                                                                                                            : k.startsWith(
+                                                                                                                                                                                                                  "constant_stakingbsc_new12",
+                                                                                                                                                                                                                )
+                                                                                                                                                                                                              ? window.CONSTANT_STAKINGBSC_NEW_ABI
+                                                                                                                                                                                                              : k.startsWith(
+                                                                                                                                                                                                                    "constant_stakingbsc_new13",
+                                                                                                                                                                                                                  )
+                                                                                                                                                                                                                ? window.CONSTANT_STAKINGBSC_NEW_ABI
+                                                                                                                                                                                                                : k.startsWith(
+                                                                                                                                                                                                                      "constant_stakingbsc_new14",
+                                                                                                                                                                                                                    )
+                                                                                                                                                                                                                  ? window.CONSTANT_STAKING_OLD_ABI
+                                                                                                                                                                                                                  : k.startsWith(
+                                                                                                                                                                                                                        "constant_staking_dypius_bsc1",
+                                                                                                                                                                                                                      )
+                                                                                                                                                                                                                    ? window.CONSTANT_STAKING_DYPIUS_ABI
+                                                                                                                                                                                                                    : k.startsWith(
+                                                                                                                                                                                                                          "constant_staking_dypius_bscother1",
+                                                                                                                                                                                                                        )
+                                                                                                                                                                                                                      ? window.CONSTANT_STAKING_DEFI_ABI
+                                                                                                                                                                                                                      : k.startsWith(
+                                                                                                                                                                                                                            "constant_staking_dypius_ethother1",
+                                                                                                                                                                                                                          )
+                                                                                                                                                                                                                        ? window.CONSTANT_STAKING_DEFI_ABI
+                                                                                                                                                                                                                        : k.startsWith(
+                                                                                                                                                                                                                              "constant_staking_dypius_avaxother1",
+                                                                                                                                                                                                                            )
+                                                                                                                                                                                                                          ? window.CONSTANT_STAKING_DEFI_ABI
+                                                                                                                                                                                                                          : k.startsWith(
+                                                                                                                                                                                                                                "constant_stakingnew_newavax2",
+                                                                                                                                                                                                                              )
+                                                                                                                                                                                                                            ? window.CONSTANT_STAKINGNEW_ABI
+                                                                                                                                                                                                                            : k.startsWith(
+                                                                                                                                                                                                                                  "constant_stakingdaieth",
+                                                                                                                                                                                                                                )
+                                                                                                                                                                                                                              ? window.CONSTANT_STAKINGDAI_ABI
+                                                                                                                                                                                                                              : k.startsWith(
+                                                                                                                                                                                                                                    "constant_stakingdaiavax",
+                                                                                                                                                                                                                                  )
+                                                                                                                                                                                                                                ? window.CONSTANT_STAKING_DAI_ABI
+                                                                                                                                                                                                                                : k.startsWith(
+                                                                                                                                                                                                                                      "constant_stakingdaibsc",
+                                                                                                                                                                                                                                    )
+                                                                                                                                                                                                                                  ? window.CONSTANT_STAKING_DAI_ABI
+                                                                                                                                                                                                                                  : k.startsWith(
+                                                                                                                                                                                                                                        "constant_stakingotherdaibsc",
+                                                                                                                                                                                                                                      )
+                                                                                                                                                                                                                                    ? window.CONSTANT_STAKING_OTHERDAIBSC_ABI
+                                                                                                                                                                                                                                    : k.startsWith(
+                                                                                                                                                                                                                                          "constant_stakingidypavax_1",
+                                                                                                                                                                                                                                        )
+                                                                                                                                                                                                                                      ? window.CONSTANT_STAKING_IDYP_ABI
+                                                                                                                                                                                                                                      : k.startsWith(
+                                                                                                                                                                                                                                            "constant_stakingidypavax_2",
+                                                                                                                                                                                                                                          )
+                                                                                                                                                                                                                                        ? window.CONSTANT_STAKING_IDYP_ABI
+                                                                                                                                                                                                                                        : k.startsWith(
+                                                                                                                                                                                                                                              "constant_stakingidypavax_5",
+                                                                                                                                                                                                                                            )
+                                                                                                                                                                                                                                          ? window.CONSTANT_STAKING_IDYP_ABI
+                                                                                                                                                                                                                                          : k.startsWith(
+                                                                                                                                                                                                                                                "constant_stakingidypavax_7",
+                                                                                                                                                                                                                                              )
+                                                                                                                                                                                                                                            ? window.CONSTANT_STAKING_IDYP_ABI
+                                                                                                                                                                                                                                            : k.startsWith(
+                                                                                                                                                                                                                                                  "constant_stakingidypavax_6",
+                                                                                                                                                                                                                                                )
+                                                                                                                                                                                                                                              ? window.CONSTANT_STAKING_IDYP_ABI
+                                                                                                                                                                                                                                              : k.startsWith(
+                                                                                                                                                                                                                                                    "farming_new_",
+                                                                                                                                                                                                                                                  )
+                                                                                                                                                                                                                                                ? window.FARMING_NEW_ABI
+                                                                                                                                                                                                                                                : k.startsWith(
+                                                                                                                                                                                                                                                      "constant_stakingdai_",
+                                                                                                                                                                                                                                                    )
+                                                                                                                                                                                                                                                  ? window.CONSTANT_STAKING_DAI_ABI
+                                                                                                                                                                                                                                                  : k.startsWith(
+                                                                                                                                                                                                                                                        "constant_stakingold_",
+                                                                                                                                                                                                                                                      )
+                                                                                                                                                                                                                                                    ? window.CONSTANT_STAKING_OLD_ABI
+                                                                                                                                                                                                                                                    : k.startsWith(
+                                                                                                                                                                                                                                                          "new_governance",
+                                                                                                                                                                                                                                                        )
+                                                                                                                                                                                                                                                      ? window.NEW_GOVERNANCE_ABI
+                                                                                                                                                                                                                                                      : k.startsWith(
+                                                                                                                                                                                                                                                            "new_governanceavax",
+                                                                                                                                                                                                                                                          )
+                                                                                                                                                                                                                                                        ? window.NEW_GOVERNANCEAVAX_ABI
+                                                                                                                                                                                                                                                        : k.startsWith(
+                                                                                                                                                                                                                                                              "new_governancebsc",
+                                                                                                                                                                                                                                                            )
+                                                                                                                                                                                                                                                          ? window.NEW_GOVERNANCEBSC_ABI
+                                                                                                                                                                                                                                                          : k.startsWith(
+                                                                                                                                                                                                                                                                "new_governancedypv2",
+                                                                                                                                                                                                                                                              )
+                                                                                                                                                                                                                                                            ? window.NEW_GOVERNANCE_ABI
+                                                                                                                                                                                                                                                            : k.startsWith(
+                                                                                                                                                                                                                                                                  "new_governanceavaxdypv2",
+                                                                                                                                                                                                                                                                )
+                                                                                                                                                                                                                                                              ? window.NEW_GOVERNANCEAVAX_ABI
+                                                                                                                                                                                                                                                              : k.startsWith(
+                                                                                                                                                                                                                                                                    "new_governancebscdypv2",
+                                                                                                                                                                                                                                                                  )
+                                                                                                                                                                                                                                                                ? window.NEW_GOVERNANCEBSC_ABI
+                                                                                                                                                                                                                                                                : window.STAKING_ABI;
   });
 
 async function refreshBalance() {
@@ -40691,27 +41117,27 @@ async function refreshBalance() {
   //console.log('coinbase' + coinbase)
 
   let _tvl30 = await reward_token.balanceOf(
-    "0x7fc2174670d672ad7f666af0704c2d961ef32c73"
+    "0x7fc2174670d672ad7f666af0704c2d961ef32c73",
   );
   _tvl30 = _tvl30 / 1e18;
 
   let _tvl60 = await reward_token.balanceOf(
-    "0x036e336ea3ac2e255124cf775c4fdab94b2c42e4"
+    "0x036e336ea3ac2e255124cf775c4fdab94b2c42e4",
   );
   _tvl60 = _tvl60 / 1e18;
 
   let _tvl90 = await reward_token.balanceOf(
-    "0x0a32749d95217b7ee50127e24711c97849b70c6a"
+    "0x0a32749d95217b7ee50127e24711c97849b70c6a",
   );
   _tvl90 = _tvl90 / 1e18;
 
   let _tvl120 = await reward_token.balanceOf(
-    "0x82df1450efd6b504ee069f5e4548f2d5cb229880"
+    "0x82df1450efd6b504ee069f5e4548f2d5cb229880",
   );
   _tvl120 = _tvl120 / 1e18 + 0.1;
 
   let _buyback = await reward_token.balanceOf(
-    "0xe5262f38bf13410a79149cb40429f8dc5e830542"
+    "0xe5262f38bf13410a79149cb40429f8dc5e830542",
   );
   _buyback = _buyback / 1e18;
 
@@ -40736,7 +41162,7 @@ function get_usd_values({ token_contract_addresses, lp_ids }) {
 
 tokens(where:{
 id_in: ${JSON.stringify(
-          token_contract_addresses.map((a) => a.toLowerCase())
+          token_contract_addresses.map((a) => a.toLowerCase()),
         )}}) {
 id
 symbol
@@ -40825,7 +41251,7 @@ async function get_number_of_stakers(staking_pools_list) {
   } finally {
     if (!coinbase) {
       return await Promise.all(
-        staking_pools_list.map(() => Promise.resolve(0))
+        staking_pools_list.map(() => Promise.resolve(0)),
       );
     }
   }
@@ -40836,10 +41262,10 @@ async function get_number_of_stakers(staking_pools_list) {
         let contract = new window.web3.eth.Contract(
           window.STAKING_ABI,
           contract_address,
-          { from: coinbase }
+          { from: coinbase },
         );
         return contract.methods.getNumberOfHolders().call();
-      })
+      }),
     )
   ).map((h) => Number(h));
 }
@@ -40860,17 +41286,17 @@ async function get_token_balances({ TOKEN_ADDRESS, HOLDERS_LIST }) {
   let token_contract = new window.web3.eth.Contract(
     window.TOKEN_ABI,
     TOKEN_ADDRESS,
-    { from: coinbase }
+    { from: coinbase },
   );
 
   return await Promise.all(
     HOLDERS_LIST.map((h) => {
       return token_contract.methods.balanceOf(h).call();
-    })
+    }),
   );
 }
 
-async function get_usd_values_with_apy_and_tvl(...arguments) {
+async function get_usd_values_with_apy_and_tvl() {
   return await get_apy_and_tvl(await get_usd_values(...arguments));
 }
 
@@ -41039,7 +41465,7 @@ async function createLock(pair, baseToken, amount, unlockTimestamp) {
   let estimatedValue = await getMinLockCreationFeeInWei(
     pair,
     baseToken,
-    amount
+    amount,
   );
   estimatedValue = new BigNumber(estimatedValue).times(1.1).toFixed(0);
 
@@ -41066,7 +41492,7 @@ async function createLockETH(pair, baseToken, amount, unlockTimestamp) {
   let estimatedValue = await getMinLockCreationFeeInWei(
     pair,
     baseToken,
-    amount
+    amount,
   );
   estimatedValue = new BigNumber(estimatedValue).times(1.1).toFixed(0);
 
@@ -41172,7 +41598,7 @@ async function getEstimatedTokenSubscriptionAmountCFX(tokenAddress) {
 async function getEstimatedTokenSubscriptionAmountBase(tokenAddress) {
   const baseContract = new window.baseWeb3.eth.Contract(
     window.SUBSCRIPTION_BASE_ABI,
-    window.config.subscription_base_address
+    window.config.subscription_base_address,
   );
   return await baseContract.methods
     .getEstimatedTokenSubscriptionAmount(tokenAddress)
@@ -41186,7 +41612,7 @@ async function getEstimatedTokenSubscriptionAmountBase(tokenAddress) {
 async function getEstimatedTokenSubscriptionAmountSkale(tokenAddress) {
   const skaleContract = new window.skaleWeb3.eth.Contract(
     window.SUBSCRIPTION_SKALE_ABI,
-    window.config.subscription_skale_address
+    window.config.subscription_skale_address,
   );
   return await skaleContract.methods
     .getEstimatedTokenSubscriptionAmount(tokenAddress)
@@ -41234,7 +41660,7 @@ async function toggleFavorite(pair) {
 }
 
 async function getPangolinRouterContract(
-  address = window.config.pangolin_router_address
+  address = window.config.pangolin_router_address,
 ) {
   return new window.avaxWeb3.eth.Contract(window.PANGOLIN_ROUTER_ABI, address, {
     from: undefined,
@@ -41242,22 +41668,22 @@ async function getPangolinRouterContract(
 }
 
 async function getPancakeswapRouterContract(
-  address = window.config.pancakeswap_router_address
+  address = window.config.pancakeswap_router_address,
 ) {
   return new window.bscWeb3.eth.Contract(
     window.PANCAKESWAP_ROUTER_ABI,
     address,
-    { from: undefined }
+    { from: undefined },
   );
 }
 
 async function getUniswapRouterContract(
-  address = window.config.uniswap_router_address
+  address = window.config.uniswap_router_address,
 ) {
   return new window.infuraWeb3.eth.Contract(
     window.UNISWAP_ROUTER_ABI,
     address,
-    { from: await getCoinbase() }
+    { from: await getCoinbase() },
   );
 }
 
@@ -41270,8 +41696,8 @@ async function getPriceiDYP() {
   let path = [
     ...new Set(
       [rewardTokenAddress, WETH, platformTokenAddress].map((a) =>
-        a.toLowerCase()
-      )
+        a.toLowerCase(),
+      ),
     ),
   ];
   let _amountOutMin = await router.methods.getAmountsOut(amount, path).call();
@@ -41291,8 +41717,8 @@ async function getPriceiDYPAvax() {
   let path = [
     ...new Set(
       [rewardTokenAddress, WETH, platformTokenAddress].map((a) =>
-        a.toLowerCase()
-      )
+        a.toLowerCase(),
+      ),
     ),
   ];
   let _amountOutMin = await router.methods.getAmountsOut(amount, path).call();
@@ -41312,8 +41738,8 @@ async function getPriceiDYPEth() {
   let path = [
     ...new Set(
       [rewardTokenAddress, WETH, platformTokenAddress].map((a) =>
-        a.toLowerCase()
-      )
+        a.toLowerCase(),
+      ),
     ),
   ];
   let _amountOutMin = await router.methods.getAmountsOut(amount, path).call();
@@ -41419,7 +41845,7 @@ function CSVToArray(strData, strDelimiter) {
       '([^"\\' +
       strDelimiter +
       "\\r\\n]*))",
-    "gi"
+    "gi",
   );
 
   // Create an array to hold our data. Give the array

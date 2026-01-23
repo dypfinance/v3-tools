@@ -1,0 +1,85 @@
+.migrate-popup-wrapper{
+    position: fixed;
+    width: fit-content;
+    height: fit-content;
+    top: -10000px;
+    left: 0%;
+    bottom: 0%;
+    right: 0%;
+    margin: auto;
+    z-index: 1000;
+    background: #312F69;
+    border-radius: 24px;
+    pointer-events: auto  !important;
+    transition: all .25s ease-in-out;
+    width: 30%;
+
+}
+
+.popup-active{
+    box-shadow:0 0 0 10000px rgba(0,0,0,.50);
+    top: 0% !important;
+
+}
+
+.popup-title{
+    font-weight: 600;
+font-size: 28px;
+line-height: 28px;
+letter-spacing: -0.018em;
+color: #F7F7FC !important;
+text-align: center;
+}
+
+.popup-content{
+    font-style: normal;
+    font-weight: 300;
+    font-size: 20px;
+    line-height: 36px;
+    color: #FFFFFF !important;
+    padding: 5px 30px;
+    text-align: center;
+    background: linear-gradient(269.91deg, rgba(86, 80, 216, 0) 0.07%, #5650D8 51.44%, rgba(86, 80, 216, 0) 100.72%);
+}
+
+.popup-span{
+    font-weight: 400;
+font-size: 16px;
+line-height: 24px;
+letter-spacing: -0.018em;
+width: 75%;
+text-align: center;
+color: #C0CBF7 !important;
+
+}
+
+.land-nft-image{
+    width: 450px;
+
+}
+
+@media screen and (max-width: 786px) {
+    .popup-span{
+        width: 100%;
+    }
+
+    .land-nft-image{
+        width: 75% !important;
+    } 
+}
+
+@media screen and (max-width: 1455px) {
+   .migrate-popup-wrapper{
+     width: 55%;
+   }
+}
+@media screen and (max-width: 1300px) {
+    .migrate-popup-wrapper{
+        width: 70% !important;
+    }
+}
+@media screen and (max-width: 786px) {
+    .migrate-popup-wrapper{
+        width: 90% !important;
+    }
+}

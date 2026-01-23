@@ -23,7 +23,7 @@ const Footer = () => {
               <a target={"_blank"} href="https://dypius.com/">
                 <img src="https://cdn.worldofdypians.com/tools/dypiusFooter.svg" alt="Dypius"></img>
               </a>
-              <a
+              {/* <a
                 target={"_blank"}
                 href="https://www.worldofdypians.com/"
                 style={{ position: "relative" }}
@@ -33,7 +33,7 @@ const Footer = () => {
                   alt="METAVERSE"
                   style={{ height: "30px" }}
                 />
-              </a>
+              </a> */}
             </div>
             <hr
               className="form-divider my-2 d-flex d-lg-none"
@@ -65,7 +65,7 @@ const Footer = () => {
                       ></img>
                     </a>
                   </li>
-                  <li>
+                  {/* <li>
                     <a
                       target={"_blank"}
                       href="https://discord.gg/worldofdypians"
@@ -77,7 +77,7 @@ const Footer = () => {
                         width={24}
                       ></img>
                     </a>
-                  </li>
+                  </li> */}
                   <li>
                     <a
                       target={"_blank"}

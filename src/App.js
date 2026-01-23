@@ -59,6 +59,9 @@ import BundleTOS from "./components/pricingpackages/BundleTOS.js";
 import { getWeb3Connector } from "@binance/w3w-web3-connector";
 import { useWeb3React } from "@web3-react/core";
 import { isMobile } from "react-device-detect";
+import WhitelistPopup from "./components/whitelistPopup/WhitelistPopup.js";
+import NewMigration from "./components/migration-portal/NewMigration.js";
+// import MigrationPopup from "./components/MigrationPopup/MigrationPopup.js";
 const LockerWrapper = (props) => {
   const { pair_id } = useParams();
 
@@ -85,13 +88,13 @@ function App() {
   const [isConnected, setisConnected] = useState(false);
   const [coinbase, setcoinbase] = useState(null);
   const [the_graph_result_ETH_V2, setthe_graph_result_ETH_V2] = useState(
-    JSON.stringify(window.the_graph_result_eth_v2)
+    JSON.stringify(window.the_graph_result_eth_v2),
   );
   const [the_graph_result_AVAX_V2, setthe_graph_result_AVAX_V2] = useState(
-    JSON.stringify(window.the_graph_result_avax_v2)
+    JSON.stringify(window.the_graph_result_avax_v2),
   );
   const [the_graph_result_BSC_V2, setthe_graph_result_BSC_V2] = useState(
-    JSON.stringify(window.the_graph_result_bsc_v2)
+    JSON.stringify(window.the_graph_result_bsc_v2),
   );
 
   // const [subscribedPlatformTokenAmount, setsubscribedPlatformTokenAmount] =
@@ -107,7 +110,7 @@ function App() {
   const [downloadClick, setdownloadClick] = useState(false);
   const [showMobilePopup, setshowMobilePopup] = useState(false);
   const [showWalletPopup, setshowWalletPopup] = useState(false);
-  // const [whitelistPopup, setwhitelistPopup] = useState(true);
+  const [whitelistPopup, setwhitelistPopup] = useState(true);
   const [aggregatorPools, setaggregatorPools] = useState([]);
   const [userCurencyBalance, setuserCurencyBalance] = useState(0);
   const [fireAppcontent, setFireAppContent] = useState(false);
@@ -242,7 +245,7 @@ function App() {
   const fetchAggregatorPools = async () => {
     const result = await axios
       .get(
-        "https://dypiusstakingaggregator.azurewebsites.net/api/GetAggregatedPools?code=2qyv7kEpn13ZZUDkaU-f7U5YjiQLVAawRITtvj34rci0AzFuZp7JWQ%3D%3D"
+        "https://dypiusstakingaggregator.azurewebsites.net/api/GetAggregatedPools?code=2qyv7kEpn13ZZUDkaU-f7U5YjiQLVAawRITtvj34rci0AzFuZp7JWQ%3D%3D",
       )
       .catch((e) => {
         console.error(e);
@@ -427,14 +430,14 @@ function App() {
                   chainId === "1"
                     ? "0x1"
                     : chainId === "56"
-                    ? "0x38"
-                    : chainId === "204"
-                    ? "0xcc"
-                    : chainId === "43114"
-                    ? "0xa86a"
-                    : chainId === "8453"
-                    ? "0x2105"
-                    : "0x38",
+                      ? "0x38"
+                      : chainId === "204"
+                        ? "0xcc"
+                        : chainId === "43114"
+                          ? "0xa86a"
+                          : chainId === "8453"
+                            ? "0x2105"
+                            : "0x38",
               },
             ],
           })
@@ -483,14 +486,14 @@ function App() {
                 chainId === "1"
                   ? "0x1"
                   : chainId === "56"
-                  ? "0x38"
-                  : chainId === "204"
-                  ? "0xcc"
-                  : chainId === "43114"
-                  ? "0xa86a"
-                  : chainId === "8453"
-                  ? "0x2105"
-                  : "0x38",
+                    ? "0x38"
+                    : chainId === "204"
+                      ? "0xcc"
+                      : chainId === "43114"
+                        ? "0xa86a"
+                        : chainId === "8453"
+                          ? "0x2105"
+                          : "0x38",
             },
           ],
         });
@@ -565,31 +568,31 @@ function App() {
 
     const ethNewcontract = new web3eth.eth.Contract(
       EthNewABI,
-      ethsubscribeNewAddress
+      ethsubscribeNewAddress,
     );
 
     const avaxNewcontract = new web3avax.eth.Contract(
       AvaxNewABI,
-      avaxsubscribeNewAddress
+      avaxsubscribeNewAddress,
     );
 
     const bnbNewcontract = new web3bnb.eth.Contract(
       BnbNewABI,
-      bnbsubscribeNewAddress
+      bnbsubscribeNewAddress,
     );
     const bnbNewcontract2 = new web3bnb.eth.Contract(
       BnbNew2ABI,
-      bnbsubscribeNewAddress2
+      bnbsubscribeNewAddress2,
     );
 
     const bnbNewcontractnft = new web3bnb.eth.Contract(
       BnbNewBNFTABI,
-      bnbsubscribeNewAddressnft
+      bnbsubscribeNewAddressnft,
     );
 
     const basecontract = new web3base.eth.Contract(
       BaseABI,
-      basesubscribeAddress
+      basesubscribeAddress,
     );
 
     if (userWallet) {
@@ -683,7 +686,7 @@ function App() {
 
       let the_graph_result_ETH_V2 = await window.get_the_graph_eth_v2();
       setthe_graph_result_ETH_V2(
-        JSON.parse(JSON.stringify(the_graph_result_ETH_V2))
+        JSON.parse(JSON.stringify(the_graph_result_ETH_V2)),
       );
       checkConnection();
       setshowWalletPopup(false);
@@ -711,19 +714,19 @@ function App() {
       if (networkId === "1") {
         let the_graph_result_ETH_V2 = await window.get_the_graph_eth_v2();
         setthe_graph_result_ETH_V2(
-          JSON.parse(JSON.stringify(the_graph_result_ETH_V2))
+          JSON.parse(JSON.stringify(the_graph_result_ETH_V2)),
         );
       } else if (networkId === "56") {
         let the_graph_result_BSC_V2 = await window.get_the_graph_bsc_v2();
 
         setthe_graph_result_BSC_V2(
-          JSON.parse(JSON.stringify(the_graph_result_BSC_V2))
+          JSON.parse(JSON.stringify(the_graph_result_BSC_V2)),
         );
       } else if (networkId === "43114") {
         let the_graph_result_AVAX_V2 = await window.get_the_graph_avax_v2();
 
         setthe_graph_result_AVAX_V2(
-          JSON.parse(JSON.stringify(the_graph_result_AVAX_V2))
+          JSON.parse(JSON.stringify(the_graph_result_AVAX_V2)),
         );
       }
     } catch (e) {
@@ -762,37 +765,37 @@ function App() {
     if (coinbase && coinbase !== undefined && isConnected) {
       const contract1 = new window.infuraWeb3.eth.Contract(
         TokenABI,
-        tokenAddress
+        tokenAddress,
       );
       const contract2 = new window.avaxWeb3.eth.Contract(
         TokenABI,
-        tokenAddress_bsc
+        tokenAddress_bsc,
       );
       const contract3 = new window.bscWeb3.eth.Contract(
         TokenABI,
-        tokenAddress_bsc
+        tokenAddress_bsc,
       );
 
       const contract4 = new window.baseWeb3.eth.Contract(
         TokenABI,
-        tokenAddress_base
+        tokenAddress_base,
       );
       const contract5 = new window.opbnbWeb3.eth.Contract(
         TokenABI,
-        tokenAddress_opbnb
+        tokenAddress_opbnb,
       );
 
       const contract1_idyp = new window.infuraWeb3.eth.Contract(
         TokenABI,
-        window.config.reward_token_idyp_address
+        window.config.reward_token_idyp_address,
       );
       const contract2_idyp = new window.avaxWeb3.eth.Contract(
         TokenABI,
-        window.config.reward_token_idyp_address
+        window.config.reward_token_idyp_address,
       );
       const contract3_idyp = new window.bscWeb3.eth.Contract(
         TokenABI,
-        window.config.reward_token_idyp_address
+        window.config.reward_token_idyp_address,
       );
 
       let ethBalance = await contract1.methods
@@ -1291,7 +1294,7 @@ function App() {
         const provider = new ethers.providers.Web3Provider(window.ethereum);
         const signer = provider.getSigner(coinbase);
         const signature = await signer.signMessage(
-          `Signing one-time nonce: ${dataNonce?.generateWalletNonce?.nonce}`
+          `Signing one-time nonce: ${dataNonce?.generateWalletNonce?.nonce}`,
         );
         verifyWallet({
           variables: {
@@ -1325,7 +1328,7 @@ function App() {
         const provider = library;
         const signer = provider.getSigner();
         const signature = await signer.signMessage(
-          `Signing one-time nonce: ${dataNonce?.generateWalletNonce?.nonce}`
+          `Signing one-time nonce: ${dataNonce?.generateWalletNonce?.nonce}`,
         );
         verifyWallet({
           variables: {
@@ -1356,10 +1359,10 @@ function App() {
     var testArray =
       leaderboard2.length > 0
         ? leaderboard2.filter(
-            (item) =>
-              item.address.toLowerCase() ===
-              data?.getPlayer?.wallet?.publicAddress?.toLowerCase()
-          )
+          (item) =>
+            item.address.toLowerCase() ===
+            data?.getPlayer?.wallet?.publicAddress?.toLowerCase(),
+        )
         : [];
 
     fillRecordsCaws2d(leaderboard2);
@@ -1371,7 +1374,7 @@ function App() {
             item.address ===
             data?.getPlayer?.wallet?.publicAddress?.toLowerCase()
           );
-        })
+        }),
       ) > 20
     ) {
       setActivePlayerCaws2d(false);
@@ -1409,7 +1412,7 @@ function App() {
         method: "POST",
         body: bodyContent,
         headers: headersList,
-      }
+      },
     ).catch((err) => {
       console.log(err);
     });
@@ -1462,7 +1465,7 @@ function App() {
         method: "POST",
         body: bodyContent,
         headers: headersList,
-      }
+      },
     ).catch((err) => {
       console.log(err);
     });
@@ -1558,14 +1561,14 @@ function App() {
     if (userId) {
       const result = await axios.post(
         `${backendApi}/auth/GetLeaderboardAroundPlayer`,
-        data
+        data,
       );
       var testArray = result.data.data.leaderboard.filter(
-        (item) => item.displayName === username
+        (item) => item.displayName === username,
       );
       if (itemData.length > 0) {
         var testArray2 = Object.values(itemData).filter(
-          (item) => item.displayName === username
+          (item) => item.displayName === username,
         );
 
         if (testArray.length > 0 && testArray2.length > 0) {
@@ -1599,7 +1602,7 @@ function App() {
     setpreviousWeeklyVersionOpbnb(parseInt(result.data.data.version));
     setweeklyplayerDataOpbnb(result.data.data.leaderboard);
     var testArray = result.data.data.leaderboard.filter(
-      (item) => item.displayName === username
+      (item) => item.displayName === username,
     );
     fillRecordsWeeklyOpbnb(result.data.data.leaderboard);
     if (testArray.length > 0) {
@@ -1638,15 +1641,15 @@ function App() {
     if (userId) {
       const result = await axios.post(
         `${backendApi}/auth/GetLeaderboardAroundPlayer`,
-        data
+        data,
       );
       var testArray = result.data.data.leaderboard.filter(
-        (item) => item.displayName === username
+        (item) => item.displayName === username,
       );
 
       if (itemData.length > 0) {
         var testArray2 = Object.values(itemData).filter(
-          (item) => item.displayName === username
+          (item) => item.displayName === username,
         );
 
         if (testArray.length > 0 && testArray2.length > 0) {
@@ -1680,7 +1683,7 @@ function App() {
     setpreviousMonthlyVersionOpbnb(parseInt(result.data.data.version));
     setmonthlyplayerDataOpbnb(result.data.data.leaderboard);
     var testArray = result.data.data.leaderboard.filter(
-      (item) => item.displayName === username
+      (item) => item.displayName === username,
     );
     fillRecordsMonthlyOpbnb(result.data.data.leaderboard);
     if (testArray.length > 0) {
@@ -1719,14 +1722,14 @@ function App() {
     if (userId) {
       const result = await axios.post(
         `${backendApi}/auth/GetLeaderboardAroundPlayer`,
-        data
+        data,
       );
       var testArray = result.data.data.leaderboard.filter(
-        (item) => item.displayName === username
+        (item) => item.displayName === username,
       );
       if (itemData.length > 0) {
         var testArray2 = Object.values(itemData).filter(
-          (item) => item.displayName === username
+          (item) => item.displayName === username,
         );
 
         if (testArray.length > 0 && testArray2.length > 0) {
@@ -1760,7 +1763,7 @@ function App() {
     setpreviousWeeklyVersion(parseInt(result.data.data.version));
     setweeklyplayerData(result.data.data.leaderboard);
     var testArray = result.data.data.leaderboard.filter(
-      (item) => item.displayName === username
+      (item) => item.displayName === username,
     );
     fillRecordsWeekly(result.data.data.leaderboard);
     if (testArray.length > 0) {
@@ -1799,15 +1802,15 @@ function App() {
     if (userId) {
       const result = await axios.post(
         `${backendApi}/auth/GetLeaderboardAroundPlayer`,
-        data
+        data,
       );
       var testArray = result.data.data.leaderboard.filter(
-        (item) => item.displayName === username
+        (item) => item.displayName === username,
       );
 
       if (itemData.length > 0) {
         var testArray2 = Object.values(itemData).filter(
-          (item) => item.displayName === username
+          (item) => item.displayName === username,
         );
 
         if (testArray.length > 0 && testArray2.length > 0) {
@@ -1841,7 +1844,7 @@ function App() {
     setpreviousMonthlyVersion(parseInt(result.data.data.version));
     setmonthlyplayerData(result.data.data.leaderboard);
     var testArray = result.data.data.leaderboard.filter(
-      (item) => item.displayName === username
+      (item) => item.displayName === username,
     );
     fillRecordsMonthly(result.data.data.leaderboard);
     if (testArray.length > 0) {
@@ -1880,14 +1883,14 @@ function App() {
     if (userId) {
       const result = await axios.post(
         `${backendApi}/auth/GetLeaderboardAroundPlayer`,
-        data
+        data,
       );
       var testArray = result.data.data.leaderboard.filter(
-        (item) => item.displayName === username
+        (item) => item.displayName === username,
       );
       if (itemData.length > 0) {
         var testArray2 = Object.values(itemData).filter(
-          (item) => item.displayName === username
+          (item) => item.displayName === username,
         );
 
         if (testArray.length > 0 && testArray2.length > 0) {
@@ -1922,7 +1925,7 @@ function App() {
     setkittyDashRecords(result?.data?.data?.leaderboard);
 
     var testArray = result.data.data.leaderboard.filter(
-      (item) => item.displayName === username
+      (item) => item.displayName === username,
     );
     if (testArray.length > 0) {
       setActivePlayerKitty(true);
@@ -2010,7 +2013,7 @@ function App() {
     } else if (
       (logoutstorage === "false" ||
         window.coinbase_address ===
-          "0x0000000000000000000000000000000000000000" ||
+        "0x0000000000000000000000000000000000000000" ||
         window.coin98) &&
       window.WALLET_TYPE !== "binance"
     ) {
@@ -2170,8 +2173,8 @@ function App() {
       <div>
         {(window.location?.pathname === "/genesis" &&
           window.innerWidth < 786) ||
-        (window.location?.pathname === "/caws-staking" &&
-          window.innerWidth < 786) ? null : (
+          (window.location?.pathname === "/caws-staking" &&
+            window.innerWidth < 786) ? null : (
           <Header
             coinbase={coinbase}
             toggleMobileSidebar={toggleMobileSidebar}
@@ -2214,13 +2217,12 @@ function App() {
               />
             </div>
             <div
-              className={`${
-                windowSize.width < 991
+              className={`${windowSize.width < 991
                   ? "col-12 px-1"
                   : windowSize.width < 1490
-                  ? "col-11"
-                  : "col-10"
-              }`}
+                    ? "col-11"
+                    : "col-10"
+                }`}
             >
               <div className="right-content pr-0 my-4 my-lg-5">
                 <Routes>
@@ -2598,18 +2600,21 @@ setkittyDashRecords */}
                       />
                     }
                   /> */}
-                  {/* <Route
+                  <Route
                     exact
-                    path="/migration"
+                    path="/migration-portal"
                     element={
-                      <DypMigration
+                      <NewMigration
                         networkId={parseInt(networkId)}
                         isConnected={isConnected}
                         handleConnection={handleConnection}
                         coinbase={coinbase}
+                        binanceW3WProvider={library}
+                        handleSwitchChainBinanceWallet={handleSwitchNetwork}
+                        handleSwitchNetwork={handleSwitchNetwork}
                       />
                     }
-                  /> */}
+                  />
 
                   {/* <Route
                     exact
@@ -2788,7 +2793,7 @@ setkittyDashRecords */}
                         theme={theme}
                         coinbase={coinbase}
                         networkId={networkId}
-                        // {...props}
+                      // {...props}
                       />
                     }
                   />
@@ -2800,7 +2805,7 @@ setkittyDashRecords */}
                       <Admin
                         handleConnection={handleConnection}
                         isConnected={isConnected}
-                        // {...props}
+                      // {...props}
                       />
                     }
                   />
@@ -2840,17 +2845,16 @@ setkittyDashRecords */}
             <div className="col-1"></div>
           </div>
           {window.location?.pathname === "/genesis" ||
-          window.location?.pathname === "/caws-staking" ? null : (
+            window.location?.pathname === "/caws-staking" ? null : (
             <MobileMenu />
           )}
         </div>
       </div>
       {(window.location?.pathname === "/genesis" && window.innerWidth < 786) ||
-      (window.location?.pathname === "/caws-staking" &&
-        window.innerWidth < 786) ? null : (
+        (window.location?.pathname === "/caws-staking" &&
+          window.innerWidth < 786) ? null : (
         <Footer />
       )}
-
       {(showMobilePopup === true || downloadClick === true) && (
         <Modal
           open={showMobilePopup || downloadClick}
@@ -2935,7 +2939,7 @@ setkittyDashRecords */}
           <WhitelistPopup
             open={whitelistPopup === true}
             onClose={() => {
-              this.setState({ whitelistPopup: false });
+              setwhitelistPopup(false)
             }}
           />
         )} */}
