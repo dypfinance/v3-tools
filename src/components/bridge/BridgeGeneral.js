@@ -22,25 +22,25 @@ const Bridge = ({
   const [activebtn, setActiveBtn] = useState("");
 
   const [sourceBridge, setSourceBridge] = useState(
-    window.new_dypius_bridge_ethbsc
+    window.new_dypius_bridge_ethbsc,
   );
   const [destinationBridge, setDestinationBridge] = useState(
-    window.new_dypius_bridge_bsc
+    window.new_dypius_bridge_bsc,
   );
   const [sourceToken, setSourceToken] = useState(window.token_dypius_new);
   const [destinationToken, setDestinationToken] = useState(
-    window.token_dypius_new_bsc
+    window.token_dypius_new_bsc,
   );
 
   const [sourceBridgeiDyp, setSourceBridgeiDyp] = useState(
-    window.bridge_idypeth
+    window.bridge_idypeth,
   );
   const [destinationBridgeiDyp, setDestinationBridgeiDyp] = useState(
-    window.bridge_idypbsceth
+    window.bridge_idypbsceth,
   );
   const [sourceTokeniDyp, setSourceTokeniDyp] = useState(window.token_idyp_eth);
   const [destinationTokeniDyp, setDestinationTokeniDyp] = useState(
-    window.token_idyp_bsceth
+    window.token_idyp_bsceth,
   );
 
   const routeData = useLocation();
@@ -95,11 +95,11 @@ const Bridge = ({
     if (coinbase != undefined) {
       const contract1 = new window.infuraWeb3.eth.Contract(
         TokenABI,
-        tokenAddress
+        tokenAddress,
       );
       const contract2 = new window.avaxWeb3.eth.Contract(
         TokenABI,
-        tokenAddress
+        tokenAddress,
       );
       const contract3 = new window.bscWeb3.eth.Contract(TokenABI, tokenAddress);
 
@@ -282,7 +282,7 @@ const Bridge = ({
       <div>
         <div className="d-flex flex-lg-row flex-column-reverse justify-content-between gap-3 mb-4">
           <div className="d-flex flex-column">
-            <h3 className="text-white mb-4">
+            <h3 className="text-white mb-4 d-flex align-items-center gap-2">
               <img
                 src={"https://cdn.worldofdypians.com/tools/dyplogo.svg"}
                 alt=""
@@ -458,7 +458,7 @@ const Bridge = ({
       </div>
       <div className="bigseparator mt-5 mb-5"></div>
       <div>
-        <h3 className="text-white mb-4">
+        <h3 className="text-white mb-4 d-flex align-items-center gap-2">
           <img
             src={"https://cdn.worldofdypians.com/tools/idypius.svg"}
             alt=""

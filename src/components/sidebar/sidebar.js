@@ -1,5 +1,5 @@
 import { NavLink, useLocation } from "react-router-dom";
-import React, { useState, useEffect } from "react"; 
+import React, { useState, useEffect } from "react";
 import useWindowSize from "../../functions/useWindowSize";
 import "./sidebar.css";
 
@@ -9,7 +9,7 @@ const Sidebar = (props) => {
   const [activePath, setactivePath] = useState(null);
 
   const [activeSidebar, setActiveSidebar] = useState(false);
- 
+
   const windowSize = useWindowSize();
   const location = useLocation();
 
@@ -33,7 +33,7 @@ const Sidebar = (props) => {
 
   sidebar?.addEventListener("mouseover", openSidebar);
   sidebar?.addEventListener("mouseleave", closeSidebar);
- 
+
   useEffect(() => {
     // const fetchInterval = setInterval(
     //   () => setlocation(window.location.pathname),
@@ -47,11 +47,11 @@ const Sidebar = (props) => {
   }, [windowSize]);
 
   const sidebarItems = [
-    // {
-    //   label: "Migration",
-    //   icon: "swapIcon",
-    //   link: "/migration",
-    // },
+    {
+      label: "Migration Portal",
+      icon: "swapIcon",
+      link: "/migration-portal",
+    },
     {
       label: "Earn",
       icon: "earnIcon",
@@ -381,7 +381,7 @@ const Sidebar = (props) => {
                     </div>
                   </NavLink>
                 )
-              )
+              ),
             )}
           </div>
         </div>

@@ -119,7 +119,10 @@
   line-height: 18px;
   color: #8e97cd;
 }
-
+#dropdown-basic-button-migration {
+  width: 100% !important;
+  height: 42px !important;
+}
 #dropdown-basic-button2 {
   background: #2a2859 !important;
   border-radius: 8px;
