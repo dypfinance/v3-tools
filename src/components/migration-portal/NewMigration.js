@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect } from "react";
 import { MigrationPortal } from "./components/MigrationPortal";
 
 const NewMigration = ({
@@ -10,6 +10,9 @@ const NewMigration = ({
   handleSwitchChainBinanceWallet,
   handleSwitchNetwork,
 }) => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <div className="container-lg p-lg-0 pt-5 relative">
       {/* Content */}

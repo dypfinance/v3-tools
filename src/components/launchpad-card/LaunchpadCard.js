@@ -1,17 +1,22 @@
 import React from "react";
 import "./launchpad.css";
+import { NavLink } from "react-router-dom";
 
 const LaunchpadCard = ({ type }) => {
   return (
-    <a
-      href="https://www.worldofdypians.com/"
+    <NavLink
+      to="/governance"
       className="launchpad-wrapper"
       rel="noreferrer"
-      target="_blank"
       style={{ marginTop: "12px" }}
     >
       <div className="d-flex flex-column gap-2 align-items-center justify-content-between">
-        <img src={'https://cdn.worldofdypians.com/tools/defiBg.webp'} alt="" className="launchpadbg" />
+        <img
+          src={"https://cdn.worldofdypians.com/tools/govhero.png"}
+          alt=""
+          className="launchpadbg"
+          style={{ height: 120 }}
+        />
         <div
           className="d-flex gap-2 align-items-center justify-content-between w-100"
           style={{ padding: "0px 10px 4px 10px" }}
@@ -24,7 +29,8 @@ const LaunchpadCard = ({ type }) => {
               lineHeight: "16px",
             }}
           >
-            Discover excitement like never before!
+            {/* Discover excitement like never before! */}
+            Dypius Governance
           </h6>
           <img
             src={"https://cdn.worldofdypians.com/tools/filledArrow.svg"}
@@ -32,7 +38,7 @@ const LaunchpadCard = ({ type }) => {
           />
         </div>
       </div>
-    </a>
+    </NavLink>
   );
 };
 
