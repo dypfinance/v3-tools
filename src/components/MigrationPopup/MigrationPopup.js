@@ -47,17 +47,15 @@ const MigrationPopup = () => {
             DYP/iDYP migration is now Live
           </h6>
           <span className="popup-span mb-0">
-          Easily migrate your DYP and iDYP tokens from Ethereum, BNB Chain, and Avalanche with premium rates available until the snapshot date.
+            Easily migrate your DYP and iDYP tokens with premium rates available
+            until the snapshot date.
           </span>
         </div>
         <img src={migrationBanner} className="land-nft-image" alt="land nft" />
         <span className="popup-content">
           Premium migration rates until February 23, 2026
         </span>
-        <NavLink
-          to="/migration-portal"
-          onClick={() => setActive(false)}
-        >
+        <NavLink to="/migration-portal" onClick={() => setActive(false)}>
           <button
             className="btn filled-btn m-3"
             style={{ fontSize: "16px", padding: "12px 24px" }}
