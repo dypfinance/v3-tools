@@ -2713,11 +2713,9 @@ window.config = {
   token_old_avax_address: "0x961c8c0b1aad0c0b10a51fef6a867e3091bcef17", //avax
 
   claim_newdyp_eth_address: "0xc40be3a801a39bdc151bf6b3468b4035f8a4d440", //migrate old dyp eth -> new dyp eth
-  migrationeth_address: "0x0000000000000000000000000000000000000000", //migrate old dyp and idyp phase2
-  migrationbnb_address: "0x51A430C68C8b0221B27461a82f8F4065442404e3", //migrate old dyp and idyp phase2
-  migrationopbnb_address: "0x0000000000000000000000000000000000000000", //migrate old dyp and idyp phase2
-  migrationavax_address: "0x0000000000000000000000000000000000000000", //migrate old dyp and idyp phase2
-  migrationbase_address: "0x0000000000000000000000000000000000000000", //migrate old dyp and idyp phase2
+  migrationeth_address: "0x7617cFE206529A33d884FE9d6bE51068d4F390af", //migrate old dyp and idyp phase2
+  migrationbnb_address: "0xB057481458f996888eB15430D8aca87D7A5d6147", //migrate old dyp and idyp phase2
+  token_dyp_migration_eth_address: "0x39b46B212bDF15b42B166779b9d1787A68b9D0c3",
 
   bridge_bsc_new_address: "0x39b46b212bdf15b42b166779b9d1787a68b9d0c3",
   bridge_migration_eth_bsc_new_address:
@@ -3364,9 +3362,9 @@ const checkapproveStakePool = async (useraddr, tokenaddr, stakingaddr) => {
   let token_contract = new window.web3.eth.Contract(
     window.TOKEN_ABI,
     tokenaddr,
-  );
+  )
 
-  return await token_contract.methods.allowance(useraddr, stakingaddr).call();
+  return await token_contract.methods.allowance(useraddr, stakingaddr).call().catch((e)=>{console.error(e); return 0});
 };
 
 window.checkapproveStakePool = checkapproveStakePool;
