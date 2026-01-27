@@ -391,7 +391,7 @@ const TopPoolsListCard = ({
           </div>
         </div>
         <div className="d-flex col-12 col-lg-4 align-items-center justify-content-between">
-          {cardType !== "Vault" && (
+          {/* {cardType !== "Vault" && (
             <div className="d-flex flex-column gap-2">
               <span
                 style={{
@@ -412,7 +412,7 @@ const TopPoolsListCard = ({
                 {tvl}
               </h5>
             </div>
-          )}
+          )} */}
           <div className="d-flex flex-column gap-2">
             <span
               style={{ fontSize: "12px", fontWeight: "400", color: "#C0C9FF" }}

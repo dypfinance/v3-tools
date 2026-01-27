@@ -401,7 +401,7 @@ const Header = ({
                   />
                 </NavLink>
                 <div className="d-flex m-0 justify-content-between gap-3 align-items-center">
-                  <NavLink className="buydyp-btn btn" to="/buydyp">
+                  {/* <NavLink className="buydyp-btn btn" to="/buydyp">
                     <img
                       src={"https://cdn.worldofdypians.com/tools/coins.svg"}
                       alt=""
@@ -409,7 +409,7 @@ const Header = ({
                     <span className="buy-dyp-text d-none d-lg-flex">
                       Buy DYP
                     </span>
-                  </NavLink>
+                  </NavLink> */}
                   <div className="d-flex justify-content-between gap-3 align-items-center">
                     {routeData.pathname &&
                       routeData.pathname !== "/swap" &&

@@ -3826,48 +3826,44 @@ const EarnTopPicks = ({
                     </h6>
                   </div>
                   <div
-                    className={`position-relative w-100 ${
-                      selectedchain === "base"
-                        ? "chain-popup-item-base"
-                        : "chain-popup-item"
-                    }`}
-                    onClick={() => {
-                      setselectedchain("base");
-                      onChainSelect("base");
+                    className={`position-relative w-100 chain-popup-item-disabled`}
+                    // onClick={() => {
+                    //   setselectedchain("base");
+                    //   onChainSelect("base");
 
-                      setselectedPool(
-                        selectedPool.type === "dyp"
-                          ? basePools.find((item) => {
-                              return item.type === "dyp";
-                            })
-                            ? basePools.find((item) => {
-                                return item.type === "dyp";
-                              })
-                            : basePools.find((item) => {
-                                return item.type === "idyp";
-                              })
-                          : selectedPool.type === "idyp" &&
-                            expiredPools === false
-                          ? basePools.find((item) => {
-                              return item.type === "idyp";
-                            })
-                            ? basePools.find((item) => {
-                                return item.type === "idyp";
-                              })
-                            : basePools.find((item) => {
-                                return item.type === "dyp";
-                              })
-                          : basePoolsiDypExpired.find((item) => {
-                              return item.type === "idyp";
-                            })
-                          ? basePoolsiDypExpired.find((item) => {
-                              return item.type === "idyp";
-                            })
-                          : basePoolsDyp.find((item) => {
-                              return item.type === "dyp";
-                            })
-                      );
-                    }}
+                    //   setselectedPool(
+                    //     selectedPool.type === "dyp"
+                    //       ? basePools.find((item) => {
+                    //           return item.type === "dyp";
+                    //         })
+                    //         ? basePools.find((item) => {
+                    //             return item.type === "dyp";
+                    //           })
+                    //         : basePools.find((item) => {
+                    //             return item.type === "idyp";
+                    //           })
+                    //       : selectedPool.type === "idyp" &&
+                    //         expiredPools === false
+                    //       ? basePools.find((item) => {
+                    //           return item.type === "idyp";
+                    //         })
+                    //         ? basePools.find((item) => {
+                    //             return item.type === "idyp";
+                    //           })
+                    //         : basePools.find((item) => {
+                    //             return item.type === "dyp";
+                    //           })
+                    //       : basePoolsiDypExpired.find((item) => {
+                    //           return item.type === "idyp";
+                    //         })
+                    //       ? basePoolsiDypExpired.find((item) => {
+                    //           return item.type === "idyp";
+                    //         })
+                    //       : basePoolsDyp.find((item) => {
+                    //           return item.type === "dyp";
+                    //         })
+                    //   );
+                    // }}
                   >
                     <h6
                       className={`d-flex justify-content-center align-items-center chain-popup-text`}

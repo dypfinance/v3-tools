@@ -885,7 +885,7 @@ const StakeBscIDyp = ({
   const getAvailableQuota = async () => {
     if (staking && staking._address && poolCap !== 0) {
       const stakingSc = new window.bscWeb3.eth.Contract(
-        window.CONSTANT_STAKING_IDYP_ABI,
+        window.CONSTANT_STAKING_IDYP2_ABI,
         staking._address
       );
       const totalDeposited = await stakingSc.methods

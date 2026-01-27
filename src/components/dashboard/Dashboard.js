@@ -213,16 +213,16 @@ const Dashboard = ({
 
     const wbnbContract = new window.bscWeb3.eth.Contract(
       window.TOKEN_ABI,
-      window.config.reward_token_wbnb_address
+      window.config.reward_token_wbnb_address,
     );
     const baseContract = new window.baseWeb3.eth.Contract(
       window.TOKEN_ABI,
-      window.config.reward_token_dypius_base_address
+      window.config.reward_token_dypius_base_address,
     );
 
     const wavaxContract = new window.avaxWeb3.eth.Contract(
       window.TOKEN_ABI,
-      window.config.wavax_address
+      window.config.wavax_address,
     );
 
     const tvl = await wbnbContract.methods
@@ -403,6 +403,7 @@ const Dashboard = ({
       const sortedActivebase = allActivebase.sort(function (a, b) {
         return b.apy_percent - a.apy_percent;
       });
+      console.log("sortedActivebase", sortedActivebase);
       setBasePools(sortedActivebase);
       setbasePoolsDyp(sortedActivebase);
 
@@ -663,7 +664,7 @@ const Dashboard = ({
     bnbDypPool,
     bnbIdypPool,
     avaxDyppool,
-    avaxiDypPool
+    avaxiDypPool,
   ) => {
     if (chain === "eth") {
       if (tokentype === "dyp") {
@@ -706,23 +707,25 @@ const Dashboard = ({
     }
     if (chain === "base") {
       if (tokentype === "dyp") {
-        if (locktimeToCheck === selectedPool.lock_time) {
-          return "method-btn-active";
-        } else if (
-          locktimeToCheck !== selectedPool.lock_time &&
-          baseDypPool?.find((obj) => {
-            return obj.lock_time === locktimeToCheck;
-          })
-        ) {
-          return "method-btn";
-        } else if (
-          locktimeToCheck !== selectedPool.lock_time &&
-          !baseDypPool?.find((obj) => {
-            return obj.lock_time === locktimeToCheck;
-          })
-        ) {
-          return "method-btn-disabled";
-        }
+        if (selectedPool) {
+          if (locktimeToCheck === selectedPool.lock_time) {
+            return "method-btn-active";
+          } else if (
+            locktimeToCheck !== selectedPool.lock_time &&
+            baseDypPool?.find((obj) => {
+              return obj.lock_time === locktimeToCheck;
+            })
+          ) {
+            return "method-btn";
+          } else if (
+            locktimeToCheck !== selectedPool.lock_time &&
+            !baseDypPool?.find((obj) => {
+              return obj.lock_time === locktimeToCheck;
+            })
+          ) {
+            return "method-btn-disabled";
+          }
+        } else return "method-btn-disabled";
       } else if (tokentype === "idyp") {
         if (locktimeToCheck === selectedPool.lock_time) {
           return "method-btn-active";
@@ -833,7 +836,7 @@ const Dashboard = ({
     bnbPoolsDyp,
     bnbPoolsiDyp,
     avaxPoolsDyp,
-    avaxPoolsiDyp
+    avaxPoolsiDyp,
   ) => {
     if (selectedchain === "eth") {
       if (selectedpoolType === "dyp") {
@@ -1113,7 +1116,7 @@ const Dashboard = ({
                               isStaked={
                                 userPools.length > 0
                                   ? userPools.find(
-                                      (obj) => obj.contract_address === item.id
+                                      (obj) => obj.contract_address === item.id,
                                     )
                                     ? true
                                     : false
@@ -1128,30 +1131,30 @@ const Dashboard = ({
                                 item.pair_name === "ETH"
                                   ? "$" + getFormattedNumber(totalTvlETH)
                                   : item.type === "staking" &&
-                                    item.pair_name === "BNB"
-                                  ? "$" + getFormattedNumber(totalTvlBNB)
-                                  : item.pair_name === "AVAX" &&
-                                    item.type === "staking"
-                                  ? "$" + getFormattedNumber(totalTvlAVAX)
-                                  : item.tvl_usd === "--"
-                                  ? item.tvl_usd
-                                  : "$" + getFormattedNumber(item.tvl_usd)
+                                      item.pair_name === "BNB"
+                                    ? "$" + getFormattedNumber(totalTvlBNB)
+                                    : item.pair_name === "AVAX" &&
+                                        item.type === "staking"
+                                      ? "$" + getFormattedNumber(totalTvlAVAX)
+                                      : item.tvl_usd === "--"
+                                        ? item.tvl_usd
+                                        : "$" + getFormattedNumber(item.tvl_usd)
                               }
                               lockTime={item.lock_time ? item.lock_time : 30}
                               tokenLogo={
                                 item.icon
                                   ? item.icon
                                   : item.pair_name === "iDYP"
-                                  ? "idypius.svg"
-                                  : item.pair_name === "DYP"
-                                  ? "dyplogo.svg"
-                                  : item.pair_name === "BNB"
-                                  ? "bnbChain.svg"
-                                  : item.pair_name === "ETH"
-                                  ? "ethereum.svg"
-                                  : item.pair_name === "AVAX"
-                                  ? "avax.svg"
-                                  : "cawslogo.svg"
+                                    ? "idypius.svg"
+                                    : item.pair_name === "DYP"
+                                      ? "dyplogo.svg"
+                                      : item.pair_name === "BNB"
+                                        ? "bnbChain.svg"
+                                        : item.pair_name === "ETH"
+                                          ? "ethereum.svg"
+                                          : item.pair_name === "AVAX"
+                                            ? "avax.svg"
+                                            : "cawslogo.svg"
                               }
                               onShowDetailsClick={() => {
                                 setActiveCard(topPools[index]);
@@ -1171,7 +1174,7 @@ const Dashboard = ({
                                   bnbPoolsDyp,
                                   bnbPoolsiDyp,
                                   avaxPoolsDyp,
-                                  avaxPoolsiDyp
+                                  avaxPoolsiDyp,
                                 );
                               }}
                               onHideDetailsClick={() => {
@@ -1313,7 +1316,7 @@ const Dashboard = ({
                               isStaked={
                                 userPools.length > 0
                                   ? userPools.find(
-                                      (obj) => obj.contract_address === item.id
+                                      (obj) => obj.contract_address === item.id,
                                     )
                                     ? true
                                     : false
@@ -1328,30 +1331,30 @@ const Dashboard = ({
                                 item.pair_name === "ETH"
                                   ? "$" + getFormattedNumber(totalTvlETH)
                                   : item.type === "staking" &&
-                                    item.pair_name === "BNB"
-                                  ? "$" + getFormattedNumber(totalTvlBNB)
-                                  : item.pair_name === "AVAX" &&
-                                    item.type === "staking"
-                                  ? "$" + getFormattedNumber(totalTvlAVAX)
-                                  : item.tvl_usd === "--"
-                                  ? item.tvl_usd
-                                  : "$" + getFormattedNumber(item.tvl_usd)
+                                      item.pair_name === "BNB"
+                                    ? "$" + getFormattedNumber(totalTvlBNB)
+                                    : item.pair_name === "AVAX" &&
+                                        item.type === "staking"
+                                      ? "$" + getFormattedNumber(totalTvlAVAX)
+                                      : item.tvl_usd === "--"
+                                        ? item.tvl_usd
+                                        : "$" + getFormattedNumber(item.tvl_usd)
                               }
                               lockTime={item.lock_time ? item.lock_time : 30}
                               tokenLogo={
                                 item.icon
                                   ? item.icon
                                   : item.pair_name === "iDYP"
-                                  ? "idypius.svg"
-                                  : item.pair_name === "DYP"
-                                  ? "dyplogo.svg"
-                                  : item.pair_name === "BNB"
-                                  ? "bnbChain.svg"
-                                  : item.pair_name === "ETH"
-                                  ? "ethereum.svg"
-                                  : item.pair_name === "AVAX"
-                                  ? "avax.svg"
-                                  : "cawslogo.svg"
+                                    ? "idypius.svg"
+                                    : item.pair_name === "DYP"
+                                      ? "dyplogo.svg"
+                                      : item.pair_name === "BNB"
+                                        ? "bnbChain.svg"
+                                        : item.pair_name === "ETH"
+                                          ? "ethereum.svg"
+                                          : item.pair_name === "AVAX"
+                                            ? "avax.svg"
+                                            : "cawslogo.svg"
                               }
                               onShowDetailsClick={() => {
                                 setActiveCard(topPools[index]);
@@ -1371,7 +1374,7 @@ const Dashboard = ({
                                   bnbPoolsDyp,
                                   bnbPoolsiDyp,
                                   avaxPoolsDyp,
-                                  avaxPoolsiDyp
+                                  avaxPoolsiDyp,
                                 );
                               }}
                               onHideDetailsClick={() => {
@@ -1538,7 +1541,7 @@ const Dashboard = ({
                           bnbPoolsDyp,
                           bnbPoolsiDyp,
                           avaxPoolsDyp,
-                          avaxPoolsiDyp
+                          avaxPoolsiDyp,
                         )}
                         onClick={() => {
                           handleSelectPool(
@@ -1551,7 +1554,7 @@ const Dashboard = ({
                             bnbPoolsDyp,
                             bnbPoolsiDyp,
                             avaxPoolsDyp,
-                            avaxPoolsiDyp
+                            avaxPoolsiDyp,
                           );
                         }}
                       >
@@ -1569,7 +1572,7 @@ const Dashboard = ({
                           bnbPoolsDyp,
                           bnbPoolsiDyp,
                           avaxPoolsDyp,
-                          avaxPoolsiDyp
+                          avaxPoolsiDyp,
                         )}
                         onClick={() => {
                           handleSelectPool(
@@ -1582,7 +1585,7 @@ const Dashboard = ({
                             bnbPoolsDyp,
                             bnbPoolsiDyp,
                             avaxPoolsDyp,
-                            avaxPoolsiDyp
+                            avaxPoolsiDyp,
                           );
                         }}
                       >
@@ -1600,7 +1603,7 @@ const Dashboard = ({
                           bnbPoolsDyp,
                           bnbPoolsiDyp,
                           avaxPoolsDyp,
-                          avaxPoolsiDyp
+                          avaxPoolsiDyp,
                         )}`}
                         onClick={() => {
                           handleSelectPool(
@@ -1613,7 +1616,7 @@ const Dashboard = ({
                             bnbPoolsDyp,
                             bnbPoolsiDyp,
                             avaxPoolsDyp,
-                            avaxPoolsiDyp
+                            avaxPoolsiDyp,
                           );
                         }}
                       >
@@ -1637,7 +1640,7 @@ const Dashboard = ({
                           bnbPoolsDyp,
                           bnbPoolsiDyp,
                           avaxPoolsDyp,
-                          avaxPoolsiDyp
+                          avaxPoolsiDyp,
                         )}`}
                         onClick={() => {
                           handleSelectPool(
@@ -1650,7 +1653,7 @@ const Dashboard = ({
                             bnbPoolsDyp,
                             bnbPoolsiDyp,
                             avaxPoolsDyp,
-                            avaxPoolsiDyp
+                            avaxPoolsiDyp,
                           );
                           setselectedIndex(0);
                         }}
@@ -1680,7 +1683,7 @@ const Dashboard = ({
                           bnbPoolsDyp,
                           bnbPoolsiDyp,
                           avaxPoolsDyp,
-                          avaxPoolsiDyp
+                          avaxPoolsiDyp,
                         )}`}
                         onClick={() => {
                           handleSelectPool(
@@ -1693,7 +1696,7 @@ const Dashboard = ({
                             bnbPoolsDyp,
                             bnbPoolsiDyp,
                             avaxPoolsDyp,
-                            avaxPoolsiDyp
+                            avaxPoolsiDyp,
                           );
                         }}
                       >
@@ -1718,7 +1721,7 @@ const Dashboard = ({
                           bnbPoolsDyp,
                           bnbPoolsiDyp,
                           avaxPoolsDyp,
-                          avaxPoolsiDyp
+                          avaxPoolsiDyp,
                         )}`}
                         onClick={() => {
                           handleSelectPool(
@@ -1731,7 +1734,7 @@ const Dashboard = ({
                             bnbPoolsDyp,
                             bnbPoolsiDyp,
                             avaxPoolsDyp,
-                            avaxPoolsiDyp
+                            avaxPoolsiDyp,
                           );
                         }}
                       >
@@ -1834,8 +1837,8 @@ const Dashboard = ({
                       selectedchain === "eth"
                         ? "chain-popup-item-eth"
                         : selectedpoolType === "idyp"
-                        ? "chain-popup-item-disabled"
-                        : "chain-popup-item"
+                          ? "chain-popup-item-disabled"
+                          : "chain-popup-item"
                     }`}
                     onClick={() => {
                       setselectedchain("eth");
@@ -1860,22 +1863,23 @@ const Dashboard = ({
                                 );
                               })
                           : ethPools.find((item) => {
-                              return (
-                                item.tokenType === "idyp" &&
-                                item.chain === "eth"
-                              );
-                            })
-                          ? ethPools.find((item) => {
-                              return (
-                                item.tokenType === "idyp" &&
-                                item.chain === "eth"
-                              );
-                            })
-                          : ethPools.find((item) => {
-                              return (
-                                item.tokenType === "dyp" && item.chain === "eth"
-                              );
-                            })
+                                return (
+                                  item.tokenType === "idyp" &&
+                                  item.chain === "eth"
+                                );
+                              })
+                            ? ethPools.find((item) => {
+                                return (
+                                  item.tokenType === "idyp" &&
+                                  item.chain === "eth"
+                                );
+                              })
+                            : ethPools.find((item) => {
+                                return (
+                                  item.tokenType === "dyp" &&
+                                  item.chain === "eth"
+                                );
+                              }),
                       );
                     }}
                   >
@@ -1924,22 +1928,23 @@ const Dashboard = ({
                                 );
                               })
                           : bnbPools.find((item) => {
-                              return (
-                                item.tokenType === "idyp" &&
-                                item.chain === "bnb"
-                              );
-                            })
-                          ? bnbPools.find((item) => {
-                              return (
-                                item.tokenType === "idyp" &&
-                                item.chain === "bnb"
-                              );
-                            })
-                          : bnbPools.find((item) => {
-                              return (
-                                item.tokenType === "dyp" && item.chain === "bnb"
-                              );
-                            })
+                                return (
+                                  item.tokenType === "idyp" &&
+                                  item.chain === "bnb"
+                                );
+                              })
+                            ? bnbPools.find((item) => {
+                                return (
+                                  item.tokenType === "idyp" &&
+                                  item.chain === "bnb"
+                                );
+                              })
+                            : bnbPools.find((item) => {
+                                return (
+                                  item.tokenType === "dyp" &&
+                                  item.chain === "bnb"
+                                );
+                              }),
                       );
                     }}
                   >
@@ -1959,55 +1964,51 @@ const Dashboard = ({
                     </h6>
                   </div>
                   <div
-                    className={`position-relative w-100 ${
-                      selectedchain === "base"
-                        ? "chain-popup-item-base"
-                        : "chain-popup-item"
-                    }`}
-                    onClick={() => {
-                      setselectedchain("base");
-                      // onChainSelect("bnb");
+                    className={`position-relative w-100 chain-popup-item-disabled`}
+                    // onClick={() => {
+                    //   setselectedchain("base");
+                     
 
-                      setselectedPool(
-                        selectedPool.tokenType === "dyp"
-                          ? basePools.find((item) => {
-                              return (
-                                item.tokenType === "dyp" &&
-                                item.chain === "base"
-                              );
-                            })
-                            ? basePools.find((item) => {
-                                return (
-                                  item.tokenType === "dyp" &&
-                                  item.chain === "base"
-                                );
-                              })
-                            : basePools.find((item) => {
-                                return (
-                                  item.tokenType === "idyp" &&
-                                  item.chain === "base"
-                                );
-                              })
-                          : basePools.find((item) => {
-                              return (
-                                item.tokenType === "idyp" &&
-                                item.chain === "base"
-                              );
-                            })
-                          ? basePools.find((item) => {
-                              return (
-                                item.tokenType === "idyp" &&
-                                item.chain === "base"
-                              );
-                            })
-                          : basePools.find((item) => {
-                              return (
-                                item.tokenType === "dyp" &&
-                                item.chain === "base"
-                              );
-                            })
-                      );
-                    }}
+                    //   setselectedPool(
+                    //     selectedPool.tokenType === "dyp"
+                    //       ? basePools.find((item) => {
+                    //           return (
+                    //             item.tokenType === "dyp" &&
+                    //             item.chain === "base"
+                    //           );
+                    //         })
+                    //         ? basePools.find((item) => {
+                    //             return (
+                    //               item.tokenType === "dyp" &&
+                    //               item.chain === "base"
+                    //             );
+                    //           })
+                    //         : basePools.find((item) => {
+                    //             return (
+                    //               item.tokenType === "idyp" &&
+                    //               item.chain === "base"
+                    //             );
+                    //           })
+                    //       : basePools.find((item) => {
+                    //             return (
+                    //               item.tokenType === "idyp" &&
+                    //               item.chain === "base"
+                    //             );
+                    //           })
+                    //         ? basePools.find((item) => {
+                    //             return (
+                    //               item.tokenType === "idyp" &&
+                    //               item.chain === "base"
+                    //             );
+                    //           })
+                    //         : basePools.find((item) => {
+                    //             return (
+                    //               item.tokenType === "dyp" &&
+                    //               item.chain === "base"
+                    //             );
+                    //           }),
+                    //   );
+                    // }}
                   >
                     <h6
                       className={`d-flex justify-content-center align-items-center chain-popup-text`}
@@ -2057,23 +2058,23 @@ const Dashboard = ({
                                 );
                               })
                           : avaxPools.find((item) => {
-                              return (
-                                item.tokenType === "idyp" &&
-                                item.chain === "avax"
-                              );
-                            })
-                          ? avaxPools.find((item) => {
-                              return (
-                                item.tokenType === "idyp" &&
-                                item.chain === "avax"
-                              );
-                            })
-                          : avaxPools.find((item) => {
-                              return (
-                                item.tokenType === "dyp" &&
-                                item.chain === "avax"
-                              );
-                            })
+                                return (
+                                  item.tokenType === "idyp" &&
+                                  item.chain === "avax"
+                                );
+                              })
+                            ? avaxPools.find((item) => {
+                                return (
+                                  item.tokenType === "idyp" &&
+                                  item.chain === "avax"
+                                );
+                              })
+                            : avaxPools.find((item) => {
+                                return (
+                                  item.tokenType === "dyp" &&
+                                  item.chain === "avax"
+                                );
+                              }),
                       );
                     }}
                   >
@@ -2366,7 +2367,7 @@ const Dashboard = ({
                 ) : activeCard &&
                   selectedPool?.id ===
                     "0x92A84052Fe6945949A295AF14a7506e3dc085492" &&
-                  selectedPool.name !== "AVAX" ? (
+                  selectedPool?.name !== "AVAX" ? (
                   <StakeDypiusEth3Phase2
                     selectedPool={selectedPool}
                     selectedTab={selectedTab}
@@ -2408,7 +2409,7 @@ const Dashboard = ({
                 ) : activeCard &&
                   selectedPool?.id ===
                     "0xFdD3CFF22CF846208E3B37b47Bc36b2c61D2cA8b" &&
-                  selectedPool.name !== "AVAX" ? (
+                  selectedPool?.name !== "AVAX" ? (
                   <StakeDypiusEth3Phase2
                     selectedPool={selectedPool}
                     selectedTab={selectedTab}
@@ -2765,7 +2766,7 @@ const Dashboard = ({
                       handleSwitchChainBinanceWallet
                     }
                   />
-                ) : activeCard && selectedPool.name === "BNB" ? (
+                ) : activeCard && selectedPool?.name === "BNB" ? (
                   <StakeDypiusBscOther
                     selectedTab={selectedTab}
                     selectedBtn={selectedBtn}
@@ -2804,7 +2805,7 @@ const Dashboard = ({
                       handleSwitchChainBinanceWallet
                     }
                   />
-                ) : activeCard && selectedPool.name === "ETH" ? (
+                ) : activeCard && selectedPool?.name === "ETH" ? (
                   <StakeDypiusEthOther
                     selectedTab={selectedTab}
                     selectedBtn={selectedBtn}
@@ -2843,7 +2844,7 @@ const Dashboard = ({
                       handleSwitchChainBinanceWallet
                     }
                   />
-                ) : activeCard && selectedPool.name === "AVAX" ? (
+                ) : activeCard && selectedPool?.name === "AVAX" ? (
                   <StakeDypiusAvaxOther
                     selectedTab={selectedTab}
                     selectedBtn={selectedBtn}
