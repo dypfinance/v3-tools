@@ -177,16 +177,16 @@ const TopPoolsCard = ({
             </div>
           </div>
           <div
-            className={`d-flex m-0 justify-content between gap-2 align-items-center justify-content-between ${
+            className={`d-flex m-0 gap-2 align-items-center justify-content-end ${
               expired === true ? "bottomwrapperExpired" : "bottomwrapper"
             } } `}
           >
-            {cardType !== "Vault" && (
+            {/* {cardType !== "Vault" && (
               <div className="d-flex flex-column">
                 <h6 className="tvl-text">Total Value Locked</h6>
                 <h6 className="tvl-amount">{tvl}</h6>
               </div>
-            )}
+            )} */}
             <div
               className={`d-flex flex-column ${
                 cardType !== "Vault" && "align-items-end"

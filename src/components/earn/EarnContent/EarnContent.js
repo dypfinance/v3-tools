@@ -592,7 +592,7 @@ const EarnContent = ({
               style={{ minHeight: "55px" }}
             >
               <div className="col-12 col-lg-4 col-xl-3 px-0">
-                {option !== "Farming" && (
+                {/* {option !== "Farming" && (
                   <div className="total-value-locked-container p-2 d-flex justify-content-between align-items-center">
                     <span style={{ fontWeight: "300", fontSize: "13px" }}>
                       Total value locked
@@ -604,7 +604,7 @@ const EarnContent = ({
                       ${getFormattedNumber(tvl)}
                     </h6>
                   </div>
-                )}
+                )} */}
               </div>
 
               <div className="col-12 col-lg-8 col-xl-7 my-3 my-lg-0 d-flex flex-wrap gap-3 justify-content-center justify-content-lg-end justify-content-xl-center px-0 px-xl-2">

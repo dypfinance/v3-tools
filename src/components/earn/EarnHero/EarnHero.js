@@ -131,8 +131,8 @@ const EarnHero = () => {
           Farming and Vault. Start earning today!
         </p>
       </div>
-      <div className="col-12 col-lg-7 px-0 px-lg-2 d-flex gap-3 gap-lg-4 flex-column flex-lg-row">
-        <div className="d-flex align-items-start gap-2 p-3 total-tvl-wrapper position-relative">
+      <div className="col-12 col-lg-7 px-0 px-lg-2 justify-content-end d-flex gap-3 gap-lg-4 flex-column flex-lg-row">
+        {/* <div className="d-flex align-items-start gap-2 p-3 total-tvl-wrapper position-relative">
           <div className="purplediv" style={{ left: "1px", top: "10px" }}></div>
           <img src={'https://cdn.worldofdypians.com/tools/totalTvlIcon.svg'} alt="total-tvl" />
           <div
@@ -144,7 +144,7 @@ const EarnHero = () => {
               ${getFormattedNumber(totalTvl)}
             </h6>
           </div>
-        </div>
+        </div> */}
         <div className="d-flex gap-0 gap-lg-4">
           <div className="d-flex flex-column align-items-start">
             <div className="d-flex flex-column paid-rewards">
