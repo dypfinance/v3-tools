@@ -259,7 +259,7 @@ function App() {
   };
 
   const checkNetworkId = () => {
-    if (!window.location.pathname.includes("migration")) {
+ 
       if (
         window.ethereum &&
         !window.coin98 &&
@@ -358,7 +358,7 @@ function App() {
       } else {
         setnetworkId("1");
       }
-    }
+    
   };
 
   const handleSwitchNetwork = async (chainId) => {
@@ -1136,10 +1136,10 @@ function App() {
     LP_IDs_V2.weth[4],
   ];
 
-  if (!window.location.pathname.includes("migration")) {
+
     ethereum?.on("chainChanged", checkNetworkId);
     ethereum?.on("accountsChanged", checkConnection2);
-  }
+ 
 
   Amplify.configure(awsExports);
 
