@@ -9,6 +9,8 @@ import Web3 from "web3";
 import { handleSwitchNetworkhook } from "../../../functions/hooks";
 import DisclaimerModal from "./DisclaimerModal";
 import { NavLink } from "react-router-dom";
+import { ethers } from "ethers";
+import { parseEther } from "ethers/lib/utils";
 
 const TOKEN_RATES = {
   DYP: 0.004,
@@ -66,14 +68,23 @@ export function MigrationPortal({
 
   const handleChangeNetwork = async (chainId) => {
     let hexChainId = "0x" + chainId.toString(16);
-
-    await handleSwitchNetworkhook(hexChainId)
-      .then(() => {
-        handleSwitchNetwork(chainId.toString());
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+    if (window.ethereum) {
+      if (!window.gatewallet && window.WALLET_TYPE !== "binance") {
+        await handleSwitchNetworkhook(hexChainId)
+          .then(() => {
+            handleSwitchNetwork(chainId.toString());
+          })
+          .catch((e) => {
+            console.log(e);
+          });
+      } else if (coinbase && window.WALLET_TYPE === "binance") {
+        handleSwitchChainBinanceWallet(chainId.toString());
+      }
+    } else if (coinbase && window.WALLET_TYPE === "binance") {
+      handleSwitchChainBinanceWallet(chainId.toString());
+    } else {
+      window.alertify.error("No web3 detected. Please install Metamask!");
+    }
   };
 
   const getTokenBalance = async (token, sourceChain) => {
@@ -129,18 +140,71 @@ export function MigrationPortal({
 
   const handleDeposit = async () => {
     setdepositLoading(true);
-    window.web3 = new Web3(window.ethereum);
-    let contract = new window.web3.eth.Contract(
-      window.MIGRATIONBNB_ABI,
-      selectedChain.chainId === 56
-        ? window.config.migrationbnb_address
-        : window.config.migrationeth_address,
-    );
-    let amount2 = window.web3.utils.toWei(amount.toString(), "ether");
-    await contract.methods
-      .deposit(tokenAddress, amount2, networkId)
-      .send({ from: coinbase, maxPriorityFeePerGas: null, maxFeePerGas: null })
-      .then(() => {
+    if (window.WALLET_TYPE !== "binance") {
+      window.web3 = new Web3(window.ethereum);
+      let contract = new window.web3.eth.Contract(
+        window.MIGRATIONBNB_ABI,
+        selectedChain.chainId === 56
+          ? window.config.migrationbnb_address
+          : window.config.migrationeth_address,
+      );
+      let amount2 = window.web3.utils.toWei(amount.toString(), "ether");
+      await contract.methods
+        .deposit(tokenAddress, amount2, networkId)
+        .send({
+          from: coinbase,
+          maxPriorityFeePerGas: null,
+          maxFeePerGas: null,
+        })
+        .then(() => {
+          setdepositLoading(false);
+          setdepositStatus("success");
+          getTokenBalance(
+            selectedToken,
+            selectedChain.name === "Ethereum" ? "eth" : "bnb",
+          );
+          getAllDepositsByUser();
+          setTimeout(() => {
+            setAmount("");
+            setdepositStatus("initial");
+            seterrorMsg("");
+          }, 5000);
+        })
+        .catch((e) => {
+          setdepositLoading(false);
+          setdepositStatus("fail");
+          seterrorMsg(e?.message);
+          setTimeout(() => {
+            setAmount("");
+            setdepositStatus("initial");
+            seterrorMsg("");
+          }, 5000);
+        });
+    } else if (window.WALLET_TYPE === "binance") {
+      let contract_binance = new ethers.Contract(
+        selectedChain.chainId === 56
+          ? window.config.migrationbnb_address
+          : window.config.migrationeth_address,
+        window.MIGRATIONBNB_ABI,
+        binanceW3WProvider.getSigner(),
+      );
+      let amount2 = parseEther(amount.toString());
+
+      const txResponse = await contract_binance
+        .deposit(tokenAddress, amount2, networkId)
+        .catch((e) => {
+          setdepositLoading(false);
+          setdepositStatus("fail");
+          seterrorMsg(e?.message);
+          setTimeout(() => {
+            setAmount("");
+            setdepositStatus("initial");
+            seterrorMsg("");
+          }, 5000);
+        });
+
+      const txReceipt = await txResponse.wait();
+      if (txReceipt) {
         setdepositLoading(false);
         setdepositStatus("success");
         getTokenBalance(
@@ -153,17 +217,8 @@ export function MigrationPortal({
           setdepositStatus("initial");
           seterrorMsg("");
         }, 5000);
-      })
-      .catch((e) => {
-        setdepositLoading(false);
-        setdepositStatus("fail");
-        seterrorMsg(e?.message);
-        setTimeout(() => {
-          setAmount("");
-          setdepositStatus("initial");
-          seterrorMsg("");
-        }, 5000);
-      });
+      }
+    }
   };
 
   const checkApproval = async (amount) => {
@@ -195,38 +250,70 @@ export function MigrationPortal({
 
   const handleApprove = async () => {
     setdepositLoading(true);
-    window.web3 = new Web3(window.ethereum);
-    let contract = new window.web3.eth.Contract(window.TOKEN_ABI, tokenAddress);
-    console.log(
-      tokenAddress,
-      coinbase,
-      selectedChain.chainId === 56
-        ? window.config.migrationbnb_address
-        : window.config.migrationeth_address,
-      window.web3.utils.toWei(amount.toString(), "ether"),
-    );
-    await contract.methods
-      .approve(
-        selectedChain.chainId === 56
-          ? window.config.migrationbnb_address
-          : window.config.migrationeth_address,
-        window.web3.utils.toWei(amount.toString(), "ether"),
-      )
-      .send({ from: coinbase, maxPriorityFeePerGas: null, maxFeePerGas: null })
-      .then(() => {
+    if (window.WALLET_TYPE !== "binance") {
+      window.web3 = new Web3(window.ethereum);
+      let contract = new window.web3.eth.Contract(
+        window.TOKEN_ABI,
+        tokenAddress,
+      );
+
+      await contract.methods
+        .approve(
+          selectedChain.chainId === 56
+            ? window.config.migrationbnb_address
+            : window.config.migrationeth_address,
+          window.web3.utils.toWei(amount.toString(), "ether"),
+        )
+        .send({
+          from: coinbase,
+          maxPriorityFeePerGas: null,
+          maxFeePerGas: null,
+        })
+        .then(() => {
+          setdepositLoading(false);
+          setdepositStatus("deposit");
+        })
+        .catch((e) => {
+          setdepositLoading(false);
+          setdepositStatus("fail");
+          seterrorMsg(e?.message);
+          setTimeout(() => {
+            setAmount("");
+            setdepositStatus("initial");
+            seterrorMsg("");
+          }, 10000);
+        });
+    } else if (window.WALLET_TYPE === "binance") {
+      let contract_binance = new ethers.Contract(
+        tokenAddress,
+        window.TOKEN_ABI,
+        binanceW3WProvider.getSigner(),
+      );
+      let value = parseEther(amount.toString());
+      const txResponse = await contract_binance
+        .approve(
+          selectedChain.chainId === 56
+            ? window.config.migrationbnb_address
+            : window.config.migrationeth_address,
+          value,
+        )
+        .catch((e) => {
+          setdepositLoading(false);
+          setdepositStatus("fail");
+          seterrorMsg(e?.message);
+          setTimeout(() => {
+            setAmount("");
+            setdepositStatus("initial");
+            seterrorMsg("");
+          }, 10000);
+        });
+
+      const txReceipt = await txResponse.wait();
+      if (txReceipt) {
         setdepositLoading(false);
         setdepositStatus("deposit");
-      })
-      .catch((e) => {
-        setdepositLoading(false);
-        setdepositStatus("fail");
-        seterrorMsg(e?.message);
-        setTimeout(() => {
-          setAmount("");
-          setdepositStatus("initial");
-          seterrorMsg("");
-        }, 10000);
-      });
+      }
+    }
   };
 
   const handleClaim = async () => {
@@ -520,41 +607,45 @@ export function MigrationPortal({
               {/* Chain Selection */}
               <div className="mb-lg-6 mb-2 col-lg-3 col-12 px-0">
                 <div className="d-flex align-items-start gap-2 justify-content-between">
-                <label className="text-gray-300 text-sm mb-3 block">
-                  Select Chain
-                </label>
-                <Tooltip
-                  placement="top"
-                  interactive
-                  title={
-                    <div className="tooltip-text">
-                      <div className="space-y-2 px-2">
-                        <p className="font-semibold text-start">
-                          The migration for DYP tokens is supported only on
-                          Ethereum Chain and for iDYP tokens is supported only
-                          on BNB Chain.
-                        </p>
-                        <p className="text-xs text-start">
-                          If you have tokens on other chains, bridge your tokens
-                          and migrate after.
-                        </p>
-                        <NavLink to="/bridge" rel="noreferrer" className={'py-2'}>
-                          <h6 className="bottomitems">
-                            <img
-                              src={
-                                "https://cdn.worldofdypians.com/tools/arrow-up.svg"
-                              }
-                              alt=""
-                            />
-                            Go to Bridge
-                          </h6>
-                        </NavLink>
+                  <label className="text-gray-300 text-sm mb-3 block">
+                    Select Chain
+                  </label>
+                  <Tooltip
+                    placement="top"
+                    interactive
+                    title={
+                      <div className="tooltip-text">
+                        <div className="space-y-2 px-2">
+                          <p className="font-semibold text-start">
+                            The migration for DYP tokens is supported only on
+                            Ethereum Chain and for iDYP tokens is supported only
+                            on BNB Chain.
+                          </p>
+                          <p className="text-xs text-start">
+                            If you have tokens on other chains, bridge your
+                            tokens and migrate after.
+                          </p>
+                          <NavLink
+                            to="/bridge"
+                            rel="noreferrer"
+                            className={"py-2"}
+                          >
+                            <h6 className="bottomitems">
+                              <img
+                                src={
+                                  "https://cdn.worldofdypians.com/tools/arrow-up.svg"
+                                }
+                                alt=""
+                              />
+                              Go to Bridge
+                            </h6>
+                          </NavLink>
+                        </div>
                       </div>
-                    </div>
-                  }
-                >
-                  <Info className="w-5 h-5 text-gray-400 hover:text-white transition-colors" />
-                </Tooltip>
+                    }
+                  >
+                    <Info className="w-5 h-5 text-gray-400 hover:text-white transition-colors" />
+                  </Tooltip>
                 </div>
 
                 <DropdownButton
