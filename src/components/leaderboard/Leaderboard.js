@@ -317,6 +317,8 @@ const Leaderboard = ({
             <CircleAlert className="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5" />{" "}
             Pending rewards will be distributed in the new token, plus a 10%
             bonus for all players.
+            <br /> All results will be reviewed with a final check. Abusing
+            users will be removed and will not receive rewards.
           </span>
           <div className="d-flex align-items-center gap-1 mt-2">
             <div
