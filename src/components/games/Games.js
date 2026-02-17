@@ -152,6 +152,42 @@ const Games = ({
     "computronfromhell@gmail.com",
     "cirssimson@gmail.com",
     "therockcharro@gmail.com",
+    "scallopedpotato1@gmail.com",
+    "satywin8@gmail.com",
+    "wn9m1@airsworld.net",
+    "fistikfitil@gmail.com",
+    "citobi3572@icousd.com",
+    "aldi23sgg@gmail.com",
+    "8wtsm@virgilian.com",
+    "pisap71129@gavrom.com",
+    "kitchen.home.garden@gmail.com",
+    "fabiandonado2016@gmail.com",
+    "ismailaltin611@gmail.com",
+    "kaansamat85@gmail.com",
+    "miraccakici66@gmail.com",
+    "bilapek931@imfaya.com",
+    "cosmicwindow.channel@gmail.com",
+    "cokgensil@gmail.com",
+    "fn2p1@airsworld.net",
+    "sebastiananda14@gmail.com",
+    "peshesabi.co@gmail.com",
+    "airdroptest995@gmail.com",
+    "onssatis@gmail.com",
+    "chreko639@gmail.com",
+    "cakicimirac61@gmail.com",
+    "karalavuk5@gmail.com",
+    "miraccakici611a@gmail.com",
+    "goldhop444@gmail.com",
+    "3rszn@airsworld.net",
+    "parijih552@icousd.com",
+    "36mgv@virgilian.com",
+    "tarihimaraton@gmail.com",
+    "karafatal356@gmail.com",
+    "olja.naeratus@gmail.com",
+    "ujsqu@airsworld.net",
+    "melshock40@gmail.com",
+    "poho08018@gmail.com",
+    "airdropmetis11@gmail.com",
   ];
 
   const midnightUTC = new Date(
@@ -161,8 +197,8 @@ const Games = ({
       now.getUTCDate() + 1,
       0,
       30,
-      0
-    )
+      0,
+    ),
   );
 
   const countEarnedRewards = () => {
@@ -348,7 +384,7 @@ const Games = ({
 
   const showSingleRewardData = (chestID, chestIndex) => {
     const filteredResult = openedChests.find(
-      (el) => el.chestId === chestID && chests.indexOf(el) === chestIndex
+      (el) => el.chestId === chestID && chests.indexOf(el) === chestIndex,
     );
 
     setIsActive(chestID);
@@ -407,7 +443,7 @@ const Games = ({
 
   const showSingleRewardDataOpbnb = (chestID, chestIndex) => {
     const filteredResult = openedOpbnbChests.find(
-      (el) => el.chestId === chestID && opbnbchests.indexOf(el) === chestIndex
+      (el) => el.chestId === chestID && opbnbchests.indexOf(el) === chestIndex,
     );
 
     setIsActive(chestID);
@@ -1086,7 +1122,7 @@ const Games = ({
                                         handleChestSelection(
                                           index,
                                           chests,
-                                          openedChests
+                                          openedChests,
                                         )
                                       ],
                                   });
@@ -1100,9 +1136,9 @@ const Games = ({
                                     handleChestSelection(
                                       index,
                                       chests,
-                                      openedChests
+                                      openedChests,
                                     )
-                                  ]
+                                  ],
                                 );
                               }}
                               onChestStatus={(val) => {
@@ -1164,7 +1200,7 @@ const Games = ({
                                         handleChestSelectionOpbnb(
                                           index,
                                           opbnbchests,
-                                          openedOpbnbChests
+                                          openedOpbnbChests,
                                         )
                                       ],
                                   });
@@ -1178,9 +1214,9 @@ const Games = ({
                                     handleChestSelectionOpbnb(
                                       index,
                                       opbnbchests,
-                                      openedOpbnbChests
+                                      openedOpbnbChests,
                                     )
-                                  ]
+                                  ],
                                 );
                               }}
                               onChestStatus={(val) => {
@@ -1616,7 +1652,7 @@ const Games = ({
                                       return obj.rewardType === "Points";
                                     }).reward
                                   : 0,
-                                0
+                                0,
                               )}
                             </h6>
 
@@ -1634,7 +1670,7 @@ const Games = ({
                                       return obj.rewardType === "MoneyETH";
                                     }).reward
                                   : 0,
-                                2
+                                2,
                               )}
                             </h6>
 
@@ -1679,7 +1715,7 @@ const Games = ({
                                         return obj.rewardType === "MoneyETH";
                                       }).reward
                                     : 0,
-                                  2
+                                  2,
                                 )}
                               </span>{" "}
                               reward cannot be claimed as you need to hold at
@@ -1696,7 +1732,7 @@ const Games = ({
                                       return obj.rewardType === "Points";
                                     }).reward
                                   : 0,
-                                0
+                                0,
                               )}
                             </h6>
                             <span className="win-amount-desc">
@@ -1714,7 +1750,7 @@ const Games = ({
                                       return obj.rewardType === "MoneyETH";
                                     }).reward
                                   : 0,
-                                2
+                                2,
                               )}
                             </h6>
                             <span className="win-amount-desc">Rewards</span>
@@ -1741,7 +1777,7 @@ const Games = ({
                                       return obj.rewardType === "Points";
                                     }).reward
                                   : 0,
-                                0
+                                0,
                               )}
                             </h6>
 
@@ -1759,7 +1795,7 @@ const Games = ({
                                       return obj.rewardType === "MoneyDYP";
                                     }).reward
                                   : 0,
-                                2
+                                2,
                               )}
                             </h6>
 
@@ -1798,7 +1834,7 @@ const Games = ({
                                       return obj.rewardType === "Points";
                                     }).reward
                                   : 0,
-                                0
+                                0,
                               )}
                             </h6>
                             <span className="win-amount-desc">
@@ -1980,7 +2016,7 @@ const Games = ({
                                 chain === "base"
                                   ? totalPoints
                                   : totalPointsOpbnb,
-                                0
+                                0,
                               )}
                             </h6>
                           </div>
@@ -1999,7 +2035,7 @@ const Games = ({
                                     chain === "base"
                                       ? totalUsdDYP
                                       : totalUsdDYPOpbnb,
-                                    2
+                                    2,
                                   )}
                                 </h6>
                               </div>
@@ -2201,7 +2237,7 @@ const Games = ({
                           `}
                                   style={{
                                     display: openChestIdsOpbnb.includes(
-                                      index + 1
+                                      index + 1,
                                     )
                                       ? "none"
                                       : "block",
@@ -2229,7 +2265,7 @@ const Games = ({
                                   } rockitem${index + 5}`}
                                   style={{
                                     display: openChestIdsOpbnb.includes(
-                                      index + 5
+                                      index + 5,
                                     )
                                       ? "none"
                                       : "",
@@ -2258,7 +2294,7 @@ const Games = ({
                                   }`}
                                   style={{
                                     display: openChestIdsOpbnb.includes(
-                                      index + 10
+                                      index + 10,
                                     )
                                       ? "none"
                                       : "",
@@ -2287,7 +2323,7 @@ const Games = ({
                                   }`}
                                   style={{
                                     display: openChestIdsOpbnb.includes(
-                                      index + 15
+                                      index + 15,
                                     )
                                       ? "none"
                                       : "",
@@ -2657,8 +2693,8 @@ const Games = ({
           type === "kittyDash"
             ? "kittydash-bg"
             : type === "stoneCrack"
-            ? "stonecrack-bg"
-            : "cawsadventure-bg"
+              ? "stonecrack-bg"
+              : "cawsadventure-bg"
         } ${
           active && "popup-active"
         } p-3 d-flex flex-column gap-3 justify-content-center align-items-center`}
