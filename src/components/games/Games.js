@@ -188,6 +188,9 @@ const Games = ({
     "melshock40@gmail.com",
     "poho08018@gmail.com",
     "airdropmetis11@gmail.com",
+    "cullpwend0@gmail.com",
+    "ssamat61@gmail.com",
+    "tz8u0@airsworld.net",
   ];
 
   const midnightUTC = new Date(
