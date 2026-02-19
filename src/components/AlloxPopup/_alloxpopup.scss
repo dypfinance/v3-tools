@@ -1,0 +1,124 @@
+.popup-wrapper {
+  position: fixed;
+  height: fit-content;
+  top: -10000px;
+  left: 0%;
+  bottom: 0%;
+  right: 0%;
+  margin: auto;
+  z-index: 1000;
+  background-color: #ffffff;
+  border-radius: 24px;
+  pointer-events: auto !important;
+  transition: all 0.25s ease-in-out;
+  overflow-x: hidden;
+  width: 33%;
+
+  @media screen and (max-width: 1440px) {
+    width: 40%;
+  }
+  @media screen and (max-width: 1300px) {
+    width: 50% !important;
+  }
+  @media screen and (max-width: 786px) {
+    width: 90% !important;
+  }
+}
+
+.popup-active {
+  box-shadow: 0 0 0 10000px rgba(0, 0, 0, 0.5);
+  top: 0% !important;
+}
+
+
+.allox-popup-title-wrapper {
+  border-radius: 200px;
+  width: 100%;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.7);
+  box-shadow:
+    0 4px 4px 0 rgba(0, 0, 0, 0.25),
+    0 4px 24px 0 rgba(0, 0, 0, 0.04),
+    0 1px 2px 0 rgba(0, 0, 0, 0.02),
+    0 1px 0 0 rgba(255, 255, 255, 0.9) inset;
+}
+
+.allox-popup-image{
+     width: 220px;
+      @media screen and (max-width: 786px) {
+    width: 150px;
+  }
+}
+
+.allox-popup-title {
+  color: #0f172a;
+  text-align: center;
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  @media screen and (max-width: 786px) {
+    font-size: 20px;
+  }
+}
+
+.allox-popup-span {
+  color: #4a5565 !important;
+  text-align: center;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px; /* 125% */
+  letter-spacing: -0.288px;
+   @media screen and (max-width: 786px) {
+    font-size: 14px;
+  }
+}
+
+.allox-popup-second-wrapper {
+  border-radius: 6px;
+  background: linear-gradient(
+    270deg,
+    rgba(239, 240, 246, 0.5) 0.07%,
+    #eff0f6 51.44%,
+    rgba(239, 240, 246, 0.5) 100.72%
+  );
+  width: 100%;
+}
+
+.allox-popup-desc {
+    color: #0F172A;
+text-align: center;
+font-family: "Inter";
+font-size: 24px;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+ @media screen and (max-width: 786px) {
+    font-size: 16px;
+  }
+}
+
+.allox-black-btn {
+    border-radius: 12px;
+background: #0F172A;
+box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.10);
+color: #FFF;
+font-size: 14px;
+font-style: normal;
+font-weight: 600;
+line-height: 21.778px; /* 155.556% */
+}
+
+.allox-white-btn {
+    border-radius: 12px;
+border: 0.5px solid #0F172A;
+background: #FFF;
+box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.10);
+color: #0F172A;
+font-family: Inter;
+font-size: 14px;
+font-style: normal;
+font-weight: 600;
+line-height: 21.778px; /* 155.556% */
+}
