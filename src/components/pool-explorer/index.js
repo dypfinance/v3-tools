@@ -322,13 +322,7 @@ export default class PoolExplorer extends React.Component {
                 alt=""
               />
             </NavLink>
-            <NavLink title="DYP Locker" to={`/locker/${txn.pairId}`}>
-              <img
-                className="icon-bg-white-rounded"
-                src="/assets/img/lock.svg"
-                alt=""
-              />
-            </NavLink>
+
           </div>
         ),
       },

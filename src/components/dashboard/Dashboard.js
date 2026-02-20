@@ -40,6 +40,7 @@ import WhitelistPopup from "../whitelistPopup/WhitelistPopup";
 import LoyaltyCard from "../launchpad-card/LoyaltyCard";
 import Calculator from "../calculator/Calculator";
 import MigrationPopup from "../MigrationPopup/MigrationPopup";
+import AlloxPopup from "../AlloxPopup/AlloxPopup";
 
 const renderer = ({ days, hours, minutes }) => {
   return (
@@ -2891,7 +2892,7 @@ const Dashboard = ({
           </Box>
         </Modal>
       )}
-      <MigrationPopup />
+      <AlloxPopup />
 
       {/* {whitelistPopup === true && (
         <WhitelistPopup

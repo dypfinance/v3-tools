@@ -866,30 +866,8 @@ const PricingPackages = ({
                     </div>
                   )}
                 </div>
-              ) : (
-                <div className="pricing-package-buy-wrapper p-3 d-flex gap-2 align-items-center justify-content-between w-100">
-                  <div className="d-flex flex-column">
-                    <span className="package-amount-needed">
-                      Minimum Lock Amount:
-                    </span>
-                    <h6 className="package-plan-price mb-0 text-white">
-                      {getFormattedNumber(bundlePrices.basic.priceInDyp, 2)} DYP
-                    </h6>
-                    <span className="package-price-usd">
-                      ${getFormattedNumber(bundlePrices.basic.priceInUsd, 0)}
-                    </span>
-                  </div>
-                  <button
-                    className="btn filledbtn px-5 py-2"
-                    style={{ fontSize: "14px" }}
-                    onClick={() => {
-                      setActiveBundle(1);
-                      setPopup(true);
-                    }}
-                  >
-                    Lock
-                  </button>
-                </div>
+              ) : ( null
+              
               )}
             </div>
             <div className="package-plan-wrapper main-package-wrapper d-flex flex-column justify-content-between">
@@ -965,30 +943,8 @@ const PricingPackages = ({
                   )}
                 </div>
               ) : (
-                <div className="pricing-package-buy-wrapper p-3 d-flex gap-2 align-items-center justify-content-between w-100">
-                  <div className="d-flex flex-column">
-                    <span className="package-amount-needed">
-                      Minimum Lock Amount:
-                    </span>
-                    <h6 className="package-plan-price mb-0 text-white">
-                      {getFormattedNumber(bundlePrices.advanced.priceInDyp, 2)}{" "}
-                      DYP
-                    </h6>
-                    <span className="package-price-usd">
-                      ${getFormattedNumber(bundlePrices.advanced.priceInUsd, 0)}
-                    </span>
-                  </div>
-                  <button
-                    className="btn filledbtn px-5 py-2"
-                    style={{ fontSize: "14px" }}
-                    onClick={() => {
-                      setActiveBundle(2);
-                      setPopup(true);
-                    }}
-                  >
-                    Lock
-                  </button>
-                </div>
+                null
+              
               )}
             </div>
             <div className="package-plan-wrapper d-flex flex-column justify-content-between">
@@ -1064,37 +1020,8 @@ const PricingPackages = ({
                   )}
                 </div>
               ) : (
-                <div className="pricing-package-buy-wrapper p-3 d-flex gap-2 align-items-center justify-content-between w-100">
-                  <div className="d-flex flex-column">
-                    <span className="package-amount-needed">
-                      Minimum Lock Amount:
-                    </span>
-                    <h6 className="package-plan-price mb-0 text-white">
-                      {getFormattedNumber(
-                        bundlePrices.enterprise.priceInDyp,
-                        2
-                      )}{" "}
-                      DYP
-                    </h6>
-                    <span className="package-price-usd">
-                      $
-                      {getFormattedNumber(
-                        bundlePrices.enterprise.priceInUsd,
-                        0
-                      )}
-                    </span>
-                  </div>
-                  <button
-                    className="btn filledbtn px-5 py-2"
-                    style={{ fontSize: "14px" }}
-                    onClick={() => {
-                      setActiveBundle(3);
-                      setPopup(true);
-                    }}
-                  >
-                    Lock
-                  </button>
-                </div>
+                null
+               
               )}
             </div>
           </div>
