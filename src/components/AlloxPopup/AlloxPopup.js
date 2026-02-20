@@ -80,7 +80,7 @@ const AlloxPopup = () => {
           </div>
           <div className="d-flex align-items-center gap-2 mt-3">
             <a
-              href="https://app.dypius.com/migration-portal"
+              href="https://x.com/alloxdotai"
               target={"_blank"}
               onClick={() => setActive(false)}
             >
@@ -101,7 +101,7 @@ const AlloxPopup = () => {
               </button>
             </a>
             <a
-              href="https://app.dypius.com/migration-portal"
+              href="https://allox.ai/"
               target={"_blank"}
               onClick={() => setActive(false)}
             >
