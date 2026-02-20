@@ -408,16 +408,7 @@ const MobileMenu = () => {
                   alt=""
                 />
               </NavLink>
-              <NavLink
-                to="/locker"
-                className="d-flex justify-content-between align-items-center w-100 py-2"
-              >
-                <h3 className="sideitem-text">DYP Locker</h3>
-                <img
-                  src={"https://cdn.worldofdypians.com/tools/rightlogo.svg"}
-                  alt=""
-                />
-              </NavLink>
+             
               <NavLink
                 to="/farms"
                 className="d-flex justify-content-between align-items-center w-100 py-2"

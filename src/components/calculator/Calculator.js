@@ -352,379 +352,49 @@ const Calculator = ({ earnClass, onClose, ref }) => {
   return (
     <div
       id="calculator"
-      className={`calculator-wrapper position-relative ${earnClass}`}
+      className={`migration-banner-wrapper position-relative ${earnClass}`}
     >
       <div className="purplediv" style={{ background: "#8E97CD" }}></div>
-      <form onSubmit={handleSubmit}>
-        <div className="flex flex-column gap-2 justify-content-between">
-          <div className="d-flex justify-content-between gap-2 align-items-center pb-4">
-            <h6 className="d-flex gap-2 align-items-center calc-title">
-              <img
-                src={"https://cdn.worldofdypians.com/tools/calculator.svg"}
-                alt=""
-              />{" "}
-              Calculator
-            </h6>
-            <img
-              src={"https://cdn.worldofdypians.com/tools/calculatorChart.svg"}
-              className="calculator-chart d-flex d-md-none"
-              alt=""
-            />
-
-            {/* {earnClass === "earn-calculator" && (
-              <img
-                src={xMark}
-                width={25}
-                height={25}
-                onClick={onClose}
-              style={{ cursor: "pointer" }}
-              />
-            )} */}
-            {/* <ClickAwayListener onClickAway={handleTooltipClose}>
-           <Tooltip
-              PopperProps={{
-                disablePortal: true,
-              }}
-              onClose={handleTooltipClose}
-              open={open}
-              disableFocusListener
-              disableHoverListener
-              disableTouchListener
-              placement="top"
-              title={
-                <div className="tooltip-text">
-                  {
-                    "This calculator is for informational purposes only."
-                  }
-                </div>
-              }
-            >
-              <img src={moreinfo} width={24} height={24} className="cursor-pointer" alt="tooltip" onClick={handleTooltipOpen} />
-            </Tooltip>
-           </ClickAwayListener> */}
-          </div>
-          <div className="pills-container gap-3 d-flex justify-content-start row m-0 w-100 position-relative">
-            <img
-              src={"https://cdn.worldofdypians.com/tools/calculatorChart.svg"}
-              className="calculator-chart d-none d-xl-flex"
-              alt=""
-            />
-            {pillsNames &&
-              pillsNames.length > 0 &&
-              pillsNames.map((item, id) => (
-                <p
-                  key={id}
-                  onClick={() => {
-                    setActivePill(item);
-                    getActivePill(item);
-                  }}
-                  className={`col col-lg-3 pill-item d-flex align-items-center gap-2 ${
-                    activePill == item ? "active-color" : ""
-                  }`}
-                  ref={(el) => (pillRef.current[id] = el)}
-                  style={{
-                    background: activePill == item ? "#1E1C40" : "#312F69",
-                    color: activePill == item ? "#F7F7FC" : "#8E97CD",
-                    border:
-                      activePill == item
-                        ? "1px solid #565891"
-                        : "1px solid #312F69",
-                  }}
-                >
-                  <img
-                    src={`https://cdn.worldofdypians.com/tools/${item.toLowerCase()}Icon.svg`}
-                    alt=""
-                  />
-                  <span className={`pill-item-text`}>{item}</span>
-                </p>
-              ))}
-          </div>
-          <div className="separator mb-0"></div>
-
-          <div
-            className="row align-items-center gap-2 m-0 position-relative"
-            style={{ top: "15px" }}
-          >
-            {/* <div
-              className="inputwrapper position-relative px-0"
-              style={{ width: "32%" }}
-            >
-              <h6 className="inputlabel position-absolute">
-                USD to deposit<h6 className="requiredstar">*</h6>
+      <div className="d-flex flex-column h-100">
+        <div className="flex flex-column gap-2 h-100 justify-content-between">
+          <div className="d-flex flex-column gap-2">
+            <div className="d-flex justify-content-between gap-2 align-items-center pb-4">
+              <h6 className="d-flex gap-2 align-items-center calc-title">
+                <img
+                  src={"https://cdn.worldofdypians.com/tools/coinStackIcon.svg"}
+                  alt=""
+                />{" "}
+                Migration Portal
               </h6>
-              <input
-                type="number"
-                min={1}
-                className="form-control calcinput w-100"
-                id="usd_to_deposit"
-                name="usd_to_deposit"
-                value={usdToDeposit}
-                onChange={(e) => handleInputUSD(e.target.value)}
-              />
-            </div> */}
-            <div className="input-container usd-input px-0">
-              <input
-                type="number"
-                min={1}
-                max={999999}
-                maxLength={6}
-                autoComplete="off"
-                id="usd_to_deposit"
-                name="usd_to_deposit"
-                value={usdToDeposit}
-                placeholder=" "
-                className="text-input"
-                onChange={(e) => handleInputUSD(e.target.value)}
-                style={{ width: "100%" }}
-              />
-              <label
-                htmlFor="usd"
-                className="label"
-                onClick={() => focusInput("usd_to_deposit")}
-              >
-                USD to deposit
-              </label>
             </div>
-            <div className="input-container days-input px-0">
-              <input
-                type="number"
-                min={1}
-                max={365}
-                id="days"
-                name="days"
-                value={days}
-                placeholder=" "
-                className="text-input"
-                onChange={(e) => handleInputDays(e.target.value)}
-                style={{ width: "100%" }}
-              />
-              <label
-                htmlFor="usd"
-                className="label"
-                onClick={() => focusInput("days")}
-              >
-                Days
-              </label>
+            <div>
+              <h6 className="explorercard-desc">
+                Easily migrate your DYP and iDYP tokens
+              </h6>
             </div>
-            <span className="calculator-purpose px-0 mt-3 mt-lg-0">
-              This calculator is for informational purposes only
+             <div className="migrated-tokens-wrapper my-4 d-flex flex-column flex-xl-row align-items-center justify-content-between p-3">
+          <>
+            <span className="migrated-tokens mb-0">
+              Migration <span className="d-none d-lg-flex"></span>
+             
+              deadline
             </span>
-
-            {/* <div
-              className="inputwrapper position-relative px-0"
-              style={{ width: "32%", paddingLeft: 0 }}
-            >
-              <h6 className="inputlabel position-absolute">
-                Days<h6 className="requiredstar">*</h6>
-              </h6>
-              <input
-                type="number"
-                min={1}
-                max={365}
-                className="form-control calcinput w-100"
-                id="days"
-                name="days"
-                value={days}
-                onChange={(e) => handleInputDays(e.target.value)}
-              />
-            </div> */}
-            {/* <div className="time-pills-container row m-0">)
-              {timePillsArray.length > 0 &&
-                timePillsArray.map((item, id) => (
-                  <p
-                    key={id}
-                    className={`time-pill-item`}
-                    ref={(el) => (timepillRef.current[id] = el)}
-                    onClick={() => {
-                      setActiveTimePill(item);
-                      handleInputDays2(item);
-                    }} // ref={(el) => (pillRef.current[id] = el)}
-                    style={{
-                      background:
-                        activeTimePill == item
-                          ? "linear-gradient(90.74deg, #7770E0 0%, #554FD8 100%)"
-                          : "transparent",
-                      color: activeTimePill == item ? "#F7F7FC" : "#6E7191",
-                      border: "none",
-                    }}
-                  >
-                    {item}
-                  </p>
-                ))}
-            </div> */}
-          </div>
-
-          {/* <div className="d-flex justify-content-between gap-2 align-items-end mt-3">
-            <button
-              className="earnbtn btn"
-              onClick={() => {
-                gotoEarn();
-              }}
-            >
-              Earn now <img src={rightarrow} alt="" />{" "}
-            </button>
-          
-             <div className="d-flex justify-content-end gap-2 align-items-center mt-2">
-           
-           <h6 className="output-txt d-flex flex-column align-items-center gap-1">
-             ${calculateApproxUSD === "NaN" ? "0.0" : calculateApproxUSD}
-             <h6 className="cryptotext">
-               Approx. (
-               {calculateApproxCrypto != "∞.undefined" &&
-                 calculateApproxCrypto != "..."
-                 ? calculateApproxCrypto
-                 : "0.0"}
-               {activeChain.text === "BSC"
-                 ? "WBNB"
-                 : activeChain.text === "AVAX"
-                   ? "WAVAX"
-                   : "WETH"}
-               )
-             </h6>
-           </h6>
-         </div>
-          </div>
-            <h6 className="calc-footer mt-3">
-              *This calculator is for informational purposes only. Calculated
-              yields assume that prices of the deposited assets don't change.
-            </h6> */}
-          <div className="row w-100 gap-3 gap-lg-2 gap-xl-0 mx-0 align-items-center justify-content-between mt-4 mt-lg-5 position-relative calculator-chains-wrapper">
-            <NavLink to={"/earn/dypius"} className="ethereum-chain-wrapper">
-              <div className="chain-content gap-4 p-2">
-                <div className="values-wrapper align-items-start d-flex flex-column gap-1">
-                  <div className="usd-value">
-                    $
-                    {calculateApproxUSD === "NaN"
-                      ? "0.0"
-                      : abbreviateNumber(calculateApproxUSD)}
-                  </div>
-                  <div className="approx-value">
-                    Approx. (
-                    {calculateApproxWeth != "∞.undefined" &&
-                    calculateApproxWeth != "..."
-                      ? calculateApproxWeth.slice(0, 6)
-                      : "0.0"}{" "}
-                    {activeMethod === "Vault" ? "WETH" : "DYP"})
-                  </div>
-                </div>
-                <div className="d-flex align-items-center justify-content-between gap-2 gap-lg-4">
-                  <div className="d-flex align-items-center gap-2">
-                    <img
-                      src={
-                        activeMethod === "Vault"
-                          ? "https://cdn.worldofdypians.com/tools/weth.svg"
-                          : "https://cdn.worldofdypians.com/tools/ethStakeActive.svg"
-                      }
-                      width={20}
-                      height={20}
-                      alt=""
-                    />
-                    <h6 className="chain-name">
-                      {activeMethod === "Vault" ? "WETH" : "Ethereum"}
-                    </h6>
-                  </div>
-                  <img
-                    src={"https://cdn.worldofdypians.com/tools/filledArrow.svg"}
-                    alt=""
-                  />
-                </div>
-              </div>
-            </NavLink>
-            <NavLink
-              to={"/earn/dypius"}
-              className={
-                activeMethod === "Vault" ? "usdc-wrapper" : `bnb-chain-wrapper`
-              }
-            >
-              <div className="chain-content gap-4 p-2">
-                <div className="values-wrapper d-flex flex-column gap-1">
-                  <div className="usd-value">
-                    $
-                    {calculateApproxUSDBNB === "NaN"
-                      ? "0.0"
-                      : abbreviateNumber(calculateApproxUSDBNB)}
-                  </div>
-                  <div className="approx-value">
-                    Approx. (
-                    {calculateApproxWbnb != "∞.undefined" &&
-                    calculateApproxWbnb != "..."
-                      ? calculateApproxWbnb.slice(0, 6)
-                      : "0.0"}{" "}
-                    {activeMethod === "Vault" ? "USDC" : "iDYP"})
-                  </div>
-                </div>
-                <div className="d-flex align-items-center justify-content-between gap-2 gap-lg-4">
-                  <div className="d-flex align-items-center gap-2">
-                    <img
-                      src={
-                        activeMethod === "Vault"
-                          ? "https://cdn.worldofdypians.com/tools/usdc.svg"
-                          : "https://cdn.worldofdypians.com/tools/bnbStakeActive.svg"
-                      }
-                      width={20}
-                      height={20}
-                      alt=""
-                    />
-                    <h6 className="chain-name">
-                      {activeMethod === "Vault" ? "USDC" : "BNB Chain"}
-                    </h6>
-                  </div>
-                  <img
-                    src={"https://cdn.worldofdypians.com/tools/filledArrow.svg"}
-                    alt=""
-                  />
-                </div>
-              </div>
-            </NavLink>
-            <NavLink
-              to={"/earn/dypius"}
-              className={
-                activeMethod === "Vault" ? "usdt-wrapper" : "avax-chain-wrapper"
-              }
-            >
-              <div className="chain-content  gap-4 p-2">
-                <div className="d-flex values-wrapper flex-column gap-1">
-                  <div className="usd-value">
-                    $
-                    {calculateApproxUSDAVAX === "NaN"
-                      ? "0.0"
-                      : abbreviateNumber(calculateApproxUSDAVAX)}
-                  </div>
-                  <div className="approx-value">
-                    Approx. (
-                    {calculateApproxWavax != "∞.undefined" &&
-                    calculateApproxWavax != "..."
-                      ? calculateApproxWavax.slice(0, 6)
-                      : "0.0"}{" "}
-                    {activeMethod === "Vault" ? "USDT" : "DYP"})
-                  </div>
-                </div>
-                <div className="d-flex align-items-center justify-content-between gap-2 gap-lg-4">
-                  <div className="d-flex align-items-center gap-2">
-                    <img
-                      src={
-                        activeMethod === "Vault"
-                          ? "https://cdn.worldofdypians.com/tools/usdt.svg"
-                          : "https://cdn.worldofdypians.com/wod/baseBlueLogo.svg"
-                      }
-                      width={20}
-                      height={20}
-                      alt=""
-                    />
-                    <h6 className="chain-name">
-                      {activeMethod === "Vault" ? "USDT" : "Base Chain"}
-                    </h6>
-                  </div>
-                  <img
-                    src={"https://cdn.worldofdypians.com/tools/filledArrow.svg"}
-                    alt=""
-                  />
-                </div>
-              </div>
-            </NavLink>
-          </div>
+            <h6 className="migrated-tokens-amount mb-0" style={{fontSize: '16px'}}>
+             February 23, 2026
+            </h6>
+          </>
         </div>
-      </form>
+          </div>
+          <NavLink to="/migration-portal">
+            <button
+              className="btn filled-btn m-3"
+              style={{ fontSize: "16px", padding: "12px 24px" }}
+            >
+              Migrate
+            </button>
+          </NavLink>
+        </div>
+      </div>
     </div>
   );
 };

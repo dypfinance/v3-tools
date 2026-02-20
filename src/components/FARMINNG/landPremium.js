@@ -540,9 +540,6 @@ const LandDetailsPremium = ({
                 ) : (
                   <button
                     className="connectbtn btn"
-                    onClick={() => {
-                      handleNavigateToPlans();
-                    }}
                   >
                     Become Premium
                   </button>

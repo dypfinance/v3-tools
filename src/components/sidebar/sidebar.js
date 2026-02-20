@@ -90,10 +90,7 @@ const Sidebar = (props) => {
           title: "Launchpad",
           link: "/launchpad",
         },
-        {
-          title: "DYP Locker",
-          link: "/locker",
-        },
+
       ],
     },
 
@@ -386,19 +383,7 @@ const Sidebar = (props) => {
           </div>
         </div>
       </div>
-      {activeSidebar &&
-        (props.isPremium === false || props.isPremium === null) && (
-          <NavLink
-            to={"/account"}
-            className="d-flex align-items-center justify-content-center"
-          >
-            <img
-              src={"https://cdn.worldofdypians.com/tools/sidebarPremium.png"}
-              alt=""
-              style={{ width: "80%" }}
-            />
-          </NavLink>
-        )}
+   
     </div>
   );
 };

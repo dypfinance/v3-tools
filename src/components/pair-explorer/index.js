@@ -1177,36 +1177,7 @@ export default class PairExplorer extends React.Component {
                         {this.props.networkId === 1 ? "ETH" : "AVAX"}
                       </p>
                     </div>
-                    <div className="d-flex justify-content-between align-items-center">
-                      <NavLink
-                        title="DYP Locker"
-                        to={`/locker/${this.props.match.params.pair_id}`}
-                        className={"w-auto"}
-                        style={{ color: "#857DFA" }}
-                      >
-                        View pair locker
-                      </NavLink>
-                      <div className="d-flex gap-2">
-                        <NavLink
-                          to={`/locker/${this.props.match.params.pair_id}`}
-                        >
-                          <img
-                            src={PairLocker}
-                            alt=""
-                            style={{ cursor: "pointer" }}
-                          />
-                        </NavLink>
-                        <NavLink
-                          to={`/locker/${this.props.match.params.pair_id}`}
-                        >
-                          <img
-                            src="/assets/img/arrow.svg"
-                            alt=""
-                            style={{ cursor: "pointer" }}
-                          />
-                        </NavLink>
-                      </div>
-                    </div>
+                    
                   </div>
                   <div>
                     <div
@@ -2371,20 +2342,7 @@ export default class PairExplorer extends React.Component {
                   border: "1px solid #565891",
                 }}
               >
-                <div>
-                  {" "}
-                  <NavLink to={`/locker/${this.props.match.params.pair_id}`}>
-                    <strong
-                      style={{ color: "#857DFA", textDecoration: "underline" }}
-                    >
-                      LP On DYP Locker{" "}
-                      <img
-                        style={{ marginLeft: "20px" }}
-                        src={PairLocker}
-                      ></img>{" "}
-                    </strong>
-                  </NavLink>
-                </div>
+                
                 <div> ${getFormattedNumber(this.state.usdValueOfLP, 2)} </div>
               </div>
             </div>

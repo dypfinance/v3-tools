@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import GoogleAnalyticsReporter from "./functions/analytics";
-import Locker from "./components/locker";
 import Account from "./components/account";
 import Admin from "./components/admin";
 import Farms from "./components/farms";
@@ -62,11 +61,7 @@ import { isMobile } from "react-device-detect";
 import WhitelistPopup from "./components/whitelistPopup/WhitelistPopup.js";
 import NewMigration from "./components/migration-portal/NewMigration.js";
 // import MigrationPopup from "./components/MigrationPopup/MigrationPopup.js";
-const LockerWrapper = (props) => {
-  const { pair_id } = useParams();
 
-  return <Locker {...props} pair_id={pair_id} />;
-};
 
 const Connector = getWeb3Connector();
 const binanceConnector = new Connector({
@@ -2783,20 +2778,7 @@ setkittyDashRecords */}
                       />
                     }
                   /> */}
-                  <Route
-                    exact
-                    path="/locker/:pair_id?"
-                    element={
-                      <LockerWrapper
-                        handleConnection={handleConnection}
-                        isConnected={isConnected}
-                        theme={theme}
-                        coinbase={coinbase}
-                        networkId={networkId}
-                      // {...props}
-                      />
-                    }
-                  />
+
 
                   <Route
                     exact

@@ -1504,7 +1504,7 @@ export default class Subscription extends React.Component {
                 : "user-cardImg"
             }  bordereddiv `}
           >
-            <div className="d-flex bordereddiv align-items-start align-items-lg-0 justify-content-between flex-column flex-lg-row gap-4 gap-lg-0">
+            <div className="d-flex bordereddiv align-items-start align-items-lg-center justify-content-between flex-column flex-lg-row gap-4 gap-lg-0">
               <div
                 className={`d-flex flex-column ${
                   this.state.showInput ? "gap-5 gap-lg-2" : "gap-2"
@@ -1635,6 +1635,7 @@ export default class Subscription extends React.Component {
                         />
                       )} */}
                     </div>
+                    {(this.props.isConnected === true || this.props.email) && (
                     <div className="d-flex align-items-center gap-2">
                       <span className="account-wallet-address">
                         {shortAddress(
@@ -1683,10 +1684,12 @@ export default class Subscription extends React.Component {
                             </Tooltip>
                           </ClickAwayListener>
                         )}
-                    </div>
+                    </div>)}
+                    {this.props.email && (
                     <span className="account-wallet-address">
                       {this.props.email}
                     </span>
+                    )}
                   </div>
                 </div>
               </div>
@@ -1710,21 +1713,8 @@ export default class Subscription extends React.Component {
                       <span className="plan-tag-title">Premium</span>
                     </div>
                   ) : (
-                    <button
-                      className="plan-tag py-2 px-4 d-flex align-items-center gap-2"
-                      onClick={() => {
-                        this.setState({ showPremiumPopup: true });
-                      }}
-                    >
-                      <img
-                        src={
-                          "https://cdn.worldofdypians.com/tools/premiumDypIcon.svg"
-                        }
-                        alt=""
-                        style={{ width: 28, height: 28 }}
-                      />
-                      <span className="plan-tag-title">Become Premium</span>
-                    </button>
+                    null
+                   
                   )}
                   {!this.props.email ? (
                     <NavLink
@@ -1791,101 +1781,7 @@ export default class Subscription extends React.Component {
               )}
           </div>
           <div className={`bordereddiv border-0`}></div>
-          <div className="row mx-0 mt-4 gap-3 gap-lg-0">
-            <div className="col-12 ps-0 col-lg-6">
-              <div className="dyp-balances-wrapper d-flex flex-column gap-4 p-3">
-                <h6 className="balances-title">Multichain DYP Balance</h6>
-                <div className=" balance-item-wrapper gap-3 ">
-                  <div className="dyp-balance-wrapper d-flex align-items-center justify-content-between justify-content-lg-center p-2 gap-3 gap-xxl-3 gap-lg-1">
-                    <img
-                      src={"https://cdn.worldofdypians.com/wod/eth.svg"}
-                      width={20}
-                      height={20}
-                      alt=""
-                    />
-                    <div className="d-flex align-items-center gap-1">
-                      <span className="balance-amount mb-0">
-                        {getFormattedNumber(this.state.ethBalance)} DYP
-                      </span>
-                      <img
-                        src={"https://cdn.worldofdypians.com/tools/dyplogo.svg"}
-                        width={20}
-                        height={20}
-                        alt=""
-                      />
-                    </div>
-                  </div>
-                  <div className="dyp-balance-wrapper d-flex align-items-center justify-content-between justify-content-lg-center p-2  gap-3 gap-xxl-3 gap-lg-1">
-                    <img
-                      src={"https://cdn.worldofdypians.com/wod/bnbIcon.svg"}
-                      width={20}
-                      height={20}
-                      alt=""
-                    />
-                    <div className="d-flex align-items-center gap-1">
-                      <span className="balance-amount mb-0">
-                        {getFormattedNumber(this.state.bnbBalance)} DYP
-                      </span>
-                      <img
-                        src={"https://cdn.worldofdypians.com/tools/dyplogo.svg"}
-                        width={20}
-                        height={20}
-                        alt=""
-                      />
-                    </div>
-                  </div>
-                  <div className="dyp-balance-wrapper d-flex align-items-center justify-content-between justify-content-lg-center p-2 gap-3 gap-xxl-3 gap-lg-1">
-                    <img
-                      src={"https://cdn.worldofdypians.com/wod/avaxIcon.svg"}
-                      alt=""
-                      width={20}
-                      height={20}
-                    />
-                    <div className="d-flex align-items-center gap-1">
-                      <span className="balance-amount mb-0">
-                        {getFormattedNumber(this.state.avaxBalance)} DYP
-                      </span>
-                      <img
-                        src={"https://cdn.worldofdypians.com/tools/dyplogo.svg"}
-                        width={20}
-                        height={20}
-                        alt=""
-                      />
-                    </div>
-                  </div>
-                  <div className="dyp-balance-wrapper d-flex align-items-center justify-content-between justify-content-lg-center p-2 gap-3 gap-xxl-3 gap-lg-1">
-                    <img
-                      src={"https://cdn.worldofdypians.com/wod/base.svg"}
-                      alt=""
-                      width={20}
-                      height={20}
-                    />
-                    <div className="d-flex align-items-center gap-1">
-                      <span className="balance-amount mb-0">
-                        {getFormattedNumber(this.state.baseBalance)} DYP
-                      </span>
-                      <img
-                        src={"https://cdn.worldofdypians.com/tools/dyplogo.svg"}
-                        width={20}
-                        height={20}
-                        alt=""
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="col-12 pe-lg-0 p-0 col-lg-6">
-              <NavLink
-                className="wod-wrapper d-flex flex-column align-items-start gap-3 p-3 justify-content-end"
-                to="/games"
-              >
-                <div className="btn hero-stake-eth-btn2 px-5 py-1 ">
-                  <span className="explore-wod">Explore</span>
-                </div>
-              </NavLink>
-            </div>
-          </div>
+         
           {/* <div className="row mt-5 gap-4 gap-lg-0">
           <div className="col-12 col-lg-6 position-relative d-flex justify-content-center">
             <div
@@ -2817,7 +2713,7 @@ export default class Subscription extends React.Component {
             // style={{ marginTop: mycaws.length === 0 || lands.length === 0 ? "6rem" : "" }}
           >
             <div className="col-12 col-lg-6">
-              <div className="mycawsCollection position-relative mb-5">
+              <div className="mycawsCollection position-relative mb-5 mt-5">
                 <div className="nft-ethereum-tag p-2 d-flex align-items-center gap-2">
                   <img
                     src={"https://cdn.worldofdypians.com/wod/eth.svg"}
@@ -2887,7 +2783,7 @@ export default class Subscription extends React.Component {
               </div>
             </div>
             <div className="col-12 col-lg-6">
-              <div className="mycawsCollection position-relative mb-5">
+              <div className="mycawsCollection position-relative mb-5 mt-5">
                 <div className="nft-ethereum-tag p-2 d-flex align-items-center gap-2">
                   <img
                     src={"https://cdn.worldofdypians.com/wod/eth.svg"}

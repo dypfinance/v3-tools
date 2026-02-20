@@ -81,17 +81,7 @@ const EarnOtherHero = ({ type, isPremium, onSliderClick }) => {
       bannerBgClass: "landBgDesktop",
       apr: "landApr.svg",
     },
-    {
-      title: "Become a Premium Subscriber!",
-      desc: "Enjoy extra benefits by upgrading to premium.",
-      buttonType: "link",
-      buttonUrl: "/account",
-      buttonTitle: "Get Premium",
-      chain: "Get Premium",
-      buttonClass: "hero-premium-btn",
-      bannerBgClass: "premiumBgDesktop",
-      apr: "",
-    },
+
   ];
 
   const handleSliderClick = (obj) => {
