@@ -53,7 +53,7 @@
 .allox-popup-title {
   color: #0f172a;
   text-align: center;
-  font-size: 32px;
+  font-size: 24px;
   font-style: normal;
   font-weight: 700;
   line-height: normal;
@@ -65,7 +65,7 @@
 .allox-popup-span {
   color: #4a5565 !important;
   text-align: center;
-  font-size: 16px;
+  font-size: 13px;
   font-style: normal;
   font-weight: 400;
   line-height: 20px; /* 125% */
@@ -90,7 +90,7 @@
     color: #0F172A;
 text-align: center;
 font-family: "Inter";
-font-size: 24px;
+font-size: 17px;
 font-style: normal;
 font-weight: 400;
 line-height: normal;
@@ -102,6 +102,7 @@ line-height: normal;
 .allox-black-btn {
     border-radius: 12px;
 background: #0F172A;
+border: 1px solid #0F172A;
 box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.10);
 color: #FFF;
 font-size: 14px;
@@ -110,9 +111,22 @@ font-weight: 600;
 line-height: 21.778px; /* 155.556% */
 }
 
+.allox-black-btn:hover,.allox-black-btn:active   {
+    border-radius: 12px;
+background: #253347 !important;
+border: 1px solid #0F172A !important;
+box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.10);
+color: #FFF !important;
+text-decoration: underline;
+font-size: 14px;
+font-style: normal;
+font-weight: 600;
+line-height: 21.778px; /* 155.556% */
+}
+
 .allox-white-btn {
     border-radius: 12px;
-border: 0.5px solid #0F172A;
+border: 1px solid #0F172A;
 background: #FFF;
 box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.10);
 color: #0F172A;
@@ -121,4 +135,18 @@ font-size: 14px;
 font-style: normal;
 font-weight: 600;
 line-height: 21.778px; /* 155.556% */
+}
+
+.allox-white-btn:hover,.allox-white-btn:active {
+   background: #E8EAED !important;
+       border-radius: 12px;
+border: 1px solid #0F172A !important;
+box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.10);
+color: #0F172A !important;
+font-family: Inter;
+text-decoration: underline;
+font-size: 14px;
+font-style: normal;
+font-weight: 600;
+line-height: 21.778px;
 }
