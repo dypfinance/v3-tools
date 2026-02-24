@@ -380,7 +380,7 @@ const Calculator = ({ earnClass, onClose, ref }) => {
               deadline
             </span>
             <h6 className="migrated-tokens-amount mb-0" style={{fontSize: '16px'}}>
-             February 23, 2026
+             February 23, 2027
             </h6>
           </>
         </div>

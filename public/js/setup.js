@@ -1982,8 +1982,8 @@ window.config = {
   default_gas_amount: 1200000,
 
   farmweth_address: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2", //farm weth
-  daily_bonus_base_address: "0xb4027947bb7efb1f14af7f3b01ae6d1d2e65ed8a",
-  daily_bonus_opbnb_address: "0x91485b9eb29C94a2CB63A552cB8ce107bA8b8e43",
+  daily_bonus_base_address: "0xF5592E56Da02def2aD2ded8863972ACaE9057b89",
+  daily_bonus_opbnb_address: "0xA8208C77F18970BBD30A2377997F997B89e4b88d",
 
   wethavax_address: "0xf20d962a6c8f70c731bd838a3a388d7d48fa6e15",
   wethbsc_address: "0x2170ed0880ac9a755fd29b2688956bd959f933f8",
