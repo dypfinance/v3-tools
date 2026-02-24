@@ -988,7 +988,7 @@ const NewChestItem = ({
     }
     if (!disableBtn || open) {
       if (!open && !ischestOpen) {
-        checkStates();
+        handleOpenChest();
         // if (approved) {
         //   handleOpenChest();
         // } else handleApprove();

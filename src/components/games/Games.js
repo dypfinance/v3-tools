@@ -711,9 +711,9 @@ const Games = ({
             openedChests &&
             openedChests.length < 20 &&
             rewardData.length === 0 &&
-            address.toLowerCase() === coinbase.toLowerCase() &&
-            networkId === 8453 &&
-            baseBalance > 0
+            address.toLowerCase() === coinbase.toLowerCase() 
+            && networkId === 8453
+            //  &&   baseBalance > 0
           ) {
             setMessage("");
             setDisable(false);
@@ -726,19 +726,12 @@ const Games = ({
             setDisable(true);
           } else if (
             rewardData.length === 0 &&
-            address.toLowerCase() === coinbase.toLowerCase() &&
-            baseBalance > 0
+            address.toLowerCase() === coinbase.toLowerCase()
+            //  &&  baseBalance > 0
           ) {
             setMessage("");
             setDisable(false);
-          } else if (
-            rewardData.length === 0 &&
-            address.toLowerCase() === coinbase.toLowerCase() &&
-            baseBalance === 0
-          ) {
-            setMessage("noDyp");
-            setDisable(true);
-          }
+          } 
         } else {
           setMessage("switchAccount");
           setDisable(true);
@@ -765,8 +758,8 @@ const Games = ({
             openedOpbnbChests.length < 20 &&
             rewardData.length === 0 &&
             address.toLowerCase() === coinbase.toLowerCase() &&
-            networkId === 204 &&
-            opBnbBalance > 0
+            networkId === 204 
+            // &&opBnbBalance > 0
           ) {
             setMessage("");
             setDisable(false);
@@ -779,18 +772,11 @@ const Games = ({
             setDisable(true);
           } else if (
             rewardData.length === 0 &&
-            address.toLowerCase() === coinbase.toLowerCase() &&
-            opBnbBalance > 0
+            address.toLowerCase() === coinbase.toLowerCase() 
+            // &&   opBnbBalance > 0
           ) {
             setMessage("");
             setDisable(false);
-          } else if (
-            rewardData.length === 0 &&
-            address.toLowerCase() === coinbase.toLowerCase() &&
-            opBnbBalance === 0
-          ) {
-            setMessage("noDyp");
-            setDisable(true);
           }
         } else {
           setMessage("switchAccount");
@@ -811,8 +797,8 @@ const Games = ({
     isConnected,
     rewardData,
     openedChests,
-    baseBalance,
-    opBnbBalance,
+    // baseBalance,
+    // opBnbBalance,
   ]);
 
   useEffect(() => {
@@ -988,14 +974,12 @@ const Games = ({
                         >
                           <div className="d-flex flex-column gap-2 align-items-start">
                             <span className="whitelist-tooltip-content-text">
-                              Every transaction on Base network requires a
-                              combination of ETH and DYP tokens on BASE.
+                              Every transaction on Base network requires ETH  on BASE.
                             </span>
                             <span className="whitelist-tooltip-content-text">
-                              Every transaction on opBNB Chain requires a
-                              combination of BNB and DYP tokens on opBNB Chain.
+                              Every transaction on opBNB Chain requires BNB on opBNB Chain.
                             </span>
-                            <a
+                            {/* <a
                               href="https://superbridge.app/base"
                               target="_blank"
                               rel="noreferrer"
@@ -1030,7 +1014,7 @@ const Games = ({
                                 />
                                 Bridge DYP on opBNB Chain
                               </h6>
-                            </NavLink>
+                            </NavLink> */}
                           </div>
                         </div>
                       </OutsideClickHandler>
