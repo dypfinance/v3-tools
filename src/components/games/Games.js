@@ -1026,7 +1026,11 @@ const Games = ({
                   <Countdown date={midnightUTC} renderer={renderer2} />
                 </span>
               </div>
-              <div className="d-flex align-items-center gap-2">
+                  <div className="d-flex align-items-center flex-column flex-lg-row gap-3">
+                  <div className="leaderboard-update-tab p-2">
+                    <span className="leaderboard-update-span">A new leaderboard system with improved features is coming this March. Stay tuned.</span>
+                  </div>
+                          <div className="d-flex align-items-center gap-2">
                 <button
                   className={` ${
                     chain === "base"
@@ -1062,6 +1066,7 @@ const Games = ({
                   opBNB
                 </button>
               </div>
+                  </div>
             </div>
             <div className="d-flex flex-column-reverse flex-lg-row gap-3">
               <div className="col-lg-5 left-games-banner">
