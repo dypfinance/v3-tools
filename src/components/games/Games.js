@@ -15,7 +15,7 @@ import CawsAdventurePopup from "./components/CawsAdventurePopup";
 import StoneCrackPopup from "./components/StoneCrackPopup";
 import KittyDashPopup from "./components/KittyDashPopup";
 import Leaderboard from "../leaderboard/Leaderboard";
-
+import { new_winners } from "./data";
 const renderer2 = ({ hours, minutes }) => {
   return (
     <span className="stone-crack-timer mb-0">
@@ -97,6 +97,7 @@ const Games = ({
   const [openChestIdsOpbnb, setopenChestIdsOpbnb] = useState([]);
 
   const [popup, setpopup] = useState(false);
+  const [popupRewards, setPopupRewards] = useState(false);
 
   const [liverewardData, setLiveRewardData] = useState([]);
 
@@ -711,8 +712,8 @@ const Games = ({
             openedChests &&
             openedChests.length < 20 &&
             rewardData.length === 0 &&
-            address.toLowerCase() === coinbase.toLowerCase() 
-            && networkId === 8453
+            address.toLowerCase() === coinbase.toLowerCase() &&
+            networkId === 8453
             //  &&   baseBalance > 0
           ) {
             setMessage("");
@@ -731,7 +732,7 @@ const Games = ({
           ) {
             setMessage("");
             setDisable(false);
-          } 
+          }
         } else {
           setMessage("switchAccount");
           setDisable(true);
@@ -758,7 +759,7 @@ const Games = ({
             openedOpbnbChests.length < 20 &&
             rewardData.length === 0 &&
             address.toLowerCase() === coinbase.toLowerCase() &&
-            networkId === 204 
+            networkId === 204
             // &&opBnbBalance > 0
           ) {
             setMessage("");
@@ -772,7 +773,7 @@ const Games = ({
             setDisable(true);
           } else if (
             rewardData.length === 0 &&
-            address.toLowerCase() === coinbase.toLowerCase() 
+            address.toLowerCase() === coinbase.toLowerCase()
             // &&   opBnbBalance > 0
           ) {
             setMessage("");
@@ -936,7 +937,7 @@ const Games = ({
         <div className="game-wrapper-container p-3">
           <div className="d-flex flex-column gap-2 align-items-center">
             <div className="d-flex flex-column flex-lg-row align-items-center gap-2 justify-content-between w-100">
-              <div className="d-flex flex-column">
+              <div className="d-flex flex-column w-100">
                 <div className="d-flex align-items-center gap-2 position-relative justify-content-start">
                   <div className="d-flex justify-content-center">
                     <img
@@ -974,10 +975,12 @@ const Games = ({
                         >
                           <div className="d-flex flex-column gap-2 align-items-start">
                             <span className="whitelist-tooltip-content-text">
-                              Every transaction on Base network requires ETH  on BASE.
+                              Every transaction on Base network requires ETH on
+                              BASE.
                             </span>
                             <span className="whitelist-tooltip-content-text">
-                              Every transaction on opBNB Chain requires BNB on opBNB Chain.
+                              Every transaction on opBNB Chain requires BNB on
+                              opBNB Chain.
                             </span>
                             {/* <a
                               href="https://superbridge.app/base"
@@ -1026,47 +1029,97 @@ const Games = ({
                   <Countdown date={midnightUTC} renderer={renderer2} />
                 </span>
               </div>
-                  <div className="d-flex align-items-center flex-column flex-lg-row gap-3">
-                  <div className="leaderboard-update-tab p-2">
-                    <span className="leaderboard-update-span">A new leaderboard system with improved features is coming this March. Stay tuned.</span>
+              <div className="d-flex position-relative align-items-center w-100 justify-content-between flex-column flex-lg-row gap-3">
+                {new_winners.some((winner) => winner.email === email) ? (
+                  <div
+                    className="leaderboard-update-tab p-2 ml-5 cursor-pointer"
+                    onClick={() => {
+                      setPopupRewards(true);
+                    }}
+                  >
+                    <span className="leaderboard-update-span text-lg">
+                      Your accumulated rewards: $
+                      <b>
+                        {
+                          new_winners.find((winner) => winner.email === email)
+                            ?.rewards
+                        }
+                      </b>
+                    </span>
                   </div>
-                          <div className="d-flex align-items-center gap-2">
-                <button
-                  className={` ${
-                    chain === "base"
-                      ? "new-chain-active-btn"
-                      : "new-chain-inactive-btn "
-                  } d-flex gap-1 align-items-center`}
-                  onClick={() => {
-                    setChain("base");
-                    switchNetwork("0x2105", "8453");
-                  }}
-                >
-                  <img
-                    src={"https://cdn.worldofdypians.com/wod/baseBlueLogo.svg"}
-                    alt=""
-                  />{" "}
-                  Base
-                </button>
-                <button
-                  className={`${
-                    chain === "opbnb"
-                      ? "new-chain-active-btn"
-                      : "new-chain-inactive-btn "
-                  } d-flex gap-1 align-items-center`}
-                  onClick={() => {
-                    setChain("opbnb");
-                    switchNetwork("0xcc", "204");
-                  }}
-                >
-                  <img
-                    src={"https://cdn.worldofdypians.com/wod/bnbIcon.svg"}
-                    alt=""
-                  />{" "}
-                  opBNB
-                </button>
+                ) : (
+                  <div></div>
+                )}
+
+                {popupRewards === true && (
+                  <div
+                    className="position-absolute"
+                    style={{ left: "-110px", top: "-10px" }}
+                  >
+                    <OutsideClickHandler
+                      onOutsideClick={() => {
+                        setPopupRewards(false);
+                      }}
+                    >
+                      <div
+                        className="tooltip d-flex justify-content-center"
+                        style={{ opacity: 1, width: 245 }}
+                      >
+                        <div className="d-flex flex-column gap-2 align-items-start">
+                          <span className="whitelist-tooltip-content-text">
+                            Your accumulated rewards already include the 10%
+                            bonus and will be distributed during the AlloX token
+                            launch event.
+                          </span>
+                        </div>
+                      </div>
+                    </OutsideClickHandler>
+                  </div>
+                )}
+                {/* <span className="leaderboard-update-span">
+                    A new leaderboard system with improved features is coming
+                    this March. Stay tuned.
+                  </span> */}
+
+                <div className="d-flex align-items-center gap-2">
+                  <button
+                    className={` ${
+                      chain === "base"
+                        ? "new-chain-active-btn"
+                        : "new-chain-inactive-btn "
+                    } d-flex gap-1 align-items-center`}
+                    onClick={() => {
+                      setChain("base");
+                      switchNetwork("0x2105", "8453");
+                    }}
+                  >
+                    <img
+                      src={
+                        "https://cdn.worldofdypians.com/wod/baseBlueLogo.svg"
+                      }
+                      alt=""
+                    />{" "}
+                    Base
+                  </button>
+                  <button
+                    className={`${
+                      chain === "opbnb"
+                        ? "new-chain-active-btn"
+                        : "new-chain-inactive-btn "
+                    } d-flex gap-1 align-items-center`}
+                    onClick={() => {
+                      setChain("opbnb");
+                      switchNetwork("0xcc", "204");
+                    }}
+                  >
+                    <img
+                      src={"https://cdn.worldofdypians.com/wod/bnbIcon.svg"}
+                      alt=""
+                    />{" "}
+                    opBNB
+                  </button>
+                </div>
               </div>
-                  </div>
             </div>
             <div className="d-flex flex-column-reverse flex-lg-row gap-3">
               <div className="col-lg-5 left-games-banner">
@@ -2689,8 +2742,12 @@ const Games = ({
               : "cawsadventure-bg"
         } ${
           active && "popup-active"
-        } p-3 d-flex flex-column gap-3 justify-content-center align-items-center`}
-        style={{ borderRadius: "8px", background: "#1A1A36" }}
+        } p-3 d-flex flex-column gap-3 justify-content-center align-items-centert`}
+        style={{
+          borderRadius: "8px",
+          background: "#1A1A36",
+          overflowX: "unset",
+        }}
       >
         <div
           className="d-flex align-items-center justify-content-end w-100"

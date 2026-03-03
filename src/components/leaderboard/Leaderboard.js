@@ -429,7 +429,7 @@ const Leaderboard = ({
             <div className="inner-table-wrapper p-2 w-100 position-relative d-flex flex-column align-items-end">
               {type === "stoneCrack" && (
                 <span className="playerHeader reward-position d-none  d-lg-flex justify-content-center align-items-center gap-1 px-0 leaderboard-rewards-bg">
-                  Rewards{" "}
+                  {/* Rewards{" "}
                   <Tooltip
                     title={
                       <>
@@ -450,7 +450,7 @@ const Leaderboard = ({
                       alt=""
                       className="tooltipicon-leaderboard"
                     />
-                  </Tooltip>
+                  </Tooltip> */}
                 </span>
               )}
               {/* {type === "cawsAdventure" ? (
@@ -492,7 +492,7 @@ const Leaderboard = ({
                                 </div>{" "}
                                 + */}
                                 <div className="d-flex algin-items-center">
-                                  <img
+                                  {/* <img
                                     src={
                                       "https://cdn.worldofdypians.com/tools/dyplogo.svg"
                                     }
@@ -501,7 +501,7 @@ const Leaderboard = ({
                                     alt=""
                                     className="me-1 d-none d-lg-block d-md-block"
                                   />{" "}
-                                  DYP
+                                  DYP */}
                                 </div>
                               </div>
                             </th>
