@@ -2468,7 +2468,7 @@ const Games = ({
                                 "reward-title-active"
                               } reward-title text-center`}
                             >
-                              DYP Rewards
+                              Rewards
                             </h6>
                             <div className="d-flex align-items-center gap-1">
                               <div
