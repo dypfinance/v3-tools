@@ -475,7 +475,7 @@ const Leaderboard = ({
                               className={`playerHeader ${item.class}`}
                               key={index}
                             >
-                              <div className="d-flex p-1 align-items-center justify-content-center gap-1">
+                              <div className="d-flex align-items-center justify-content-center gap-1">
                                 {/* <div className="d-flex algin-items-center">
                                   <img
                                     src={
@@ -501,7 +501,7 @@ const Leaderboard = ({
                                     alt=""
                                     className="me-1 d-none d-lg-block d-md-block"
                                   />{" "}
-                                  DYP */}
+                                  DYP */} {prevStatus === false &&'Coming Soon'} 
                                 </div>
                               </div>
                             </th>
@@ -522,7 +522,7 @@ const Leaderboard = ({
                             className={`playerHeader ${item.class}`}
                             key={index}
                           >
-                            {item.name}
+                           {prevStatus === false && item.name === "Reward" ? 'Coming Soon' : item.name}
                           </th>
                         ))}
                       </>
@@ -534,7 +534,7 @@ const Leaderboard = ({
                             key={index}
                             style={{ background: "#313243" }}
                           >
-                            {item.name}
+                             {prevStatus === false && item.name === "Reward" ? 'Coming Soon' : item.name}
                           </th>
                         ))}
                       </>
@@ -570,11 +570,29 @@ const Leaderboard = ({
                             className={`playerReward col-2 text-center leaderboard-rewards-bg`}
                             style={{ color: stoneHeaders.rewardColor }}
                           >
-                            {/* <img src={eth} width={12} height={12} alt="" />{" "} */}
-                            $
-                            {getFormattedNumber(
-                              stoneCrackRewards[index].reward,
-                              0,
+                           
+                            {prevStatus === false ? (
+                              <>
+                                {" "}
+                                <img
+                                  src={
+                                    "https://cdn.worldofdypians.com/tools/gem.svg"
+                                  }
+                                  width={12}
+                                  height={12}
+                                  alt=""
+                                  className="mb-1"
+                                />{" "}
+                                Gem
+                              </>
+                            ) : (
+                              <>
+                                ${" "}
+                                {getFormattedNumber(
+                                  stoneCrackRewards[index].reward,
+                                  0,
+                                )}
+                              </>
                             )}
                           </td>
                         </tr>
@@ -600,15 +618,29 @@ const Leaderboard = ({
                               className={`playerReward col-2 text-center leaderboard-rewards-bg`}
                               style={{ color: stoneHeaders.rewardColor }}
                             >
-                              {/* <img src={eth} width={12} height={12} alt="" />{" "} */}
-                              $0
+                              0
                             </td>
                             <td
                               className={`playerReward col-2 text-center leaderboard-rewards-bg`}
                               style={{ color: stoneHeaders.rewardColor }}
                             >
-                              {/* <img src={dyp} width={12} height={12} alt="" />{" "} */}
-                              $0
+                              {prevStatus === false ? (
+                                <>
+                                  {" "}
+                                  <img
+                                    src={
+                                      "https://cdn.worldofdypians.com/tools/gem.svg"
+                                    }
+                                    width={12}
+                                    height={12}
+                                    alt=""
+                                    className="mb-1"
+                                  />{" "}
+                                  Gem
+                                </>
+                              ) : (
+                                <>$ 0</>
+                              )}
                             </td>
                           </tr>
                         ),
@@ -642,7 +674,23 @@ const Leaderboard = ({
                               style={{ color: stoneHeaders.rewardColor }}
                             >
                               {/* <img src={eth} width={12} height={12} alt="" />{" "} */}
-                              ${getFormattedNumber(0, 0)}
+                              {prevStatus === false ? (
+                                <>
+                                  {" "}
+                                  <img
+                                    src={
+                                      "https://cdn.worldofdypians.com/tools/gem.svg"
+                                    }
+                                    width={12}
+                                    height={12}
+                                    alt=""
+                                    className="mb-1"
+                                  />{" "}
+                                  Gem
+                                </>
+                              ) : (
+                                <>$ 0</>
+                              )}
                             </td>
                           </tr>
                         )}
@@ -676,11 +724,28 @@ const Leaderboard = ({
                             className={`playerReward col-2 text-center leaderboard-rewards-bg`}
                             style={{ color: stoneHeaders.rewardColor }}
                           >
-                            {/* <img src={eth} width={12} height={12} alt="" />{" "} */}
-                            $
-                            {getFormattedNumber(
-                              stoneCrackRewardsMonthly[index].rewards,
-                              0,
+                            {prevStatus === false ? (
+                              <>
+                                {" "}
+                                <img
+                                  src={
+                                    "https://cdn.worldofdypians.com/tools/gem.svg"
+                                  }
+                                  width={12}
+                                  height={12}
+                                  alt=""
+                                  className="mb-1"
+                                />{" "}
+                                Gem
+                              </>
+                            ) : (
+                              <>
+                                ${" "}
+                                {getFormattedNumber(
+                                  stoneCrackRewardsMonthly[index].rewards,
+                                  0,
+                                )}
+                              </>
                             )}
                           </td>
                         </tr>
@@ -706,8 +771,23 @@ const Leaderboard = ({
                               className={`playerReward col-2 text-center leaderboard-rewards-bg`}
                               style={{ color: stoneHeaders.rewardColor }}
                             >
-                              {/* <img src={eth} width={12} height={12} alt="" />{" "} */}
-                              $0
+                              {prevStatus === false ? (
+                                <>
+                                  {" "}
+                                  <img
+                                    src={
+                                      "https://cdn.worldofdypians.com/tools/gem.svg"
+                                    }
+                                    width={12}
+                                    height={12}
+                                    alt=""
+                                    className="mb-1"
+                                  />{" "}
+                                  Gem
+                                </>
+                              ) : (
+                                <>$ 0</>
+                              )}
                             </td>
                           </tr>
                         ),
@@ -740,8 +820,23 @@ const Leaderboard = ({
                               className={`playerReward col-2 text-center leaderboard-rewards-bg`}
                               style={{ color: stoneHeaders.rewardColor }}
                             >
-                              {/* <img src={eth} width={12} height={12} alt="" />{" "} */}
-                              ${getFormattedNumber(0, 0)}
+                              {prevStatus === false ? (
+                                <>
+                                  {" "}
+                                  <img
+                                    src={
+                                      "https://cdn.worldofdypians.com/tools/gem.svg"
+                                    }
+                                    width={12}
+                                    height={12}
+                                    alt=""
+                                    className="mb-1"
+                                  />{" "}
+                                  Gem
+                                </>
+                              ) : (
+                                <>$ 0</>
+                              )}
                             </td>
                           </tr>
                         )}
@@ -775,11 +870,28 @@ const Leaderboard = ({
                             className={`playerReward col-2 text-center leaderboard-rewards-bg`}
                             style={{ color: stoneHeaders.rewardColor }}
                           >
-                            {/* <img src={eth} width={12} height={12} alt="" />{" "} */}
-                            $
-                            {getFormattedNumber(
-                              stoneCrackRewards[index].reward,
-                              0,
+                            {prevStatus === false ? (
+                              <>
+                                {" "}
+                                <img
+                                  src={
+                                    "https://cdn.worldofdypians.com/tools/gem.svg"
+                                  }
+                                  width={12}
+                                  height={12}
+                                  alt=""
+                                  className="mb-1"
+                                />{" "}
+                                Gem
+                              </>
+                            ) : (
+                              <>
+                                ${" "}
+                                {getFormattedNumber(
+                                  stoneCrackRewards[index].reward,
+                                  0,
+                                )}
+                              </>
                             )}
                           </td>
                         </tr>
@@ -806,14 +918,22 @@ const Leaderboard = ({
                               style={{ color: stoneHeaders.rewardColor }}
                             >
                               {/* <img src={eth} width={12} height={12} alt="" />{" "} */}
-                              $0
+                              0
                             </td>
                             <td
                               className={`playerReward col-2 text-center leaderboard-rewards-bg`}
                               style={{ color: stoneHeaders.rewardColor }}
                             >
                               {/* <img src={dyp} width={12} height={12} alt="" />{" "} */}
-                              $0
+                              <img
+                                src={
+                                  "https://cdn.worldofdypians.com/tools/gem.svg"
+                                }
+                                width={12}
+                                height={12}
+                                alt=""
+                              />
+                              0
                             </td>
                           </tr>
                         ),
@@ -849,8 +969,23 @@ const Leaderboard = ({
                               className={`playerReward col-2 text-center leaderboard-rewards-bg`}
                               style={{ color: stoneHeaders.rewardColor }}
                             >
-                              {/* <img src={eth} width={12} height={12} alt="" />{" "} */}
-                              ${getFormattedNumber(0, 0)}
+                              {prevStatus === false ? (
+                                <>
+                                  {" "}
+                                  <img
+                                    src={
+                                      "https://cdn.worldofdypians.com/tools/gem.svg"
+                                    }
+                                    width={12}
+                                    height={12}
+                                    alt=""
+                                    className="mb-1"
+                                  />{" "}
+                                  Gem
+                                </>
+                              ) : (
+                                <>$ 0</>
+                              )}
                             </td>
                           </tr>
                         )}
@@ -884,11 +1019,28 @@ const Leaderboard = ({
                             className={`playerReward col-2 text-center leaderboard-rewards-bg`}
                             style={{ color: stoneHeaders.rewardColor }}
                           >
-                            {/* <img src={eth} width={12} height={12} alt="" />{" "} */}
-                            $
-                            {getFormattedNumber(
-                              stoneCrackRewardsMonthly[index].rewards,
-                              0,
+                            {prevStatus === false ? (
+                              <>
+                                {" "}
+                                <img
+                                  src={
+                                    "https://cdn.worldofdypians.com/tools/gem.svg"
+                                  }
+                                  width={12}
+                                  height={12}
+                                  alt=""
+                                  className="mb-1"
+                                />{" "}
+                                Gem
+                              </>
+                            ) : (
+                              <>
+                                ${" "}
+                                {getFormattedNumber(
+                                  stoneCrackRewardsMonthly[index].rewards,
+                                  0,
+                                )}
+                              </>
                             )}
                           </td>
                         </tr>
@@ -915,8 +1067,23 @@ const Leaderboard = ({
                               className={`playerReward col-2 text-center leaderboard-rewards-bg`}
                               style={{ color: stoneHeaders.rewardColor }}
                             >
-                              {/* <img src={eth} width={12} height={12} alt="" />{" "} */}
-                              $0
+                              {prevStatus === false ? (
+                                <>
+                                  {" "}
+                                  <img
+                                    src={
+                                      "https://cdn.worldofdypians.com/tools/gem.svg"
+                                    }
+                                    width={12}
+                                    height={12}
+                                    alt=""
+                                    className="mb-1"
+                                  />{" "}
+                                  Gem
+                                </>
+                              ) : (
+                                <>$0</>
+                              )}
                             </td>
                           </tr>
                         ),
@@ -952,8 +1119,23 @@ const Leaderboard = ({
                               className={`playerReward col-2 text-center leaderboard-rewards-bg`}
                               style={{ color: stoneHeaders.rewardColor }}
                             >
-                              {/* <img src={eth} width={12} height={12} alt="" />{" "} */}
-                              ${getFormattedNumber(0, 0)}
+                              {prevStatus === false ? (
+                                <>
+                                  {" "}
+                                  <img
+                                    src={
+                                      "https://cdn.worldofdypians.com/tools/gem.svg"
+                                    }
+                                    width={12}
+                                    height={12}
+                                    alt=""
+                                    className="mb-1"
+                                  />{" "}
+                                  Gem
+                                </>
+                              ) : (
+                                <>$0</>
+                              )}
                             </td>
                           </tr>
                         )}
@@ -985,7 +1167,34 @@ const Leaderboard = ({
                             className={`playerReward col-4 text-center`}
                             style={{ color: kittyHeaders.rewardColor }}
                           >
-                            ${getFormattedNumber(kittyDashRewards[index], 0)}
+                            {prevStatus === false ? (
+                              <>
+                                {" "}
+                                <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="12"
+                                  height="12"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="#3ED2FF"
+                                  stroke-width="2"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                >
+                                  <path d="M6 3h12l4 6-10 13L2 9Z" />
+                                  <path d="M11 3 8 9l4 13 4-13-3-6" />
+                                  <path d="M2 9h20" />
+                                </svg>
+                                
+                                {" "}
+                                Gem
+                              </>
+                            ) : (
+                              <>
+                                ${" "}
+                                {getFormattedNumber(kittyDashRewards[index], 0)}
+                              </>
+                            )}
                           </td>
                         </tr>
                       ))}
@@ -1010,7 +1219,29 @@ const Leaderboard = ({
                               className={`playerReward col-4 text-center`}
                               style={{ color: kittyHeaders.rewardColor }}
                             >
-                              ${getFormattedNumber(0, 0)}
+                              {prevStatus === false ? (
+                                <>
+                                  {" "}
+                                  <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="12"
+                                  height="12"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="#3ED2FF"
+                                  stroke-width="2"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                >
+                                  <path d="M6 3h12l4 6-10 13L2 9Z" />
+                                  <path d="M11 3 8 9l4 13 4-13-3-6" />
+                                  <path d="M2 9h20" />
+                                </svg>{" "}
+                                  Gem
+                                </>
+                              ) : (
+                                <>$ 0</>
+                              )}
                             </td>
                           </tr>
                         ),
@@ -1037,7 +1268,29 @@ const Leaderboard = ({
                               className={`playerReward col-4 text-center`}
                               style={{ color: kittyHeaders.rewardColor }}
                             >
-                              ${getFormattedNumber(0, 0)}
+                              {prevStatus === false ? (
+                                <>
+                                  {" "}
+                                  <svg
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  width="12"
+                                  height="12"
+                                  viewBox="0 0 24 24"
+                                  fill="none"
+                                  stroke="#3ED2FF"
+                                  stroke-width="2"
+                                  stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                >
+                                  <path d="M6 3h12l4 6-10 13L2 9Z" />
+                                  <path d="M11 3 8 9l4 13 4-13-3-6" />
+                                  <path d="M2 9h20" />
+                                </svg>{" "}
+                                  Gem
+                                </>
+                              ) : (
+                                <>$ 0</>
+                              )}
                             </td>
                           </tr>
                         )}
@@ -1088,82 +1341,28 @@ const Leaderboard = ({
                             className={`playerReward col-2 text-center`}
                             style={{ color: cawsHeaders.rewardColor }}
                           >
-                            ${caws2dRewards[index]}
+                            {prevStatus === false ? (
+                              <>
+                                {" "}
+                                <img
+                                  src={
+                                    "https://cdn.worldofdypians.com/tools/gem.svg"
+                                  }
+                                  width={12}
+                                  height={12}
+                                  alt=""
+                                  className="mb-1"
+                                />{" "}
+                                Gem
+                              </>
+                            ) : (
+                              <>$ {caws2dRewards[index]}</>
+                            )}
                           </td>
                         </tr>
                       ))}
                     </>
                   )}
-
-                  {/* {weeklyplayerData &&
-                  inactiveBoard === true &&
-                  optionText === "weekly" &&
-                  weeklyplayerData.length > 0 &&
-                  weeklyplayerData.map((item, index) => {
-                    return (
-                      <tr
-                        key={index}
-                        className={`playerInnerRow ${
-                          inactiveBoard || item.displayName === username
-                            ? "playerInnerRow-inactive"
-                            : null
-                        }`}
-                      >
-                        <td className="playerData col-1">
-                          #{item.position + 1}
-                        </td>
-                        <td className="playerName col-5">
-                          {item.displayName === username ? (
-                            <div className="position-relative d-flex align-items-center">
-                              <img
-                                src={premiumAvatar}
-                                alt=""
-                                className="playerAvatar"
-                              />
-                              <span>
-                                {" "}
-                                {item.displayName?.slice(0, 13)}
-                                {item.displayName?.length > 13 && "..."}
-                              </span>
-                            </div>
-                          ) : (
-                            <div className="position-relative d-flex align-items-center">
-                              <img
-                                src={playerAvatar}
-                                alt=""
-                                className="playerAvatar"
-                              />{" "}
-                              {item.displayName?.slice(0, 13)}
-                              {item.displayName?.length > 13 && "..."}
-                            </div>
-                          )}
-                        </td>
-                        <td className="playerScore col-2 text-center">
-                          {getFormattedNumber(item.statValue, 0)}
-                        </td>
-                        <td
-                          className={`playerReward text-center col-2 ${
-                            username === item.displayName
-                              ? "goldenscore"
-                              : "playerReward"
-                          }`}
-                        >
-                          ${prizes[index]}
-                        </td>
-                      </tr>
-                    );
-                  })}
-
-                {inactiveBoard === true &&
-                  ((weeklyplayerData.length === 0 && optionText === "weekly") ||
-                    (monthlyplayerData.length === 0 &&
-                      optionText === "monthly")) &&
-                  optionText !== "genesis" && (
-                    <CircularProgress
-                      size={20}
-                      style={{ alignSelf: "center", margin: "auto" }}
-                    />
-                  )} */}
                 </tbody>
               </table>
             </div>
@@ -1225,7 +1424,23 @@ const Leaderboard = ({
                           className={`playerReward col-3 text-center`}
                           style={{ color: cawsHeaders.rewardColor }}
                         >
-                          $0
+                          {prevStatus === false ? (
+                            <>
+                              {" "}
+                              <img
+                                src={
+                                  "https://cdn.worldofdypians.com/tools/gem.svg"
+                                }
+                                width={12}
+                                height={12}
+                                alt=""
+                                className="mb-1"
+                              />{" "}
+                              Gem
+                            </>
+                          ) : (
+                            <>$ 0</>
+                          )}
                         </td>
                       </tr>
                     </tbody>
