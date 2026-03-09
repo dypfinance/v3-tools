@@ -571,7 +571,7 @@ const Leaderboard = ({
                             style={{ color: stoneHeaders.rewardColor }}
                           >
                            
-                            {prevStatus === false ? (
+                            {/* {prevStatus === false ? ( */}
                               <>
                                 {" "}
                                 <img
@@ -585,7 +585,7 @@ const Leaderboard = ({
                                 />{" "}
                                 Gem
                               </>
-                            ) : (
+                            {/* ) : (
                               <>
                                 ${" "}
                                 {getFormattedNumber(
@@ -593,7 +593,7 @@ const Leaderboard = ({
                                   0,
                                 )}
                               </>
-                            )}
+                            )} */}
                           </td>
                         </tr>
                       ))}
@@ -870,7 +870,7 @@ const Leaderboard = ({
                             className={`playerReward col-2 text-center leaderboard-rewards-bg`}
                             style={{ color: stoneHeaders.rewardColor }}
                           >
-                            {prevStatus === false ? (
+                            {/* {prevStatus === false ? ( */}
                               <>
                                 {" "}
                                 <img
@@ -884,7 +884,7 @@ const Leaderboard = ({
                                 />{" "}
                                 Gem
                               </>
-                            ) : (
+                            {/* ) : (
                               <>
                                 ${" "}
                                 {getFormattedNumber(
@@ -892,7 +892,7 @@ const Leaderboard = ({
                                   0,
                                 )}
                               </>
-                            )}
+                            )} */}
                           </td>
                         </tr>
                       ))}
