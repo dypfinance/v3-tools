@@ -1030,27 +1030,50 @@ const Games = ({
                 </span>
               </div>
               <div className="d-flex position-relative align-items-center w-100 justify-content-between flex-column flex-lg-row gap-3">
-                {new_winners.some((winner) => winner.email === email) ? (
+                <div className="d-flex gap-2 align-items-center">
+                  {new_winners.some((winner) => winner.email === email) ? (
+                    <div
+                      className="leaderboard-update-tab p-2 ml-5 cursor-pointer"
+                      onClick={() => {
+                        setPopupRewards(true);
+                      }}
+                    >
+                      <span className="leaderboard-update-span text-lg">
+                        Your accumulated rewards: $
+                        <b>
+                          {
+                            new_winners.find((winner) => winner.email === email)
+                              ?.rewards
+                          }
+                        </b>
+                      </span>
+                    </div>
+                  ) : (
+                    <div></div>
+                  )}
+                  {email &&
                   <div
                     className="leaderboard-update-tab p-2 ml-5 cursor-pointer"
-                    onClick={() => {
-                      setPopupRewards(true);
-                    }}
+                    // onClick={() => {
+                    //   setPopupRewards(true);
+                    // }}
                   >
                     <span className="leaderboard-update-span text-lg">
-                      Your accumulated rewards: $
+                      Total Gems:
                       <b>
-                        {
-                          new_winners.find((winner) => winner.email === email)
-                            ?.rewards
-                        }
+                        {" "}
+                        <img
+                          src={"https://cdn.worldofdypians.com/tools/gem.svg"}
+                          width={12}
+                          height={12}
+                          alt=""
+                          className="mb-1"
+                        />{" "}
+                        0
                       </b>
                     </span>
-                  </div>
-                ) : (
-                  <div></div>
-                )}
-
+                  </div> }
+                </div>
                 {popupRewards === true && (
                   <div
                     className="position-absolute"

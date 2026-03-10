@@ -173,7 +173,8 @@ const Dashboard = ({
         .catch((e) => {
           console.log(e);
         });
-      setuserPools(result);
+        if(result){
+      setuserPools(result);}
     }
   };
 
