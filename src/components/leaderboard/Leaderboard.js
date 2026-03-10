@@ -140,38 +140,38 @@ const Leaderboard = ({
 
   const stoneCrackRewards = [
     {
-      reward: 40,
+      reward: 2.5,
     },
     {
-      reward: 30,
+      reward: 2,
     },
     {
-      reward: 20,
+      reward: 1.5,
     },
     {
-      reward: 15,
+      reward: 1,
     },
     {
-      reward: 10,
+      reward: 0.5,
     },
     {
-      reward: 10,
+      reward: 0.5,
     },
     {
-      reward: 10,
+      reward: 0.5,
     },
     {
-      reward: 10,
+      reward: 0.5,
     },
     {
-      reward: 10,
+      reward: 0.5,
     },
     {
-      reward: 10,
+      reward: 0.5,
     },
   ];
 
-  const stoneCrackRewardsMonthly = [
+   const previous_stoneCrackRewardsMonthly = [
     {
       rewards: 200,
     },
@@ -204,11 +204,46 @@ const Leaderboard = ({
     },
   ];
 
-  const kittyDashRewards = [120, 80, 40, 40, 20, 20, 20, 20, 20, 20];
+  const stoneCrackRewardsMonthly = [
+   {
+      reward: 7.5,
+    },
+    {
+      reward: 5,
+    },
+    {
+      reward: 3,
+    },
+    {
+      reward: 2,
+    },
+    {
+      reward: 1,
+    },
+    {
+      reward: 1,
+    },
+    {
+      reward: 1,
+    },
+    {
+      reward: 1,
+    },
+    {
+      reward: 1,
+    },
+    {
+      reward: 1,
+    },
+  ];
 
-  const caws2dRewards = [
+    const previous_kittyDashRewards = [120, 80, 40, 40, 20, 20, 20, 20, 20, 20];
+    const kittyDashRewards = [1,0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1];
+
+      const previous_caws2dRewards = [
     100, 60, 40, 30, 20, 20, 20, 20, 20, 20, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
   ];
+  const caws2dRewards = [1,0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1];
 
   const [optionText, setOptionText] = useState("weekly");
   const [inactiveBoard, setInactiveBoard] = useState(false);
@@ -501,7 +536,7 @@ const Leaderboard = ({
                                     alt=""
                                     className="me-1 d-none d-lg-block d-md-block"
                                   />{" "}
-                                  DYP */} {prevStatus === false &&'Coming Soon'} 
+                                  DYP */}  
                                 </div>
                               </div>
                             </th>
@@ -522,7 +557,7 @@ const Leaderboard = ({
                             className={`playerHeader ${item.class}`}
                             key={index}
                           >
-                           {prevStatus === false && item.name === "Reward" ? 'Coming Soon' : item.name}
+                           {item.name}
                           </th>
                         ))}
                       </>
@@ -534,7 +569,7 @@ const Leaderboard = ({
                             key={index}
                             style={{ background: "#313243" }}
                           >
-                             {prevStatus === false && item.name === "Reward" ? 'Coming Soon' : item.name}
+                             {item.name}
                           </th>
                         ))}
                       </>
@@ -571,7 +606,7 @@ const Leaderboard = ({
                             style={{ color: stoneHeaders.rewardColor }}
                           >
                            
-                            {prevStatus === false ? (
+                            {/* {prevStatus === false ? ( */}
                               <>
                                 {" "}
                                 <img
@@ -583,9 +618,10 @@ const Leaderboard = ({
                                   alt=""
                                   className="mb-1"
                                 />{" "}
-                                Gem
+                                {
+                                  stoneCrackRewards[index].reward}
                               </>
-                            ) : (
+                            {/* ) : (
                               <>
                                 ${" "}
                                 {getFormattedNumber(
@@ -593,7 +629,7 @@ const Leaderboard = ({
                                   0,
                                 )}
                               </>
-                            )}
+                            )} */}
                           </td>
                         </tr>
                       ))}
@@ -624,9 +660,9 @@ const Leaderboard = ({
                               className={`playerReward col-2 text-center leaderboard-rewards-bg`}
                               style={{ color: stoneHeaders.rewardColor }}
                             >
-                              {prevStatus === false ? (
+                              {/* {prevStatus === false ? (
                                 <>
-                                  {" "}
+                                  {" "} */}
                                   <img
                                     src={
                                       "https://cdn.worldofdypians.com/tools/gem.svg"
@@ -636,11 +672,11 @@ const Leaderboard = ({
                                     alt=""
                                     className="mb-1"
                                   />{" "}
-                                  Gem
-                                </>
+                                  0
+                                {/* </>
                               ) : (
                                 <>$ 0</>
-                              )}
+                              )} */}
                             </td>
                           </tr>
                         ),
@@ -674,7 +710,7 @@ const Leaderboard = ({
                               style={{ color: stoneHeaders.rewardColor }}
                             >
                               {/* <img src={eth} width={12} height={12} alt="" />{" "} */}
-                              {prevStatus === false ? (
+                              {/* {prevStatus === false ? ( */}
                                 <>
                                   {" "}
                                   <img
@@ -686,11 +722,11 @@ const Leaderboard = ({
                                     alt=""
                                     className="mb-1"
                                   />{" "}
-                                  Gem
+                                  0
                                 </>
-                              ) : (
+                              {/* ) : (
                                 <>$ 0</>
-                              )}
+                              )} */}
                             </td>
                           </tr>
                         )}
@@ -736,13 +772,14 @@ const Leaderboard = ({
                                   alt=""
                                   className="mb-1"
                                 />{" "}
-                                Gem
+                                {
+                                  stoneCrackRewardsMonthly[index].reward}
                               </>
                             ) : (
                               <>
                                 ${" "}
                                 {getFormattedNumber(
-                                  stoneCrackRewardsMonthly[index].rewards,
+                                  previous_stoneCrackRewardsMonthly[index].rewards,
                                   0,
                                 )}
                               </>
@@ -783,7 +820,7 @@ const Leaderboard = ({
                                     alt=""
                                     className="mb-1"
                                   />{" "}
-                                  Gem
+                                  0
                                 </>
                               ) : (
                                 <>$ 0</>
@@ -832,7 +869,7 @@ const Leaderboard = ({
                                     alt=""
                                     className="mb-1"
                                   />{" "}
-                                  Gem
+                                  0
                                 </>
                               ) : (
                                 <>$ 0</>
@@ -870,7 +907,7 @@ const Leaderboard = ({
                             className={`playerReward col-2 text-center leaderboard-rewards-bg`}
                             style={{ color: stoneHeaders.rewardColor }}
                           >
-                            {prevStatus === false ? (
+                            {/* {prevStatus === false ? ( */}
                               <>
                                 {" "}
                                 <img
@@ -882,9 +919,10 @@ const Leaderboard = ({
                                   alt=""
                                   className="mb-1"
                                 />{" "}
-                                Gem
+                                {
+                                  stoneCrackRewards[index].reward}
                               </>
-                            ) : (
+                            {/* ) : (
                               <>
                                 ${" "}
                                 {getFormattedNumber(
@@ -892,7 +930,7 @@ const Leaderboard = ({
                                   0,
                                 )}
                               </>
-                            )}
+                            )} */}
                           </td>
                         </tr>
                       ))}
@@ -969,8 +1007,8 @@ const Leaderboard = ({
                               className={`playerReward col-2 text-center leaderboard-rewards-bg`}
                               style={{ color: stoneHeaders.rewardColor }}
                             >
-                              {prevStatus === false ? (
-                                <>
+                              {/* {prevStatus === false ? (
+                                <> */}
                                   {" "}
                                   <img
                                     src={
@@ -981,11 +1019,11 @@ const Leaderboard = ({
                                     alt=""
                                     className="mb-1"
                                   />{" "}
-                                  Gem
-                                </>
+                                  0
+                                {/* </>
                               ) : (
                                 <>$ 0</>
-                              )}
+                              )} */}
                             </td>
                           </tr>
                         )}
@@ -1031,13 +1069,15 @@ const Leaderboard = ({
                                   alt=""
                                   className="mb-1"
                                 />{" "}
-                                Gem
+                                 {
+                                  stoneCrackRewardsMonthly[index].reward
+                                }
                               </>
                             ) : (
                               <>
                                 ${" "}
                                 {getFormattedNumber(
-                                  stoneCrackRewardsMonthly[index].rewards,
+                                  previous_stoneCrackRewardsMonthly[index].rewards,
                                   0,
                                 )}
                               </>
@@ -1079,7 +1119,7 @@ const Leaderboard = ({
                                     alt=""
                                     className="mb-1"
                                   />{" "}
-                                  Gem
+                                  0
                                 </>
                               ) : (
                                 <>$0</>
@@ -1131,7 +1171,7 @@ const Leaderboard = ({
                                     alt=""
                                     className="mb-1"
                                   />{" "}
-                                  Gem
+                                  0
                                 </>
                               ) : (
                                 <>$0</>
@@ -1187,12 +1227,12 @@ const Leaderboard = ({
                                 </svg>
                                 
                                 {" "}
-                                Gem
+                                 {kittyDashRewards[index]}
                               </>
                             ) : (
                               <>
                                 ${" "}
-                                {getFormattedNumber(kittyDashRewards[index], 0)}
+                                {getFormattedNumber(previous_kittyDashRewards[index], 0)}
                               </>
                             )}
                           </td>
@@ -1237,7 +1277,7 @@ const Leaderboard = ({
                                   <path d="M11 3 8 9l4 13 4-13-3-6" />
                                   <path d="M2 9h20" />
                                 </svg>{" "}
-                                  Gem
+                                  0
                                 </>
                               ) : (
                                 <>$ 0</>
@@ -1286,7 +1326,7 @@ const Leaderboard = ({
                                   <path d="M11 3 8 9l4 13 4-13-3-6" />
                                   <path d="M2 9h20" />
                                 </svg>{" "}
-                                  Gem
+                                  0
                                 </>
                               ) : (
                                 <>$ 0</>
@@ -1353,10 +1393,10 @@ const Leaderboard = ({
                                   alt=""
                                   className="mb-1"
                                 />{" "}
-                                Gem
+                                {caws2dRewards[index]}
                               </>
                             ) : (
-                              <>$ {caws2dRewards[index]}</>
+                              <>$ {previous_caws2dRewards[index]}</>
                             )}
                           </td>
                         </tr>
@@ -1436,7 +1476,7 @@ const Leaderboard = ({
                                 alt=""
                                 className="mb-1"
                               />{" "}
-                              Gem
+                              0
                             </>
                           ) : (
                             <>$ 0</>

@@ -527,7 +527,8 @@ function App() {
         .catch((e) => {
           console.log(e);
         });
-      setuserPools(result);
+      if(result){
+      setuserPools(result);}
     }
   };
 
@@ -1348,7 +1349,8 @@ function App() {
         await fetch("https://game.dypius.com/api/leaderboard")
       ).json();
     } catch (e) {
-      console.warn(e);
+      console.error(e);
+      return []
     }
     leaderboard2 = leaderboard2.sort((a, b) => b.score - a.score);
     var testArray =
@@ -1386,7 +1388,8 @@ function App() {
         await fetch("https://game.dypius.com/api/leaderboard-previous")
       ).json();
     } catch (e) {
-      console.warn(e);
+      console.error(e);
+      return []
     }
     leaderboard2 = leaderboard2.sort((a, b) => b.score - a.score);
 
