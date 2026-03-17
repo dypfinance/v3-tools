@@ -46,19 +46,6 @@ const Leaderboard = ({
   const leaderboardCaws = leaderboardCaws2d.sort(
     (a, b) => b.score - a.score || a.timestamp - b.timestamp,
   );
-  const weeklyPrizes = ["25", "15", "10", "8", "0", "0", "0", "0", "0", "0"];
-  const monthlyPrizes = [
-    "250",
-    "150",
-    "100",
-    "50",
-    "50",
-    "20",
-    "20",
-    "10",
-    "10",
-    "10",
-  ];
 
   const stoneHeaders = {
     scoreColor: "#FFBE6F",
@@ -103,7 +90,6 @@ const Leaderboard = ({
         name: "Reward",
         class: "col-4 text-center",
       },
-      ,
     ],
   };
 
@@ -140,7 +126,10 @@ const Leaderboard = ({
 
   const stoneCrackRewards = [
     {
-      reward: 2.5,
+      reward: 4,
+    },
+    {
+      reward: 3,
     },
     {
       reward: 2,
@@ -152,116 +141,77 @@ const Leaderboard = ({
       reward: 1,
     },
     {
-      reward: 0.5,
+      reward: 1,
     },
     {
-      reward: 0.5,
+      reward: 1,
     },
     {
-      reward: 0.5,
+      reward: 1,
     },
     {
-      reward: 0.5,
+      reward: 1,
     },
     {
-      reward: 0.5,
-    },
-    {
-      reward: 0.5,
-    },
-  ];
-
-   const previous_stoneCrackRewardsMonthly = [
-    {
-      rewards: 200,
-    },
-    {
-      rewards: 100,
-    },
-    {
-      rewards: 50,
-    },
-    {
-      rewards: 30,
-    },
-    {
-      rewards: 20,
-    },
-    {
-      rewards: 20,
-    },
-    {
-      rewards: 20,
-    },
-    {
-      rewards: 20,
-    },
-    {
-      rewards: 20,
-    },
-    {
-      rewards: 20,
+      reward: 1,
     },
   ];
 
   const stoneCrackRewardsMonthly = [
-   {
-      reward: 7.5,
+    {
+      reward: 10,
     },
     {
-      reward: 5,
+      reward: 8,
     },
     {
-      reward: 3,
+      reward: 6,
+    },
+    {
+      reward: 4,
     },
     {
       reward: 2,
     },
     {
-      reward: 1,
+      reward: 2,
     },
     {
-      reward: 1,
+      reward: 2,
     },
     {
-      reward: 1,
+      reward: 2,
     },
     {
-      reward: 1,
+      reward: 2,
     },
     {
-      reward: 1,
-    },
-    {
-      reward: 1,
+      reward: 2,
     },
   ];
+ 
+  const kittyDashRewards = [1, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1];
 
-    const previous_kittyDashRewards = [120, 80, 40, 40, 20, 20, 20, 20, 20, 20];
-    const kittyDashRewards = [1,0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1];
-
-      const previous_caws2dRewards = [
-    100, 60, 40, 30, 20, 20, 20, 20, 20, 20, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
-  ];
-  const caws2dRewards = [1,0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1];
+ 
+  const caws2dRewards = [1, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1];
 
   const [optionText, setOptionText] = useState("weekly");
-  const [inactiveBoard, setInactiveBoard] = useState(false);
-  const [prizes, setPrizes] = useState(weeklyPrizes);
+  // const [inactiveBoard, setInactiveBoard] = useState(false);
+  // const [prizes, setPrizes] = useState(weeklyPrizes);
   const [prevStatus, setPrevStatus] = useState(false);
   const [selectedChain, setselectedChain] = useState("base");
 
   const handleOption = (item) => {
     setOptionText(item);
-    if (item === "weekly" && inactiveBoard === false) {
-      setPrizes(weeklyPrizes);
-    } else if (item === "weekly" && inactiveBoard === true) {
-      setPrizes(weeklyPrizes);
-    } else if (item === "monthly" && inactiveBoard === false) {
-      setPrizes(monthlyPrizes);
-    } else if (item === "monthly" && inactiveBoard === true) {
-      setPrizes(monthlyPrizes);
-    }
+    // if (item === "weekly" && inactiveBoard === false) {
+    //   setPrizes(weeklyPrizes);
+    // } else if (item === "weekly" && inactiveBoard === true) {
+    //   setPrizes(weeklyPrizes);
+    // } else if (item === "monthly" && inactiveBoard === false) {
+    //   setPrizes(monthlyPrizes);
+    // } else if (item === "monthly" && inactiveBoard === true) {
+    //   setPrizes(monthlyPrizes);
+    // }
   };
 
   useEffect(() => {
@@ -536,7 +486,7 @@ const Leaderboard = ({
                                     alt=""
                                     className="me-1 d-none d-lg-block d-md-block"
                                   />{" "}
-                                  DYP */}  
+                                  DYP */}
                                 </div>
                               </div>
                             </th>
@@ -557,7 +507,7 @@ const Leaderboard = ({
                             className={`playerHeader ${item.class}`}
                             key={index}
                           >
-                           {item.name}
+                            {item.name}
                           </th>
                         ))}
                       </>
@@ -569,7 +519,7 @@ const Leaderboard = ({
                             key={index}
                             style={{ background: "#313243" }}
                           >
-                             {item.name}
+                            {item.name}
                           </th>
                         ))}
                       </>
@@ -605,22 +555,20 @@ const Leaderboard = ({
                             className={`playerReward col-2 text-center leaderboard-rewards-bg`}
                             style={{ color: stoneHeaders.rewardColor }}
                           >
-                           
                             {/* {prevStatus === false ? ( */}
-                              <>
-                                {" "}
-                                <img
-                                  src={
-                                    "https://cdn.worldofdypians.com/tools/gem.svg"
-                                  }
-                                  width={12}
-                                  height={12}
-                                  alt=""
-                                  className="mb-1"
-                                />{" "}
-                                {
-                                  stoneCrackRewards[index].reward}
-                              </>
+                            <>
+                              {" "}
+                              <img
+                                src={
+                                  "https://cdn.worldofdypians.com/tools/gem.svg"
+                                }
+                                width={12}
+                                height={12}
+                                alt=""
+                                className="mb-1"
+                              />{" "}
+                              {stoneCrackRewards[index].reward}
+                            </>
                             {/* ) : (
                               <>
                                 ${" "}
@@ -663,17 +611,17 @@ const Leaderboard = ({
                               {/* {prevStatus === false ? (
                                 <>
                                   {" "} */}
-                                  <img
-                                    src={
-                                      "https://cdn.worldofdypians.com/tools/gem.svg"
-                                    }
-                                    width={12}
-                                    height={12}
-                                    alt=""
-                                    className="mb-1"
-                                  />{" "}
-                                  0
-                                {/* </>
+                              <img
+                                src={
+                                  "https://cdn.worldofdypians.com/tools/gem.svg"
+                                }
+                                width={12}
+                                height={12}
+                                alt=""
+                                className="mb-1"
+                              />{" "}
+                              0
+                              {/* </>
                               ) : (
                                 <>$ 0</>
                               )} */}
@@ -711,19 +659,19 @@ const Leaderboard = ({
                             >
                               {/* <img src={eth} width={12} height={12} alt="" />{" "} */}
                               {/* {prevStatus === false ? ( */}
-                                <>
-                                  {" "}
-                                  <img
-                                    src={
-                                      "https://cdn.worldofdypians.com/tools/gem.svg"
-                                    }
-                                    width={12}
-                                    height={12}
-                                    alt=""
-                                    className="mb-1"
-                                  />{" "}
-                                  0
-                                </>
+                              <>
+                                {" "}
+                                <img
+                                  src={
+                                    "https://cdn.worldofdypians.com/tools/gem.svg"
+                                  }
+                                  width={12}
+                                  height={12}
+                                  alt=""
+                                  className="mb-1"
+                                />{" "}
+                                0
+                              </>
                               {/* ) : (
                                 <>$ 0</>
                               )} */}
@@ -760,9 +708,7 @@ const Leaderboard = ({
                             className={`playerReward col-2 text-center leaderboard-rewards-bg`}
                             style={{ color: stoneHeaders.rewardColor }}
                           >
-                            {prevStatus === false ? (
-                              <>
-                                {" "}
+                            
                                 <img
                                   src={
                                     "https://cdn.worldofdypians.com/tools/gem.svg"
@@ -772,18 +718,8 @@ const Leaderboard = ({
                                   alt=""
                                   className="mb-1"
                                 />{" "}
-                                {
-                                  stoneCrackRewardsMonthly[index].reward}
-                              </>
-                            ) : (
-                              <>
-                                ${" "}
-                                {getFormattedNumber(
-                                  previous_stoneCrackRewardsMonthly[index].rewards,
-                                  0,
-                                )}
-                              </>
-                            )}
+                                {stoneCrackRewardsMonthly[index].reward}
+                               
                           </td>
                         </tr>
                       ))}
@@ -908,20 +844,19 @@ const Leaderboard = ({
                             style={{ color: stoneHeaders.rewardColor }}
                           >
                             {/* {prevStatus === false ? ( */}
-                              <>
-                                {" "}
-                                <img
-                                  src={
-                                    "https://cdn.worldofdypians.com/tools/gem.svg"
-                                  }
-                                  width={12}
-                                  height={12}
-                                  alt=""
-                                  className="mb-1"
-                                />{" "}
-                                {
-                                  stoneCrackRewards[index].reward}
-                              </>
+                            <>
+                              {" "}
+                              <img
+                                src={
+                                  "https://cdn.worldofdypians.com/tools/gem.svg"
+                                }
+                                width={12}
+                                height={12}
+                                alt=""
+                                className="mb-1"
+                              />{" "}
+                              {stoneCrackRewards[index].reward}
+                            </>
                             {/* ) : (
                               <>
                                 ${" "}
@@ -1008,19 +943,18 @@ const Leaderboard = ({
                               style={{ color: stoneHeaders.rewardColor }}
                             >
                               {/* {prevStatus === false ? (
-                                <> */}
-                                  {" "}
-                                  <img
-                                    src={
-                                      "https://cdn.worldofdypians.com/tools/gem.svg"
-                                    }
-                                    width={12}
-                                    height={12}
-                                    alt=""
-                                    className="mb-1"
-                                  />{" "}
-                                  0
-                                {/* </>
+                                <> */}{" "}
+                              <img
+                                src={
+                                  "https://cdn.worldofdypians.com/tools/gem.svg"
+                                }
+                                width={12}
+                                height={12}
+                                alt=""
+                                className="mb-1"
+                              />{" "}
+                              0
+                              {/* </>
                               ) : (
                                 <>$ 0</>
                               )} */}
@@ -1057,9 +991,7 @@ const Leaderboard = ({
                             className={`playerReward col-2 text-center leaderboard-rewards-bg`}
                             style={{ color: stoneHeaders.rewardColor }}
                           >
-                            {prevStatus === false ? (
-                              <>
-                                {" "}
+                            
                                 <img
                                   src={
                                     "https://cdn.worldofdypians.com/tools/gem.svg"
@@ -1069,19 +1001,9 @@ const Leaderboard = ({
                                   alt=""
                                   className="mb-1"
                                 />{" "}
-                                 {
-                                  stoneCrackRewardsMonthly[index].reward
-                                }
-                              </>
-                            ) : (
-                              <>
-                                ${" "}
-                                {getFormattedNumber(
-                                  previous_stoneCrackRewardsMonthly[index].rewards,
-                                  0,
-                                )}
-                              </>
-                            )}
+                                {stoneCrackRewardsMonthly[index].reward}
+                             
+                           
                           </td>
                         </tr>
                       ))}
@@ -1207,9 +1129,7 @@ const Leaderboard = ({
                             className={`playerReward col-4 text-center`}
                             style={{ color: kittyHeaders.rewardColor }}
                           >
-                            {prevStatus === false ? (
-                              <>
-                                {" "}
+                             
                                 <svg
                                   xmlns="http://www.w3.org/2000/svg"
                                   width="12"
@@ -1224,17 +1144,9 @@ const Leaderboard = ({
                                   <path d="M6 3h12l4 6-10 13L2 9Z" />
                                   <path d="M11 3 8 9l4 13 4-13-3-6" />
                                   <path d="M2 9h20" />
-                                </svg>
-                                
-                                {" "}
-                                 {kittyDashRewards[index]}
-                              </>
-                            ) : (
-                              <>
-                                ${" "}
-                                {getFormattedNumber(previous_kittyDashRewards[index], 0)}
-                              </>
-                            )}
+                                </svg>{" "}
+                                {kittyDashRewards[index]}
+                             
                           </td>
                         </tr>
                       ))}
@@ -1263,20 +1175,20 @@ const Leaderboard = ({
                                 <>
                                   {" "}
                                   <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  width="12"
-                                  height="12"
-                                  viewBox="0 0 24 24"
-                                  fill="none"
-                                  stroke="#3ED2FF"
-                                  stroke-width="2"
-                                  stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                >
-                                  <path d="M6 3h12l4 6-10 13L2 9Z" />
-                                  <path d="M11 3 8 9l4 13 4-13-3-6" />
-                                  <path d="M2 9h20" />
-                                </svg>{" "}
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="12"
+                                    height="12"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="#3ED2FF"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                  >
+                                    <path d="M6 3h12l4 6-10 13L2 9Z" />
+                                    <path d="M11 3 8 9l4 13 4-13-3-6" />
+                                    <path d="M2 9h20" />
+                                  </svg>{" "}
                                   0
                                 </>
                               ) : (
@@ -1312,20 +1224,20 @@ const Leaderboard = ({
                                 <>
                                   {" "}
                                   <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  width="12"
-                                  height="12"
-                                  viewBox="0 0 24 24"
-                                  fill="none"
-                                  stroke="#3ED2FF"
-                                  stroke-width="2"
-                                  stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                >
-                                  <path d="M6 3h12l4 6-10 13L2 9Z" />
-                                  <path d="M11 3 8 9l4 13 4-13-3-6" />
-                                  <path d="M2 9h20" />
-                                </svg>{" "}
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="12"
+                                    height="12"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="#3ED2FF"
+                                    stroke-width="2"
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                  >
+                                    <path d="M6 3h12l4 6-10 13L2 9Z" />
+                                    <path d="M11 3 8 9l4 13 4-13-3-6" />
+                                    <path d="M2 9h20" />
+                                  </svg>{" "}
                                   0
                                 </>
                               ) : (
@@ -1381,9 +1293,7 @@ const Leaderboard = ({
                             className={`playerReward col-2 text-center`}
                             style={{ color: cawsHeaders.rewardColor }}
                           >
-                            {prevStatus === false ? (
-                              <>
-                                {" "}
+                            
                                 <img
                                   src={
                                     "https://cdn.worldofdypians.com/tools/gem.svg"
@@ -1394,10 +1304,7 @@ const Leaderboard = ({
                                   className="mb-1"
                                 />{" "}
                                 {caws2dRewards[index]}
-                              </>
-                            ) : (
-                              <>$ {previous_caws2dRewards[index]}</>
-                            )}
+                              
                           </td>
                         </tr>
                       ))}
