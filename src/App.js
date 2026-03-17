@@ -62,7 +62,6 @@ import WhitelistPopup from "./components/whitelistPopup/WhitelistPopup.js";
 import NewMigration from "./components/migration-portal/NewMigration.js";
 // import MigrationPopup from "./components/MigrationPopup/MigrationPopup.js";
 
-
 const Connector = getWeb3Connector();
 const binanceConnector = new Connector({
   lng: "en-US",
@@ -254,106 +253,104 @@ function App() {
   };
 
   const checkNetworkId = () => {
- 
-      if (
-        window.ethereum &&
-        !window.coin98 &&
-        (window.ethereum.isMetaMask === true ||
-          window.ethereum.isCoinbaseWallet === true) &&
-        window.WALLET_TYPE !== "binance"
-      ) {
-        window.ethereum
-          .request({ method: "eth_chainId" })
-          .then((data) => {
-            if (data === "0x1") {
-              setnetworkId("1");
-            } else if (data === "0xa86a") {
-              setnetworkId("43114");
-            } else if (data === "0x2105") {
-              setnetworkId("8453");
-            } else if (data === "0xcc") {
-              setnetworkId("204");
-            } else if (data === "0x406") {
-              setnetworkId("1030");
-            } else if (data === "0x38") {
-              setnetworkId("56");
-            } else if (data === "0x585eb4b1") {
-              setnetworkId("1482601649");
-            } else if (data === "0x2105") {
-              setnetworkId("8453");
-            } else if (data !== "undefined") {
-              setnetworkId("0");
-            } else {
-              setnetworkId("1");
-            }
-          })
-          .catch(console.error);
-      } else if (
-        window.ethereum &&
-        !window.coin98 &&
-        (window.ethereum.isTrust === true || window.ethereum?.isTrustWallet) &&
-        window.WALLET_TYPE !== "binance"
-      ) {
-        window.ethereum
-          .request({ method: "net_version" })
-          .then((data) => {
-            setnetworkId(data.toString());
-          })
-          .catch(console.error);
-      } else if (
-        window.ethereum &&
-        window.ethereum.overrideIsMetaMask === true &&
-        !window.coin98 &&
-        !window.ethereum.isCoinbaseWallet &&
-        window.WALLET_TYPE !== "binance"
-      ) {
-        const chainId = window.ethereum.selectedProvider.chainId;
+    if (
+      window.ethereum &&
+      !window.coin98 &&
+      (window.ethereum.isMetaMask === true ||
+        window.ethereum.isCoinbaseWallet === true) &&
+      window.WALLET_TYPE !== "binance"
+    ) {
+      window.ethereum
+        .request({ method: "eth_chainId" })
+        .then((data) => {
+          if (data === "0x1") {
+            setnetworkId("1");
+          } else if (data === "0xa86a") {
+            setnetworkId("43114");
+          } else if (data === "0x2105") {
+            setnetworkId("8453");
+          } else if (data === "0xcc") {
+            setnetworkId("204");
+          } else if (data === "0x406") {
+            setnetworkId("1030");
+          } else if (data === "0x38") {
+            setnetworkId("56");
+          } else if (data === "0x585eb4b1") {
+            setnetworkId("1482601649");
+          } else if (data === "0x2105") {
+            setnetworkId("8453");
+          } else if (data !== "undefined") {
+            setnetworkId("0");
+          } else {
+            setnetworkId("1");
+          }
+        })
+        .catch(console.error);
+    } else if (
+      window.ethereum &&
+      !window.coin98 &&
+      (window.ethereum.isTrust === true || window.ethereum?.isTrustWallet) &&
+      window.WALLET_TYPE !== "binance"
+    ) {
+      window.ethereum
+        .request({ method: "net_version" })
+        .then((data) => {
+          setnetworkId(data.toString());
+        })
+        .catch(console.error);
+    } else if (
+      window.ethereum &&
+      window.ethereum.overrideIsMetaMask === true &&
+      !window.coin98 &&
+      !window.ethereum.isCoinbaseWallet &&
+      window.WALLET_TYPE !== "binance"
+    ) {
+      const chainId = window.ethereum.selectedProvider.chainId;
 
-        if (chainId === "0x1") {
-          setnetworkId("1");
-        } else if (chainId === "0xa86a") {
-          setnetworkId("43114");
-        } else if (chainId === "0x2105") {
-          setnetworkId("8453");
-        } else if (chainId === "0xcc") {
-          setnetworkId("204");
-        } else if (chainId === "0x38") {
-          setnetworkId("56");
-        } else if (chainId === "0x2105") {
-          setnetworkId("8453");
-        } else if (chainId !== "undefined") {
-          setnetworkId("0");
-        } else {
-          setnetworkId("1");
-        }
-      } else if (
-        window.ethereum &&
-        window.coin98 &&
-        window.WALLET_TYPE !== "binance"
-      ) {
-        window.ethereum
-          .request({ method: "net_version" })
-          .then((data) => {
-            if (data !== undefined) {
-              setnetworkId(data);
-            } else if (data !== "undefined") {
-              setnetworkId("0");
-            }
-          })
-          .catch(console.error);
-      } else if (
-        window.WALLET_TYPE === "binance" ||
-        (binanceData !== undefined && binanceData !== null)
-      ) {
-        if (binanceData !== undefined && binanceData !== null) {
-          setnetworkId(binanceData.chainId.toString());
-        } else {
-          setnetworkId(chainId?.toString() ?? "1");
-        }
+      if (chainId === "0x1") {
+        setnetworkId("1");
+      } else if (chainId === "0xa86a") {
+        setnetworkId("43114");
+      } else if (chainId === "0x2105") {
+        setnetworkId("8453");
+      } else if (chainId === "0xcc") {
+        setnetworkId("204");
+      } else if (chainId === "0x38") {
+        setnetworkId("56");
+      } else if (chainId === "0x2105") {
+        setnetworkId("8453");
+      } else if (chainId !== "undefined") {
+        setnetworkId("0");
       } else {
         setnetworkId("1");
       }
-    
+    } else if (
+      window.ethereum &&
+      window.coin98 &&
+      window.WALLET_TYPE !== "binance"
+    ) {
+      window.ethereum
+        .request({ method: "net_version" })
+        .then((data) => {
+          if (data !== undefined) {
+            setnetworkId(data);
+          } else if (data !== "undefined") {
+            setnetworkId("0");
+          }
+        })
+        .catch(console.error);
+    } else if (
+      window.WALLET_TYPE === "binance" ||
+      (binanceData !== undefined && binanceData !== null)
+    ) {
+      if (binanceData !== undefined && binanceData !== null) {
+        setnetworkId(binanceData.chainId.toString());
+      } else {
+        setnetworkId(chainId?.toString() ?? "1");
+      }
+    } else {
+      setnetworkId("1");
+    }
   };
 
   const handleSwitchNetwork = async (chainId) => {
@@ -527,8 +524,9 @@ function App() {
         .catch((e) => {
           console.log(e);
         });
-      if(result){
-      setuserPools(result);}
+      if (result) {
+        setuserPools(result);
+      }
     }
   };
 
@@ -1132,10 +1130,8 @@ function App() {
     LP_IDs_V2.weth[4],
   ];
 
-
-    ethereum?.on("chainChanged", checkNetworkId);
-    ethereum?.on("accountsChanged", checkConnection2);
- 
+  ethereum?.on("chainChanged", checkNetworkId);
+  ethereum?.on("accountsChanged", checkConnection2);
 
   Amplify.configure(awsExports);
 
@@ -1350,16 +1346,16 @@ function App() {
       ).json();
     } catch (e) {
       console.error(e);
-      return []
+      return [];
     }
     leaderboard2 = leaderboard2.sort((a, b) => b.score - a.score);
     var testArray =
       leaderboard2.length > 0
         ? leaderboard2.filter(
-          (item) =>
-            item.address.toLowerCase() ===
-            data?.getPlayer?.wallet?.publicAddress?.toLowerCase(),
-        )
+            (item) =>
+              item.address.toLowerCase() ===
+              data?.getPlayer?.wallet?.publicAddress?.toLowerCase(),
+          )
         : [];
 
     fillRecordsCaws2d(leaderboard2);
@@ -1389,7 +1385,7 @@ function App() {
       ).json();
     } catch (e) {
       console.error(e);
-      return []
+      return [];
     }
     leaderboard2 = leaderboard2.sort((a, b) => b.score - a.score);
 
@@ -1626,7 +1622,9 @@ function App() {
           console.log(err);
         });
 
-      setweeklyplayerDataOpbnb(result.data.data.leaderboard);
+      if (result) {
+        setweeklyplayerDataOpbnb(result.data.data.leaderboard);
+      }
     }
   };
 
@@ -2011,7 +2009,7 @@ function App() {
     } else if (
       (logoutstorage === "false" ||
         window.coinbase_address ===
-        "0x0000000000000000000000000000000000000000" ||
+          "0x0000000000000000000000000000000000000000" ||
         window.coin98) &&
       window.WALLET_TYPE !== "binance"
     ) {
@@ -2171,8 +2169,8 @@ function App() {
       <div>
         {(window.location?.pathname === "/genesis" &&
           window.innerWidth < 786) ||
-          (window.location?.pathname === "/caws-staking" &&
-            window.innerWidth < 786) ? null : (
+        (window.location?.pathname === "/caws-staking" &&
+          window.innerWidth < 786) ? null : (
           <Header
             coinbase={coinbase}
             toggleMobileSidebar={toggleMobileSidebar}
@@ -2215,12 +2213,13 @@ function App() {
               />
             </div>
             <div
-              className={`${windowSize.width < 991
+              className={`${
+                windowSize.width < 991
                   ? "col-12 px-1"
                   : windowSize.width < 1490
                     ? "col-11"
                     : "col-10"
-                }`}
+              }`}
             >
               <div className="right-content pr-0 my-4 my-lg-5">
                 <Routes>
@@ -2782,7 +2781,6 @@ setkittyDashRecords */}
                     }
                   /> */}
 
-
                   <Route
                     exact
                     path="/admin"
@@ -2790,7 +2788,7 @@ setkittyDashRecords */}
                       <Admin
                         handleConnection={handleConnection}
                         isConnected={isConnected}
-                      // {...props}
+                        // {...props}
                       />
                     }
                   />
@@ -2830,14 +2828,14 @@ setkittyDashRecords */}
             <div className="col-1"></div>
           </div>
           {window.location?.pathname === "/genesis" ||
-            window.location?.pathname === "/caws-staking" ? null : (
+          window.location?.pathname === "/caws-staking" ? null : (
             <MobileMenu />
           )}
         </div>
       </div>
       {(window.location?.pathname === "/genesis" && window.innerWidth < 786) ||
-        (window.location?.pathname === "/caws-staking" &&
-          window.innerWidth < 786) ? null : (
+      (window.location?.pathname === "/caws-staking" &&
+        window.innerWidth < 786) ? null : (
         <Footer />
       )}
       {(showMobilePopup === true || downloadClick === true) && (
