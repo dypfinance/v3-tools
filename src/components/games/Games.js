@@ -15,7 +15,7 @@ import CawsAdventurePopup from "./components/CawsAdventurePopup";
 import StoneCrackPopup from "./components/StoneCrackPopup";
 import KittyDashPopup from "./components/KittyDashPopup";
 import Leaderboard from "../leaderboard/Leaderboard";
-import { new_winners } from "./data";
+import { new_winners, new_winners_gem } from "./data";
 const renderer2 = ({ hours, minutes }) => {
   return (
     <span className="stone-crack-timer mb-0">
@@ -1051,28 +1051,30 @@ const Games = ({
                   ) : (
                     <div></div>
                   )}
-                  {email &&
-                  <div
-                    className="leaderboard-update-tab p-2 ml-5 cursor-pointer"
-                    // onClick={() => {
-                    //   setPopupRewards(true);
-                    // }}
-                  >
-                    <span className="leaderboard-update-span text-lg">
-                      Total Gems:
-                      <b>
-                        {" "}
-                        <img
-                          src={"https://cdn.worldofdypians.com/tools/gem.svg"}
-                          width={12}
-                          height={12}
-                          alt=""
-                          className="mb-1"
-                        />{" "}
-                        0
-                      </b>
-                    </span>
-                  </div> }
+                  {email && (
+                    <div
+                      className="leaderboard-update-tab p-2 ml-5 cursor-pointer"
+                      // onClick={() => {
+                      //   setPopupRewards(true);
+                      // }}
+                    >
+                      <span className="leaderboard-update-span text-lg">
+                        Total Gems:
+                        <b>
+                          {" "}
+                          <img
+                            src={"https://cdn.worldofdypians.com/tools/gem.svg"}
+                            width={12}
+                            height={12}
+                            alt=""
+                            className="mb-1"
+                          />{" "}
+                          {new_winners_gem.find((winner) => winner.email === email)
+                            ?.reward ?? 0}
+                        </b>
+                      </span>
+                    </div>
+                  )}
                 </div>
                 {popupRewards === true && (
                   <div
