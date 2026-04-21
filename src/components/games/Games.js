@@ -192,8 +192,13 @@ const Games = ({
     "cullpwend0@gmail.com",
     "ssamat61@gmail.com",
     "tz8u0@airsworld.net",
+    "joffdevilish13@gmail.com",
+    "jokongscholar4@gmail.com"
   ];
 
+  const suspicousEmails = [
+  "jokongscholar5@gmail.com"
+]
   const midnightUTC = new Date(
     Date.UTC(
       now.getUTCFullYear(),
@@ -827,6 +832,25 @@ const Games = ({
               </div>
             </div>
           )}
+          {suspicousEmails.includes(email) && (
+          <div className="custom-container mt-5 mt-lg-0">
+            <div className="bg-gradient-to-r from-orange-500 to-orange-600 rounded-xl w-100 px-2 py-3 mt-5 mt-lg-2 d-flex align-items-center justify-content-center">
+              <h6 className="banned-account-message mb-0 text-white text-center">
+                This account has been flagged for suspicious activity and is
+                being monitored. For any issues submit a ticket on:{" "}
+                <a
+                  href="https://discord.gg/worldofdypians"
+                  className="text-white text-decoration-underline"
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  World of Dypians Discord
+                </a>
+                .
+              </h6>
+            </div>
+          </div>
+        )}
           <div className="col-12 col-lg-4">
             <NavLink to="/loyalty-program">
               <div className="games-banner loyalty-game-banner d-flex flex-column  flex-lg-row px-3 py-3 gap-3 gap-lg-0 align-items-start align-items-lg-center mb-4 position-relative">
