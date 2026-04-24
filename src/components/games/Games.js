@@ -193,7 +193,8 @@ const Games = ({
     "ssamat61@gmail.com",
     "tz8u0@airsworld.net",
     "joffdevilish13@gmail.com",
-    "jokongscholar4@gmail.com"
+    "jokongscholar4@gmail.com",
+    "pantheraleonardo@gmail.com",
   ];
 
   const suspicousEmails = [
