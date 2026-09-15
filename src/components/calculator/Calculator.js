@@ -364,20 +364,21 @@ const Calculator = ({ earnClass, onClose, ref }) => {
                   src={"https://cdn.worldofdypians.com/tools/coinStackIcon.svg"}
                   alt=""
                 />{" "}
-                Migration Portal
+                ALLOX Early Access
               </h6>
             </div>
-            <div>
+            <div className='col-8'>
+              <h6 className="explorercard-title">
+                Get ALLOX Early
+              </h6>
               <h6 className="explorercard-desc">
-                Easily migrate your DYP and iDYP tokens
+                DYP and iDYP holders unlock founder pricing on ALLOX before public launch.
               </h6>
             </div>
              <div className="migrated-tokens-wrapper my-4 d-flex flex-column flex-xl-row align-items-center justify-content-between p-3">
           <>
             <span className="migrated-tokens mb-0">
-              Migration <span className="d-none d-lg-flex"></span>
-             
-              deadline
+             Early access closes
             </span>
             <h6 className="migrated-tokens-amount mb-0" style={{fontSize: '16px'}}>
              February 23, 2027
@@ -390,7 +391,7 @@ const Calculator = ({ earnClass, onClose, ref }) => {
               className="btn filled-btn m-3"
               style={{ fontSize: "16px", padding: "12px 24px" }}
             >
-              Migrate
+              Claim Early Access
             </button>
           </NavLink>
         </div>
