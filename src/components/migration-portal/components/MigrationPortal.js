@@ -497,7 +497,7 @@ export function MigrationPortal({
                         <div className="tooltip-text">
                           <div className="space-y-2">
                             <p className="text-xs">
-                              You can still migrate if you:
+                              You can still get early access if you:
                             </p>
                             <p className="text-xs">
                               • Held tokens at snapshot time (Feb 23, 2026 00:00
@@ -523,7 +523,7 @@ export function MigrationPortal({
                     </Tooltip>
                   </div>
                   <p className="text-gray-300 text-sm">
-                    The snapshot has been taken. You can still migrate if you
+                    The snapshot has been taken. You can still get early access if you
                     held eligible tokens at snapshot time.
                   </p>
                 </div>
