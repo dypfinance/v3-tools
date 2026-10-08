@@ -60,6 +60,7 @@ import { useWeb3React } from "@web3-react/core";
 import { isMobile } from "react-device-detect";
 import WhitelistPopup from "./components/whitelistPopup/WhitelistPopup.js";
 import NewMigration from "./components/migration-portal/NewMigration.js";
+import ClaimInvestors from "./components/claim-investors/ClaimInvestors.js";
 // import MigrationPopup from "./components/MigrationPopup/MigrationPopup.js";
 
 const Connector = getWeb3Connector();
@@ -2608,6 +2609,19 @@ setkittyDashRecords */}
                         coinbase={coinbase}
                         binanceW3WProvider={library}
                         handleSwitchChainBinanceWallet={handleSwitchNetwork}
+                        handleSwitchNetwork={handleSwitchNetwork}
+                      />
+                    }
+                  />
+                  <Route
+                    exact
+                    path="/claim/investors"
+                    element={
+                      <ClaimInvestors
+                        isConnected={isConnected}
+                        handleConnection={handleConnection}
+                        coinbase={coinbase}
+                        networkId={parseInt(networkId)}
                         handleSwitchNetwork={handleSwitchNetwork}
                       />
                     }

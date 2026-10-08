@@ -173,6 +173,11 @@ const Sidebar = (props) => {
       icon: "newsIcon",
       link: "/news",
     },
+    {
+      label: "ALLOX Claim",
+      icon: "loyaltyIcon", // ponytail: no gift icon on the CDN yet, swap when uploaded
+      link: "/claim/investors",
+    },
   ];
 
   // const sidebarItem = document.querySelectorAll(".sidebar-item");
